@@ -29,7 +29,7 @@ echo "✅ Docker is installed and running"
 echo ""
 
 # Change to Backend directory and start container
-cd Backend
+cd "$(dirname "$0")/.."
 
 # Check for detached flag
 if [ "$1" = "-d" ] || [ "$1" = "--detach" ]; then
@@ -38,12 +38,7 @@ if [ "$1" = "-d" ] || [ "$1" = "--detach" ]; then
     echo ""
     echo "✅ Backend started in background"
     echo "To view logs: docker-compose logs -f"
-    echo "To stop: ./stop-backend.sh (from project root)"
 else
-    echo "Starting the backend container in foreground mode..."
-    echo "Press Ctrl+C to stop"
-    echo ""
+    echo "Building and starting the backend in foreground..."
     docker-compose up --build
-    echo ""
-    echo "Backend stopped"
 fi

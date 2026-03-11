@@ -13,7 +13,7 @@ if ! command -v docker-compose &> /dev/null; then
 fi
 
 # Change to Backend directory and stop container
-cd Backend
+cd "$(dirname "$0")/.."
 echo "Stopping the backend container..."
 docker-compose down
 
