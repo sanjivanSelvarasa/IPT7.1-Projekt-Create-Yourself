@@ -53,7 +53,7 @@ Das Backend wird eine webbasierte Anwendung zur Erstellung von persönlichen Por
 3. Abhängigkeiten installieren: `express`, `mssql`, `bcrypt`, `jsonwebtoken`, `dotenv`, `multer`
 4. `.env`-Datei für Umgebungsvariablen anlegen
 5. MS SQL-Datenbank in Docker-Container einrichten
-6. Datenbank-Schemas planen: **Users**, **Portfolios**, **Versions**
+6. Datenbank-Schemas durchlesen und verstehen
 7. Benutzerregistrierung implementieren (Passwort-Hashing)
 8. Login-Endpoint mit JWT-Authentifizierung implementieren
 9. Erste Unit-Tests für Authentifizierungs-Routen schreiben
@@ -73,7 +73,6 @@ Das Backend wird eine webbasierte Anwendung zur Erstellung von persönlichen Por
 2. Portfolio-Versionierung implementieren
 3. Middleware für Authentifizierung/Autorisierung einfügen
 4. Unit-Tests für Portfolio-Endpunkte schreiben
-5. API-Dokumentation beginnen
 
 ---
 
@@ -138,9 +137,3 @@ Das Backend wird eine webbasierte Anwendung zur Erstellung von persönlichen Por
 * MS SQL Node.js Dokumentation: [https://www.npmjs.com/package/mssql](https://www.npmjs.com/package/mssql)
 * Multer für Datei-Uploads: [https://www.npmjs.com/package/multer](https://www.npmjs.com/package/multer)
 * Docker Dokumentation: [https://docs.docker.com/](https://docs.docker.com/)
-
----
-
-Wenn du willst, kann ich jetzt noch eine **tägliche To-Do-Liste für Docker + Node.js Backend bis 8. April** erstellen, sodass jeder Tag genau aufzeigt, welche Aufgabe du erledigen musst.
-
-Willst du, dass ich das mache?
