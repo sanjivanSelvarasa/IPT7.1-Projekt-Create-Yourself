@@ -1,7 +1,7 @@
 @email = gian@example.com
-@password = 12345
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdpYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NzMzOTA3MTUsImV4cCI6MTc3MzM5MTkxNX0.qhb4vtx0id51irp_0ZRom-FgKl1Bu-8IL7wLj75wS1k
-@refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdpYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NzMzOTA3NDR9.IX6GNpvgFyrmWJg1MhT9hFwb2ib6G0uY1fKKV9UhZ74
+@password = 123456789
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdpYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NzMzOTQ3MDUsImV4cCI6MTc3MzM5NTkwNX0.EvftiQ0zVk9rEgIMVTA6J05508ORwj_FfDyP7TASIYE
+@refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdpYW5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NzMzOTQ3Mjd9.sxoSgME9qjQUAsRsVU2N6DAja15RozmqqWtRO5tj80E
 
 ### Get all emails
 GET http://localhost:4000/users
