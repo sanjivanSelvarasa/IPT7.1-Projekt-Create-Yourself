@@ -10,6 +10,10 @@ app.use(express.json())
 const PASSWORD_MIN_LENGTH = 6
 const PASSWORD_MAX_LENGTH = 50
 
+let refreshTokens = [] // sql here
+
+const users = [] // sql here
+
 class ApiError extends Error {
     constructor(status, message, details) {
         super(message)
@@ -66,8 +70,6 @@ function parseTokenFromBody(body) {
     return body.token.trim()
 }
 
-let refreshTokens = [] // sql here
-
 app.post('/token', asyncHandler(async (req, res) => {
     const refreshToken = parseTokenFromBody(req.body)
 
@@ -90,9 +92,8 @@ app.post('/token', asyncHandler(async (req, res) => {
     res.json({ accessToken: accessToken })
 }))
 
-const users = [] // sql here
 
-// Basic GET POST Requests for Registration and Login
+// GET and POST Requests for Registration and Login
 
 // send all existing user-emails
 app.get('/users',(req,res) => {
@@ -177,4 +178,11 @@ app.use((err, req, res, next) => {
     return res.status(status).json(response)
 })
 
-app.listen(4000)
+const server = app.listen(4000)
+
+
+//For graceful shutdown (e.g., when running in Docker)
+process.on('SIGTERM', () => {
+    server.closeAllConnections()
+    server.close(() => process.exit(0))
+})

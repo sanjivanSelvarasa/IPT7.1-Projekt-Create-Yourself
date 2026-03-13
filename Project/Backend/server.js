@@ -6,19 +6,19 @@ const jwt = require('jsonwebtoken')
 
 app.use(express.json())
 
-const posts = [
+const data = [
     {
         email: 'gian@example.com',
-        title: 'Post 1'
+        content: 'Post 1'
     },
     {
         email: 'egor@example.com',
-        title: 'Post 2' 
+        content: 'Post 2' 
 }] // sql here
 //curl -X GET http://localhost:3000/posts/
 
 app.get('/posts',authenticateToken, (req, res) => {
-    res.json(posts.filter(post => post.email === req.user.email))
+    res.json(data.filter(post => post.email === req.user.email))
 })
 
 // Authentication Middleware
@@ -34,4 +34,10 @@ function authenticateToken(req, res, next){
     })
 }
 
-app.listen(3000)
+const server = app.listen(3000)
+
+//For graceful shutdowns (e.g., when running in Docker)
+process.on('SIGTERM', () => {
+    server.closeAllConnections()
+    server.close(() => process.exit(0))
+})
