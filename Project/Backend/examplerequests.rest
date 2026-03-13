@@ -1,0 +1,45 @@
+@name = Gian
+@password = 12345
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiR2lhbiIsImlhdCI6MTc3MzM2ODUxNSwiZXhwIjoxNzczMzY5NzE1fQ.RtNCSRnq9_l_e7vqE7trJ2mDedD3z6W23bADnudy4SI
+@refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiR2lhbiIsImlhdCI6MTc3MzM2ODA1OH0.WkR6iaIw4Yr35NTwCtJQm1vOim4cU_L_Z_UJ4TyettU
+
+### Get all usernames
+GET http://localhost:4000/users
+
+### Register new user
+POST http://localhost:4000/users/register
+Content-Type: application/json
+
+{
+	"name": "{{name}}",
+	"password": "{{password}}"
+}
+
+### Login
+POST http://localhost:4000/users/login
+Content-Type: application/json
+
+{
+	"name": "{{name}}",
+	"password": "{{password}}"
+}
+
+### Refresh token
+POST http://localhost:4000/token
+Content-Type: application/json
+
+{
+    "token": "{{refreshToken}}"
+}
+
+### Get posts (using the JWT token)
+GET http://localhost:3000/posts
+Authorization: Bearer {{accessToken}}
+
+### Logout (delete refresh token)
+DELETE http://localhost:4000/users/logout
+Content-Type: application/json
+
+{
+    "token": "{{refreshToken}}"
+}

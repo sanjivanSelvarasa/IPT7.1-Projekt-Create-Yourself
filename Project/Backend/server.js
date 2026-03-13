@@ -1,43 +1,37 @@
+require('dotenv').config()
+
 const express = require('express')
 const app = express()
-const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 app.use(express.json())
 
-const users = []
+const posts = [
+    {
+        username: 'Gian',
+        title: 'Post 1'
+    },
+    {
+        username: 'Egor',
+        title: 'Post 2' 
+}] // sql here
+//curl -X GET http://localhost:3000/posts/
 
-// Basic GET POST Requests for Registration and Login
-
-app.get('/users',(req,res) => {
-    res.json(users)
+app.get('/posts',authenticateToken, (req, res) => {
+    res.json(posts.filter(post => post.username === req.user.name))
 })
 
-app.post('/users', async (req, res) => {
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        console.log(hashedPassword)
-        const user = { name: req.body.name, password: hashedPassword }
-        users.push(user)
-        res.status(201).send()
-    } catch {
-        res.status(500).send()
-    }
-})
+// Authentication Middleware
+function authenticateToken(req, res, next){
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if (token == null) return res.sendStatus(401)
 
-app.post('/users/login', async (req, res) => {
-    const user = users.find(user => user.name === req.body.name)
-    if (user == null){
-        return res.status(400).send('Cannot find user with that username')
-    }
-    try {
-        if (await bcrypt.compare(req.body.password, user.password)){
-            res.send('Success')
-        } else {
-            res.send('Invalid Password')
-        }
-    } catch {
-        res.status(500).send()
-    }
-})
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403)
+        req.user = user
+        next()
+    })
+}
 
 app.listen(3000)
