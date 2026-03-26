@@ -3,7 +3,7 @@ require('dotenv').config()
 const express = require('express')
 
 const authRoutes = require('./routes/authRoutes')
-const postsRoutes = require('./routes/postsRoutes')
+const portfolioRoutes = require('./routes/portfolioRoutes')
 const notFoundHandler = require('./middleware/notFoundHandler')
 const errorHandler = require('./middleware/errorHandler')
 
@@ -11,7 +11,7 @@ const app = express()
 app.use(express.json())
 
 app.use('/', authRoutes)
-app.use('/', postsRoutes)
+app.use('/', portfolioRoutes)
 app.use(notFoundHandler)
 app.use(errorHandler)
 

@@ -1,10 +1,10 @@
 const express = require('express')
 
-const postsController = require('../controllers/postsController')
+const portfolioController = require('../controllers/portfolioController')
 const authenticateToken = require('../middleware/authenticateToken')
 
 const router = express.Router()
 
-router.get('/posts', authenticateToken, postsController.getPosts)
+router.get('/portfolios', authenticateToken, portfolioController.getPortfolios)
 
 module.exports = router

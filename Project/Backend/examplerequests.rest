@@ -32,8 +32,8 @@ Content-Type: application/json
     "token": "{{refreshToken}}"
 }
 
-### Get posts (using the JWT token)
-GET http://localhost:3000/posts
+### Get portfolios (using the JWT token)
+GET http://localhost:3000/portfolios
 Authorization: Bearer {{accessToken}}
 
 ### Logout (delete refresh token)
