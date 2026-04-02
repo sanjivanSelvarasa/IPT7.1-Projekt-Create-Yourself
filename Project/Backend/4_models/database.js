@@ -2,11 +2,11 @@ const sql = require('mssql')
 
 let poolPromise
 
-function getConfig() {
+function getConfig(databaseName = process.env.DB_NAME) {
     return {
         server: process.env.DB_SERVER,
         port: Number(process.env.DB_PORT || 1433),
-        database: process.env.DB_NAME,
+        database: databaseName,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         options: {
@@ -63,11 +63,49 @@ async function getPool() {
     return createPool()
 }
 
+async function waitForDatabaseOnline(maxAttempts = 10, retryDelayMs = 3000) {
+    let lastError
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+        const tempPool = new sql.ConnectionPool(getConfig('master'))
+
+        try {
+            await tempPool.connect()
+
+            const result = await tempPool
+                .request()
+                .input('databaseName', sql.NVarChar, process.env.DB_NAME)
+                .query(`
+                    SELECT state_desc
+                    FROM sys.databases
+                    WHERE name = @databaseName
+                `)
+
+            if (result.recordset[0]?.state_desc === 'ONLINE') {
+                return
+            }
+
+            lastError = new Error(`Database ${process.env.DB_NAME} is not online yet.`)
+        } catch (error) {
+            lastError = error
+        } finally {
+            await tempPool.close().catch(() => undefined)
+        }
+
+        if (attempt < maxAttempts) {
+            await new Promise(resolve => setTimeout(resolve, retryDelayMs))
+        }
+    }
+
+    throw lastError
+}
+
 async function connectWithRetry(maxAttempts = 10, retryDelayMs = 3000) {
     let lastError
 
     for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
         try {
+            await waitForDatabaseOnline(maxAttempts, retryDelayMs)
             await createPool()
             await ensureRefreshTokenTable()
             return
