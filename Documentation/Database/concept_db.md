@@ -133,3 +133,14 @@
 | created_at       | DATETIME2     | -                  |
 
 ---
+
+### UserRefreshToken
+
+| Attribute  | Datentyp       | Schlüsseltyp  |
+| ---------- | -------------- | ------------- |
+| id         | INT            | PK            |
+| user_id    | INT            | FK -> user.id |
+| token      | NVARCHAR(2048) | UQ            |
+| created_at | DATETIME2      | -             |
+
+---

@@ -128,11 +128,11 @@ foreign key (portfolio_id) references Portfolio(id)
 
 create table UserRefreshToken(
 id int primary key identity,
-user_id int,
+[user_id] int,
 token nvarchar(2048),
 created_at datetime2,
 
 unique(token),
 
-foreign key (user_id) references [User](id)
+foreign key ([user_id]) references [User](id)
 );
