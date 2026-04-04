@@ -26,6 +26,11 @@
 **Beschreibung:**  
 Speichert die Benutzerdaten für Login, Profil und Spracheinstellungen.
 
+Beziehung: 
+- User **1 - N** Portfolio  
+- User **1 - N** UserRefreshToken  
+- User **1 - N** Media  
+
 ---
 
 ### UserRefreshToken
@@ -41,6 +46,7 @@ Speichert die Benutzerdaten für Login, Profil und Spracheinstellungen.
 
 **Beschreibung:**  
 Speichert Refresh Tokens für die Authentifizierung und Gültigkeit.
+
 
 ---
 
@@ -58,6 +64,8 @@ Speichert Refresh Tokens für die Authentifizierung und Gültigkeit.
 **Beschreibung:**  
 Enthält die verfügbaren Grundtemplates für das Portfolio-Layout.
 
+Beziehung: 
+- Template **1 - N** Portfolio  
 ---
 
 ### Theme
@@ -79,6 +87,8 @@ Enthält die verfügbaren Grundtemplates für das Portfolio-Layout.
 **Beschreibung:**  
 Speichert die Design-Einstellungen eines Portfolios.
 
+Beziehung: 
+- Portfolio **1 - N** Theme
 ---
 
 ### Portfolio
@@ -103,6 +113,17 @@ Speichert die Design-Einstellungen eines Portfolios.
 **Beschreibung:**  
 Zentrale Tabelle für ein Portfolio. Enthält Metadaten, Veröffentlichungsstatus und FK's auf Template, Theme und aktuelle Version.
 
+Beziehung: 
+- Portfolio **1 - 1** Theme  
+- Portfolio **1 - N** PortfolioVersion  
+- Portfolio **1 - N** Project  
+- Portfolio **1 - N** PortfolioSkill  
+- Portfolio **1 - N** SocialLink  
+- Portfolio **1 - N** Experience  
+- Portfolio **1 - N** Education  
+- Portfolio **1 - N** Media  
+- Portfolio **1 - N** PortfolioTranslation  
+- Portfolio **N - M** Skill *(über PortfolioSkill)*  
 ---
 
 ### PortfolioVersion
@@ -119,6 +140,9 @@ Zentrale Tabelle für ein Portfolio. Enthält Metadaten, Veröffentlichungsstatu
 **Beschreibung:**  
 Speichert Versionen eines Portfolios, damit Entwürfe und frühere Stände wiederhergestellt werden können.
 
+Beziehung: 
+- PortfolioVersion **1 - N** PortfolioSection  
+- Portfolio **1 - 1** PortfolioVersion
 ---
 
 ### PortfolioSection
@@ -137,6 +161,8 @@ Speichert Versionen eines Portfolios, damit Entwürfe und frühere Stände wiede
 **Beschreibung:**  
 Beschreibt die einzelnen Bereiche eines Portfolios innerhalb einer bestimmten Version, zb. Hero, Projekte oder Skills.
 
+Beziehung: 
+- PortfolioSection **1 - N** EditorBlock  
 ---
 
 ### EditorBlock
@@ -154,6 +180,7 @@ Beschreibt die einzelnen Bereiche eines Portfolios innerhalb einer bestimmten Ve
 **Beschreibung:**  
 Speichert die eigentlichen Bausteine des Editors wie Text, Bild, Link oder andere Komponenten.
 
+Beziehung: 
 ---
 
 ### Media
@@ -173,6 +200,7 @@ Speichert die eigentlichen Bausteine des Editors wie Text, Bild, Link oder ander
 **Beschreibung:**  
 Verwaltet hochgeladene Medien wie Bilder für Profil, Projekte oder Editor-Blöcke.
 
+Beziehung: 
 ---
 
 ### Project
@@ -194,6 +222,7 @@ Verwaltet hochgeladene Medien wie Bilder für Profil, Projekte oder Editor-Blöc
 **Beschreibung:**  
 Speichert Projekte, die in einem Portfolio angezeigt werden.
 
+Beziehung: 
 ---
 
 ### Skill
@@ -208,6 +237,8 @@ Speichert Projekte, die in einem Portfolio angezeigt werden.
 **Beschreibung:**  
 Skill-Tabelle die im Portfolio gezeigt werden kann.
 
+Beziehung: 
+- Skill **1 - N** PortfolioSkill  
 ---
 
 ### PortfolioSkill
@@ -223,6 +254,7 @@ Skill-Tabelle die im Portfolio gezeigt werden kann.
 **Beschreibung:**  
 Verbindet Skills mit einem Portfolio und speichert das Level vom Skill.
 
+Beziehung: 
 ---
 
 ### SocialLink
@@ -238,6 +270,7 @@ Verbindet Skills mit einem Portfolio und speichert das Level vom Skill.
 **Beschreibung:**  
 Speichert Social-Media oder Kontaktlinks für ein Portfolio.
 
+Beziehung: 
 ---
 
 ### Experience
@@ -256,6 +289,7 @@ Speichert Social-Media oder Kontaktlinks für ein Portfolio.
 **Beschreibung:**  
 Speichert Berufserfahrungen, die im Portfolio dargestellt werden.
 
+Beziehung: 
 ---
 
 ### Education
@@ -274,6 +308,7 @@ Speichert Berufserfahrungen, die im Portfolio dargestellt werden.
 **Beschreibung:**  
 Speichert Ausbildungsinformationen für das Portfolio.
 
+Beziehung: 
 ---
 
 ### PortfolioTranslation
@@ -291,4 +326,5 @@ Speichert Ausbildungsinformationen für das Portfolio.
 **Beschreibung:**  
 Ermöglicht Inhalte für Portfolio-Titel und Beschreibung mit verschiedenen Sprachen.
 
+Beziehung: 
 ---
