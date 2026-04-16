@@ -9,169 +9,129 @@ registerUser()
 loginUser()
 logoutUser()
 refreshAccessToken()
-hashPassword()
-comparePassword()
 generateAccessToken()
-generateRefreshToken()
+generateAvailableUsername()
 ```
 
 ### registerUser()
-**Beschreibung:**  
+**Beschreibung:** Registriert einen Benutzer, hashed Passwort und speichert User in der DB.
+**Parameter:** `submittedEmail`, `submittedPassword`
+**Rückgabe:** Keine Nutzdaten, Controller gibt Erfolgsmeldung zurück.
 
-**Parameter:**
+### loginUser()
+**Beschreibung:** Prüft E-Mail/Passwort und erstellt Access-/Refresh-Token.
+**Parameter:** `submittedEmail`, `submittedPassword`
+**Rückgabe:** `{ accessToken, refreshToken }`
 
-**Rückgabe:**
-
-usw.
-
-## User-Modul
-
-```
-getCurrentUser()
-updateUserProfile()
-updatePassword()
-deleteUserAccount()
-```
-
-
-### getCurrentUser()
-**Beschreibung:**  
-
-**Parameter:**
-
-**Rückgabe:**
-
-usw.
+### refreshAccessToken()
+**Beschreibung:** Prüft Refresh-Token und gibt neuen Access-Token aus.
+**Parameter:** `refreshToken`
+**Rückgabe:** `accessToken`
 
 ## Portfolio-Modul
 
 ```
+getPortfoliosForUser()
 createPortfolio()
 getPortfolioById()
-getPortfoliosByUser()
 updatePortfolio()
 deletePortfolio()
-updatePortfolioVisibility()
-generateSlug()
-ensureUniqueSlug()
 ```
 
 ### createPortfolio()
-**Beschreibung:**  
+**Beschreibung:** Erstellt ein Portfolio mit Slug/Sichtbarkeit-Validierung.
+**Parameter:** `email`, `data`
+**Rückgabe:** Portfolio-Objekt aus DB.
 
-**Parameter:**
+### updatePortfolio()
+**Beschreibung:** Aktualisiert eigenes Portfolio inkl. Slug-Konfliktbehandlung.
+**Parameter:** `email`, `portfolioId`, `data`
+**Rückgabe:** Aktualisiertes Portfolio.
 
-**Rückgabe:**
+## Project-Modul
 
-usw.
-
-## Portfolio Inhalte (Portfolio Modul)
 ```
-addProjectToPortfolio()
+listProjects()
+createProject()
 updateProject()
 deleteProject()
-addSkillToPortfolio()
-updatePortfolioSkillLevel()
-removeSkillFromPortfolio()
-addSocialLink()
+uploadProjectImage()
+```
+
+### uploadProjectImage()
+**Beschreibung:** Speichert hochgeladene Bilddatei lokal und setzt `img_url` im Projekt.
+**Parameter:** `email`, `portfolioId`, `projectId`, `file`
+**Rückgabe:** `{ id, portfolioId, imageUrl, updatedAt }`
+
+## Skill-Modul
+
+```
+listSkills()
+createSkill()
+updateSkill()
+deleteSkill()
+```
+
+## SocialLink-Modul
+
+```
+listSocialLinks()
+createSocialLink()
 updateSocialLink()
 deleteSocialLink()
-addExperience()
+```
+
+## Experience-Modul
+
+```
+listExperiences()
+createExperience()
 updateExperience()
 deleteExperience()
-addEducation()
+```
+
+## Education-Modul
+
+```
+listEducations()
+createEducation()
 updateEducation()
 deleteEducation()
 ```
 
-### addProjectToPortfolio()
-**Beschreibung:**  
+## Gemeinsame Helper/Utility-Funktionen
 
-**Parameter:**
-
-**Rückgabe:**
-
-usw.
-
-## Editor-Modul
 ```
-saveDraft()
-loadEditorData()
-updatePortfolioSection()
-autosavePortfolio()
-```
-
-### saveDraft()
-**Beschreibung:**  
-
-**Parameter:**
-
-**Rückgabe:**
-
-usw.
-
-## Versioning-Modul
-```
-createPortfolioVersion()
-getPortfolioVersions()
-getPortfolioVersionById()
-restorePortfolioVersion()
+parseId()
+parseRequiredText()
+parseOptionalText()
+parseOptionalDate()
+validateDateRange()
+parseRequiredUrl()
+parseOptionalUrl()
+parseSkillLevel()
+parseSlug()
+validateVisibility()
+getOwnedPortfolio()
+findUserOrThrow()
 ```
 
-### createPortfolioVersion()
-**Beschreibung:**  
+### getOwnedPortfolio()
+**Beschreibung:** Lädt Portfolio und prüft Besitzrechte des eingeloggten Benutzers.
+**Parameter:** `email`, `rawPortfolioId`
+**Rückgabe:** Portfolio-Objekt oder Fehler (`403` / `404`).
 
-**Parameter:**
+### parseId()
+**Beschreibung:** Validiert IDs aus URL-Parametern.
+**Parameter:** `rawId`, `label`
+**Rückgabe:** Integer-ID oder Fehler (`400`).
 
-**Rückgabe:**
+### validateDateRange()
+**Beschreibung:** Prüft, dass Startdatum nicht nach Enddatum liegt.
+**Parameter:** `startDate`, `endDate`
+**Rückgabe:** Kein Wert, wirft ggf. Fehler (`400`).
 
-usw.
+## Hinweis
 
-## Theme-/Template-Modul
-```
-getAvailableTemplates()
-assignTemplateToPortfolio()
-updatePortfolioTheme()
-```
-
-### getAvailableTemplates()
-**Beschreibung:**  
-
-**Parameter:**
-
-**Rückgabe:**
-
-usw.
-
-## Publish-Modul
-```
-publishPortfolio()
-unpublishPortfolio()
-getPublicPortfolioBySlug()
-isPortfolioPublic()
-```
-
-### publishPortfolio()
-**Beschreibung:**  
-
-**Parameter:**
-
-**Rückgabe:**
-
-usw.
-
-## Upload-Modul
-```
-uploadImage()
-validateUploadedFile()
-deleteUploadedFile()
-```
-
-### uploadImage()
-**Beschreibung:**  
-
-**Parameter:**
-
-**Rückgabe:**
-
-usw.
+Nicht implementierte Zukunftsmodule (z. B. Editor, Publish, Versioning) bleiben bewusst außerhalb dieser Liste,
+damit die Dokumentation nur den aktuellen Stand des Codes zeigt.

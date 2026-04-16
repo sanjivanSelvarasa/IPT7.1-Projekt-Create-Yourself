@@ -3,61 +3,63 @@
 ## Projektziel Backend
 
 ### Beschreibung
-Das Backend dient als zentrale Schnittstelle für die Verarbeitung von Daten.
-Durch API endpunkte ermöglicht es die sichere Kommunikation zwischen Frontend und der Datenbank.
+Das Backend ist die zentrale API-Schicht zwischen Frontend und MS SQL-Datenbank.
+Es übernimmt Authentifizierung, Portfolio-Verwaltung, Modul-CRUDs und Medien-Upload.
 
 ### Verantwortungen Backend
-- Sicheres Login und Authentifizierung der Benutzer
-- Verwaltung von Benutzerdaten
-- Fehlerbehandlung für Standardfälle
-- Vorbereitung für spätere Datenbank- und JWT-Integration
+- Benutzer sicher registrieren und einloggen
+- Geschützte Endpunkte über JWT absichern
+- Portfolios und Portfolio-Inhalte verwalten
+- Projektbilder hochladen und als URL speichern
+- Einheitliche Fehlerantworten liefern
 
-### Hauptfunktionen 
-Benutzerdatenverwaltung und Speichern in der Datenbank:
-    - Name, Email, Passwort
-    - Portfolio Daten
+### Hauptfunktionen
+- Auth: Register, Login, Logout, Token-Refresh
+- Portfolio CRUD
+- Sub-CRUD für:
+    - Projects
+    - Skills
+    - Social Links
+    - Experiences
+    - Educations
+- Upload von Projektbildern (lokale Speicherung)
 
 ## Übersicht
 - Projektziel Backend
-    - Ein übersichtliches, verständliches und simples Backend mit klaren Schnittstellen und Funktionen, um die Anforderungen des Projekts zu erfüllen.
+    - Klares, modulares Backend mit verständlicher Struktur und nachvollziehbaren Endpunkten.
 
 - Technologien
-    - Node.js mit Express für die Serverlogik
-    - Docker für die Containerisierung
-    - JWT für die Authentifizierung
-    - bcrypt für die Passwortsicherheit
-    - Multer für den Umgang mit Mediendateien (wie PNG oder PDF-Uploads)
-    - MS SQL für die Datenbank
-   
+    - Node.js + Express
+    - MS SQL (mssql)
+    - Docker / Docker Compose
+    - JWT + bcrypt
+    - Multer (Datei-Upload)
+
 - Modulübersicht
-    - Authentifizierungsmodul: Verantwortlich für die Registrierung, Anmeldung, Abmeldung und Token-Management der Benutzer.
-    - Portfolio-Verwaltungsmodul: Verantwortlich für die Erstellung, Bearbeitung, Anzeige und Löschung von Portfolios.
+    - Authentifizierungsmodul
+    - Portfolio Core Modul
+    - Project Modul
+    - Skill Modul
+    - SocialLink Modul
+    - Experience Modul
+    - Education Modul
+    - Upload Modul (Projektbilder)
 
 - API-Endpunkte
-    Port 4000 for Authentication:
-    /users/register
-    /users/login
-    /users/logout
-    /token *For Refreshing JWT Tokens*
-
-    Port 3000 for Portfolio Management:
-    /portfolios (GET, POST, PUT, DELETE)
+    - Basis: Port 3000
+    - Auth-Endpunkte: `/users/register`, `/users/login`, `/users/logout`, `/token`
+    - Portfolio-Endpunkte: `/portfolio`, `/portfolio/:id`, `/portfolios`
+    - Modul-Endpunkte unter `/portfolio/:id/...`
 
 - Funktionsliste
-    - Benutzerverwaltung der Serveradministratoren
-    - Übersichetliche API-Endpunkte für die Portfolio-Verwaltung
+    - Konkrete Funktionen sind in `5_function-list.md` aufgeführt.
 
 - Datenbankbezug
-    - warte noch auf die Datenbank-Schemas, um die genauen Tabellen und Beziehungen zu verstehen
+    - Tabellen und Beziehungen sind in `6_database-relation.md` dokumentiert.
 
 - Sicherheitskonzept
-    - Passwort-Hashing mit bcrypt
-    - JWT für die Authentifizierung und Autorisierung
-    - Authentication Tokens sind gültig für 15 minuten, Refresh Tokens für einen Monat.
-    - Rate-Limiting der IP-Adressen für API-Endpunkte, um Brute-Force-Angriffe zu verhindern
-    - Eingabevalidierung, um SQL-Injection und andere Angriffe zu verhindern
+    - Passwort-Hashing, JWT-Prüfung, Ownership Checks und Input-Validierung.
 
 - Fehlerbehandlung
-    - alle Benutzer eingaben werden zuerst validiert, bevor sie verarbeitet werden
-    - Fehler werden mit klaren Statuscodes und Nachrichten zurückgegeben
+    - Zentrale Error-Middleware mit klaren Statuscodes und JSON-Fehlerformat.
 

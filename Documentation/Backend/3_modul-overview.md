@@ -2,20 +2,22 @@
 
 | Modulname        | Beschreibung                          |
 |------------------|--------------------------------------|
-| Auth             | Login & Registrierung                |
-| User             | Benutzerverwaltung                   |
-| Portfolio        | Portfolio-Logik                      |
-| Editor           | Baukasten-Editor                     |
-| Upload           | Medienverwaltung                     |
-| Publish          | Veröffentlichung                     |
-| Versioning       | Speicherstände / Versionen           |
+| Auth             | Login, Registrierung, Logout, Token-Refresh |
+| Portfolio        | Portfolio CRUD und Ownership-Prüfung |
+| Project          | CRUD für Projekte innerhalb eines Portfolios |
+| Skill            | CRUD für PortfolioSkill-Zuordnungen |
+| SocialLink       | CRUD für Social Links im Portfolio |
+| Experience       | CRUD für Berufserfahrungen |
+| Education        | CRUD für Bildungsdaten |
+| Upload           | Projektbild-Upload und URL-Speicherung |
+| Validation/Errors| Gemeinsame Validierung + Fehlerformat |
 
 ### Moduldetails
 
 #### Modul: Auth
 - Zweck:
-    
-    Dieses Modul ist für die Authentifizierung und Anmeldung der Benutzer zuständig. Es stellt sicher, dass sich Nutzer registrieren, einloggen, ausloggen und ihre Tokens erneuern können. Zudem schützt es Bereiche der Anwendung, die nur für eingeloggte Benutzer zugänglich sein sollen.
+    Dieses Modul ist für Registrierung, Login, Logout und Token-Refresh zuständig.
+    Es stellt Access- und Refresh-Tokens bereit und schützt private API-Routen.
 - Hauptfunktionen:
     - Benutzer registrieren
     - Benutzer einloggen
@@ -25,121 +27,102 @@
     - Passwörter hashen und prüfen
     - Authentifizierung per JWT prüfen
 - Abhängigkeiten:
-    - User-Model
+    - Auth-Model
     - bcrypt
     - jsonwebtoken (JWT)
     - Auth-Middleware
     - Error Handling
 
-#### Modul: User
-- Zweck:
-
-    Dieses Modul verwaltet die Benutzerdaten. Es ermöglicht, Profildaten eines Benutzers abzurufen und zu bearbeiten. Dazu gehören zum Beispiel Benutzername, E-Mail oder Profilbild. Grundlage dafür ist die User-Entität aus unserem Datenmodell.
-- Hauptfunktionen:
-    - Eigenes Benutzerprofil abrufen
-    - Benutzerprofil bearbeiten
-    - Profilbild speichern oder aktualisieren
-    - Passwort ändern
-    - Optional: Benutzerkonto löschen
-- Abhängigkeiten:
-    - User Model
-    - Auth-Modul
-    - Upload-Modul (Profilbild)
-    - Validierung von Eingaben (Email, Name, Passwort)
-
 #### Modul: Portfolio
 - Zweck:
-
-    Dieses Modul bildet den Kern des Projekts. Es ist für die Erstellung, Bearbeitung, Anzeige und Löschung von Portfolios zuständig. Außerdem verwaltet es wichtige Metadaten wie Titel, Beschreibung, Sichtbarkeit, Slug und Template-Zuweisung.
+    Kernmodul für Portfolio-Daten (Titel, Beschreibung, Slug, Sichtbarkeit).
+    Enthält die Haupt-CRUD-Operationen und Zugriffskontrolle pro Benutzer.
 - Hauptfunktionen:
     - Portfolio erstellen
     - Eigene Portfolios abrufen
-    - Einzelnes Portfolio laden
-    - Portfolio bearbeiten
+    - Einzelnes Portfolio abrufen
+    - Portfolio aktualisieren
     - Portfolio löschen
-    - Sichtbarkeit ändern
-    - Eindeutigen Slug generieren und prüfen
 - Abhängigkeiten:
-    - Portfolio Model
-    - User-Model
-    - Theme- / Template-Modul
-    - Publish-Modul
-    - Versioning-Modul
-    - Middleware für Authentifizierung
+    - Portfolio-Model
+    - Access-Helper (Ownership)
+    - Validatoren
 
-#### Modul: Editor
+#### Modul: Project
 - Zweck:
-
-    Dieses Modul unterstützt den Baukasten-Editor, das Hauptfeature der Website. Es speichert die Inhalte und Struktur eines Portfolios und sorgt dafür, dass Änderungen im Editor übernommen werden können. Ein Teil der Editor-Logik liegt im Frontend, aber das Backend muss die Daten verarbeiten, speichern und validieren.
+    Verwaltung von Projekten pro Portfolio.
 - Hauptfunktionen:
-    - Editor-Daten laden
-    - Inhalte speichern
-    - einzelne Bereiche aktualisieren
-    - Entwurf speichern
-    - optional: Autosave
+    - Projekte auflisten
+    - Projekt anlegen
+    - Projekt aktualisieren
+    - Projekt löschen
 - Abhängigkeiten:
-    - Portfolio Model
-    - Versioning Modul
-    - Upload-Modul
-    - Validierung Editor Daten
-    - Error Handling bei ungültigem Inhalt
+    - Project-Model
+    - Access-Helper (Ownership)
+    - Validatoren
+
+#### Modul: Skill
+- Zweck:
+    Verwaltung der Skill-Zuordnungen pro Portfolio über `PortfolioSkill`.
+- Hauptfunktionen:
+    - Skills auflisten
+    - Skill-Zuordnung erstellen
+    - Skill-Level aktualisieren
+    - Skill-Zuordnung löschen
+- Abhängigkeiten:
+    - Skill-Model
+    - Access-Helper
+    - Validatoren
+
+#### Modul: SocialLink
+- Zweck:
+    Verwaltung der sozialen Profile/Links pro Portfolio.
+- Hauptfunktionen:
+    - Links auflisten
+    - Link anlegen
+    - Link aktualisieren
+    - Link löschen
+- Abhängigkeiten:
+    - SocialLink-Model
+    - Access-Helper
+    - Validatoren
+
+#### Modul: Experience
+- Zweck:
+    Verwaltung beruflicher Stationen pro Portfolio.
+- Hauptfunktionen:
+    - Experience-Einträge auflisten
+    - Experience-Eintrag anlegen
+    - Experience-Eintrag aktualisieren
+    - Experience-Eintrag löschen
+- Abhängigkeiten:
+    - Experience-Model
+    - Access-Helper
+    - Validatoren
+
+#### Modul: Education
+- Zweck:
+    Verwaltung von Bildungsdaten pro Portfolio.
+- Hauptfunktionen:
+    - Education-Einträge auflisten
+    - Education-Eintrag anlegen
+    - Education-Eintrag aktualisieren
+    - Education-Eintrag löschen
+- Abhängigkeiten:
+    - Education-Model
+    - Access-Helper
+    - Validatoren
 
 #### Modul: Upload
 - Zweck:
-
-    Dieses Modul ist für den Upload und die Verwaltung von Mediendateien zuständig, zum Beispiel Profilbilder oder Bilder innerhalb eines Portfolios. Es überprüft Dateityp, Dateigröße und Speicherort und sorgt dafür, dass nur erlaubte Dateien verarbeitet werden.
+    Upload von Projektbildern inklusive lokaler Speicherung und Rückgabe einer abrufbaren URL.
 - Hauptfunktionen:
-    - Bilddateien hochladen
-    - Dateityp prüfen
-    - Dateigröße prüfen
-    - Datei speichern
-    - Datei löschen
+    - Bilddatei entgegennehmen (multipart/form-data)
+    - Dateityp und Dateigröße prüfen
+    - Datei lokal speichern
+    - URL in `Project.img_url` speichern
 - Abhängigkeiten:
-    - Upload-Middleware
-    - User-Modul für Profilbilder
-    - Portfolio-/Editor-Modul für Medien im Portfolio
-    - Check für erlaubte Dateien
-
-
-#### Modul: Publish
-- Zweck:
-    Dieses Modul ist für die Veröffentlichung eines Portfolios zuständig. Es macht ein Portfolio unter einer öffentlichen URL zugänglich und regelt, ob ein Portfolio sichtbar oder verborgen ist.
-- Hauptfunktionen:
-    - Portfolio veröffentlichen
-    - Veröffentlichung zurückziehen
-    - öffentliches Portfolio per Slug laden
-    - Sichtbarkeit prüfen
-- Abhängigkeiten:
-    - Portfolio-Model
-    - Slug Utils
-
-
-#### Modul: Versioning
-- Zweck:
-
-    Dieses Modul speichert frühere Stände eines Portfolios. So können Benutzer Entwürfe sichern, Änderungen ansehen und bei Bedarf auf ältere Versionen zurückgehen.
-- Hauptfunktionen:
-    - neue Version speichern
-    - frühere Versionen abrufen
-    - bestimmte Version laden
-    - Version wiederherstellen
-- Abhängigkeiten:
-    - Portfolio-Model
-    - Editor-Modul
-    - Datenbanktabelle für Versionen
-
-#### Modul: Template / Theme
-- Zweck:
-    Dieses Modul verwaltet das Aussehen der Portfolios. Es erlaubt, Templates auszuwählen und Einstellungen wie Farben, Schriftarten oder Layout-Typen zu speichern.
-- Hauptfunktionen:
-    - verfügbare Templates abrufen
-    - Template einem Portfolio zuweisen
-    - Farben speichern
-    - Schriftarten speichern
-    - Theme-Einstellungen aktualisieren
-- Abhängigkeiten:
-    - Template-Model
-    - Portfolio-Model
-    - Editor-Modul
-    - Frontend-Designsystem
+    - Multer Middleware
+    - Project-Service und Project-Model
+    - Express Static Serving (`/uploads`)
 

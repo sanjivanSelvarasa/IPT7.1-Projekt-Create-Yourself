@@ -2,9 +2,12 @@
 
 | Bereich | Technologie | Zweck |
 | --- | --- | --- |
-| Framework | Express.js | API & Routing |
-| Authentifizierung | jsonwebtoken (JWT) | Token-basierte Authentifizierung und Autorisierung |
-| Sicherheit | bcrypt | Passwort-Hashing und sichere Passwort-Verifikation |
-| Konfiguration | dotenv | Umgebungsvariablen aus .env-Datei laden |
 | Runtime | Node.js | JavaScript-Ausführungsumgebung |
-| Containerisierung | Docker | Containerisierung des Backends |
+| Framework | Express.js | API, Routing und Middleware-Pipeline |
+| Datenbank | MS SQL Server | Persistente Speicherung von User-/Portfolio-Daten |
+| DB-Treiber | mssql | SQL-Abfragen aus Node.js gegen MS SQL |
+| Authentifizierung | jsonwebtoken (JWT) | Access- und Refresh-Token-basierte Auth |
+| Sicherheit | bcrypt | Passwort-Hashing und Verifikation |
+| Upload | multer | Verarbeitung von multipart/form-data (Bilder) |
+| Konfiguration | dotenv | Laden von Umgebungsvariablen aus .env |
+| Containerisierung | Docker + Docker Compose | Backend, DB und Init-Prozess als Services |

@@ -11,13 +11,21 @@ backend/
   |- 3_services/
   |- 4_models/
   |- 5_utils/
-    |- app.js
+  |- uploads/
+  |- app.js
 ```
 
 ## Backend Flow
 
 ```
 Route -> Middleware -> Controller -> Service -> Model -> Datenbank
+```
+
+Für Uploads zusätzlich:
+
+```
+Route -> Upload Middleware (multer) -> Controller -> Service -> Model -> Datenbank
+                                  -> Dateisystem (uploads/)
 ```
 
 ## Erklärung Backend Teilbereiche
@@ -43,6 +51,8 @@ async function createPortfolio(req, res) {
 **Wichtig**:
 Controller enthalten keine komplexe Geschäftslogik, sondern steuern nur den Ablauf zwischen Client und Backend-Logik.
 
+Im aktuellen Stand ruft `portfolioController` mehrere spezialisierte Services auf (Project, Skill, SocialLink, Experience, Education).
+
 ---
 
 ### services/
@@ -64,6 +74,15 @@ async function createPortfolio(data) {
 **Wichtig**:
 Die Logik ist unabhängig vom HTTP-System und kann wiederverwendet und getestet werden.
 
+Aktuelle modulare Services:
+- `portfolioService`
+- `projectService`
+- `skillService`
+- `socialLinkService`
+- `experienceService`
+- `educationService`
+- gemeinsamer Helper: `services/helpers/portfolioAccess.js`
+
 ---
 
 ### routes/
@@ -81,6 +100,10 @@ router.post("/portfolio", createPortfolio);
 ```
 
 **Wichtig**: Alle Endpunkte sind zentral organisiert und übersichtlich.
+
+Im aktuellen Projekt liegen Auth- und Portfolio-Routen getrennt in:
+- `0_routes/authRoutes.js`
+- `0_routes/portfolioRoutes.js`
 
 ---
 
@@ -102,6 +125,15 @@ const Portfolio = {
 ```
 
 **Wichtig**: Sorgt für konsistente und strukturierte Daten.
+
+Aktuelle modulare Models:
+- `authModel`
+- `portfolioModel`
+- `projectModel`
+- `skillModel`
+- `socialLinkModel`
+- `experienceModel`
+- `educationModel`
 
 ---
 
@@ -125,6 +157,12 @@ function authMiddleware(req, res, next) {
 **Wichtig**:
 Wiederverwendbare Logik, die nicht im Controller stehen muss.
 
+Im aktuellen Stand existieren u. a.:
+- `authenticateToken`
+- `errorHandler`
+- `notFoundHandler`
+- `uploadProjectImage`
+
 ---
 
 ### utils/
@@ -143,6 +181,12 @@ function generateSlug(title) {
 
 **Wichtig**:
 Utils enthalten keine Geschäftslogik, sondern nur allgemeine Funktionen.
+
+Im aktuellen Stand:
+- `ApiError`
+- `asyncHandler`
+- `authParsers`
+- `validators`
 
 ---
 
@@ -171,6 +215,10 @@ app.listen(3000, () => {
 ```
 
 **Wichtig**: Verknüpft alle Teile des Backends zu einer funktionierenden Anwendung.
+
+Zusätzlich im aktuellen Stand:
+- Statische Auslieferung von Upload-Dateien über `/uploads`
+- Start erst nach erfolgreicher DB-Verbindung
 
 ---
 

@@ -48,6 +48,30 @@ Ungültige JSON-Bodies (Syntaxfehler) werden separat abgefangen und mit folgende
 }
 ```
 
+## Upload-Fehler (Multer)
+
+Datei-Upload-Fehler werden zentral auf klare API-Fehler gemappt:
+
+- Datei zu groß (`LIMIT_FILE_SIZE`) -> `400`
+  - `"Die Bilddatei ist zu groß. Maximal 5 MB sind erlaubt."`
+- Falscher Dateityp / unerwartetes Feld (`LIMIT_UNEXPECTED_FILE`) -> `400`
+  - `"Ungültige Datei. Es sind nur Bilddateien erlaubt."`
+- Sonstige Upload-Fehler -> `400`
+  - `"Datei-Upload fehlgeschlagen."`
+
+## Typische Fachfehler
+
+- `400 Bad Request`
+  - Ungültige ID, fehlende Pflichtfelder, falsches Datumsformat, ungültige URL
+- `401 Unauthorized`
+  - Kein Access Token übermittelt
+- `403 Forbidden`
+  - Ungültiger/abgelaufener Token oder Zugriff auf fremde Ressourcen
+- `404 Not Found`
+  - Portfolio/Projekt/Modul-Eintrag nicht gefunden
+- `409 Conflict`
+  - Eindeutigkeitskonflikte (z. B. E-Mail oder Slug bereits vorhanden)
+
 ## Fehlercodes
 
 Die pro Endpunkt möglichen Statuscodes sind in der [API-Endpoints Dokumentation](./4_api-endpoints.md) aufgelistet.
