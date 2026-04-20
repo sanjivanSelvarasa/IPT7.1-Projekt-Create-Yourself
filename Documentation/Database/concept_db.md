@@ -190,7 +190,9 @@ Beziehung:
 **Beschreibung:**  
 Speichert die eigentlichen Bausteine des Editors wie Text, Bild, Link oder andere Komponenten.
 
-## Beziehung:
+Beziehung:
+
+- EditorBlock **N - 1** PortfolioSection  
 
 ### Media
 
@@ -208,6 +210,11 @@ Speichert die eigentlichen Bausteine des Editors wie Text, Bild, Link oder ander
 
 **Beschreibung:**  
 Verwaltet hochgeladene Medien wie Bilder für Profil, Projekte oder Editor-Blöcke.
+
+Beziehung:
+
+- Media **N - 1** User  
+- Media **N - 1** Portfolio  
 
 ## Beziehung:
 
@@ -231,7 +238,9 @@ Verwaltet hochgeladene Medien wie Bilder für Profil, Projekte oder Editor-Blöc
 **Beschreibung:**  
 Speichert Projekte, die in einem Portfolio angezeigt werden.
 
-## Beziehung:
+Beziehung:
+
+- Project **N - 1** Portfolio  
 
 ### Skill
 
@@ -265,7 +274,10 @@ Beziehung:
 **Beschreibung:**  
 Verbindet Skills mit einem Portfolio und speichert das Level vom Skill.
 
-## Beziehung:
+Beziehung:
+
+- PortfolioSkill **N - 1** Portfolio  
+- PortfolioSkill **N - 1** Skill  
 
 ### SocialLink
 
@@ -280,7 +292,9 @@ Verbindet Skills mit einem Portfolio und speichert das Level vom Skill.
 **Beschreibung:**  
 Speichert Social-Media oder Kontaktlinks für ein Portfolio.
 
-## Beziehung:
+Beziehung:
+
+- SocialLink **N - 1** Portfolio  
 
 ### Experience
 
@@ -299,7 +313,9 @@ Speichert Social-Media oder Kontaktlinks für ein Portfolio.
 **Beschreibung:**  
 Speichert Berufserfahrungen, die im Portfolio dargestellt werden.
 
-## Beziehung:
+Beziehung:
+
+- Experience **N - 1** Portfolio  
 
 ### Education
 
@@ -318,7 +334,9 @@ Speichert Berufserfahrungen, die im Portfolio dargestellt werden.
 **Beschreibung:**  
 Speichert Ausbildungsinformationen für das Portfolio.
 
-## Beziehung:
+Beziehung:
+
+- Education **N - 1** Portfolio  
 
 ### PortfolioTranslation
 
@@ -335,4 +353,6 @@ Speichert Ausbildungsinformationen für das Portfolio.
 **Beschreibung:**  
 Ermöglicht Inhalte für Portfolio-Titel und Beschreibung mit verschiedenen Sprachen.
 
-## Beziehung:
+Beziehung:
+
+- PortfolioTranslation **N - 1** Portfolio  
