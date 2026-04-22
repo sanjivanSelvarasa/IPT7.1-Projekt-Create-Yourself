@@ -192,7 +192,7 @@ Speichert die eigentlichen Bausteine des Editors wie Text, Bild, Link oder ander
 
 Beziehung:
 
-- EditorBlock **N - 1** PortfolioSection  
+- EditorBlock **N - 1** PortfolioSection
 
 ### Media
 
@@ -213,8 +213,8 @@ Verwaltet hochgeladene Medien wie Bilder für Profil, Projekte oder Editor-Blöc
 
 Beziehung:
 
-- Media **N - 1** User  
-- Media **N - 1** Portfolio  
+- Media **N - 1** User
+- Media **N - 1** Portfolio
 
 ## Beziehung:
 
@@ -226,7 +226,7 @@ Beziehung:
 | portfolio_id | INT           | FK → portfolio.id |
 | title        | NVARCHAR(100) | -                 |
 | description  | NVARCHAR(MAX) | -                 |
-| sort_order   | int           | -                 |
+| sort_order   | INT           | -                 |
 | img_url      | NVARCHAR(255) | -                 |
 | project_url  | NVARCHAR(255) | -                 |
 | github_url   | NVARCHAR(255) | -                 |
@@ -240,7 +240,7 @@ Speichert Projekte, die in einem Portfolio angezeigt werden.
 
 Beziehung:
 
-- Project **N - 1** Portfolio  
+- Project **N - 1** Portfolio
 
 ### Skill
 
@@ -268,7 +268,7 @@ Beziehung:
 | portfolio_id | INT       | FK → portfolio.id |
 | skill_id     | INT       | FK → skill.id     |
 | level        | TINYINT   | -                 |
-| sort_order   | int       | -                 |
+| sort_order   | INT       | -                 |
 | created_at   | DATETIME2 | -                 |
 
 **Beschreibung:**  
@@ -276,8 +276,8 @@ Verbindet Skills mit einem Portfolio und speichert das Level vom Skill.
 
 Beziehung:
 
-- PortfolioSkill **N - 1** Portfolio  
-- PortfolioSkill **N - 1** Skill  
+- PortfolioSkill **N - 1** Portfolio
+- PortfolioSkill **N - 1** Skill
 
 ### SocialLink
 
@@ -294,7 +294,7 @@ Speichert Social-Media oder Kontaktlinks für ein Portfolio.
 
 Beziehung:
 
-- SocialLink **N - 1** Portfolio  
+- SocialLink **N - 1** Portfolio
 
 ### Experience
 
@@ -304,7 +304,7 @@ Beziehung:
 | portfolio_id | INT           | FK → portfolio.id |
 | company_name | NVARCHAR(100) | -                 |
 | position     | NVARCHAR(100) | -                 |
-| sort_order   | int           | -                 |
+| sort_order   | INT           | -                 |
 | description  | NVARCHAR(MAX) | -                 |
 | start_date   | DATE          | -                 |
 | end_date     | DATE          | -                 |
@@ -315,7 +315,7 @@ Speichert Berufserfahrungen, die im Portfolio dargestellt werden.
 
 Beziehung:
 
-- Experience **N - 1** Portfolio  
+- Experience **N - 1** Portfolio
 
 ### Education
 
@@ -326,7 +326,7 @@ Beziehung:
 | institution_name | NVARCHAR(100) | -                 |
 | degree           | NVARCHAR(100) | -                 |
 | field_of_study   | NVARCHAR(100) | -                 |
-| sort_order       | int           | -                 |
+| sort_order       | INT           | -                 |
 | start_date       | DATE          | -                 |
 | end_date         | DATE          | -                 |
 | created_at       | DATETIME2     | -                 |
@@ -336,7 +336,7 @@ Speichert Ausbildungsinformationen für das Portfolio.
 
 Beziehung:
 
-- Education **N - 1** Portfolio  
+- Education **N - 1** Portfolio
 
 ### PortfolioTranslation
 
@@ -355,4 +355,4 @@ Ermöglicht Inhalte für Portfolio-Titel und Beschreibung mit verschiedenen Spra
 
 Beziehung:
 
-- PortfolioTranslation **N - 1** Portfolio  
+- PortfolioTranslation **N - 1** Portfolio
