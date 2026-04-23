@@ -1,0 +1,33 @@
+Statusbericht Backend – Gian (Stand: 21.04.2026)
+1. Fortschritt der Arbeitspakete (Auszug):
+
+Projektsetup & Docker: 90% (Struktur & Container stehen)
+
+Datenbankanbindung: 80% (Verbindung steht, veränderungen sind höchst warscheinlich)
+
+Authentifizierung: 100% (JWT/Login bereit, Refresh-Token auch)
+
+Kern-Module (CRUD): 90% (Portfolio, Projekte, Skills, Social Links, Experience, Education weitgehend fertig)
+
+Bild-Upload & Validierung: 80% (Funktionen implementiert, noh nicht wirklich getestet)
+
+Sicherheit & Versionierung: 10% (Basis steht, Details fehlen)
+
+Tests: 0% (noch offen)
+
+4. Aktueller Stand (Zusammenfassung):
+Das Backend ist strukturell weit fortgeschritten; die Grundstruktur (Node.js)
+sowie die Docker-Umgebung mit MS SQL sind einsatzbereit.
+Die wichtigsten Kernfunktionen (Auth, CRUD-Endpunkte für alle Portfolio-Module und Bild-Upload) sind bereits implementiert 
+und funktional. Aktuell liegt der Fokus auf der Bereinigung kleinerer Abweichungen zwischen dem SQL-Schema und dem Backend-Code. 
+Offen sind primär noch die Portfolio-Versionierung, automatisierte Tests.
+Insgesamt befindet sich das Backend in einer stabilen Zwischenphase und ist für manuelle Tests bereit.
+Ich bin mir noch nicht sicher ob es auch auf windows laufen würde.
+
+Nächste Schritte:
+
+Schema-Abgleich zwischen DB und Code finalisieren.
+
+End-to-End Tests der Auth- und CRUD-Endpunkte.
+
+Implementierung der Versionierung und Korrekter verbindung zum Frontend.
