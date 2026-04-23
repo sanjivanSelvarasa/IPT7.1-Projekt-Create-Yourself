@@ -16,6 +16,9 @@ router.post('/portfolio', authenticateToken, asyncHandler(portfolioController.cr
 // Einzelnes Portfolio lesen
 router.get('/portfolio/:id', authenticateToken, asyncHandler(portfolioController.getPortfolioById))
 
+// Portfolio inkl. aller Module lesen
+router.get('/portfolio/:id/full', authenticateToken, asyncHandler(portfolioController.getPortfolioFullById))
+
 // Portfolio aktualisieren
 router.put('/portfolio/:id', authenticateToken, asyncHandler(portfolioController.updatePortfolio))
 

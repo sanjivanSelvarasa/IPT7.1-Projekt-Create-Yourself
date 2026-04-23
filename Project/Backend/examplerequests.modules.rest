@@ -1,10 +1,10 @@
 @baseUrl = http://localhost:3000
 
 # Voraussetzung: Gueltigen Access Token eintragen
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdpYW5AYmVpc3BpZWwuY2giLCJpYXQiOjE3NzYzNzk3NTcsImV4cCI6MTc3NjM4MDk1N30.M9T7yAZZP3w10Hu9v4Cxw_qO_O1B6Yhh9mlrECh8sH0
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdpYW5AYmVpc3BpZWwuY2giLCJpYXQiOjE3NzY5MzU3OTAsImV4cCI6MTc3NjkzNjk5MH0.q2pEKijeaALgs9zonZtfpp0-R8VsoTNoy_-OEeE6sMI
 
 # Voraussetzung: Bestehende Portfolio-ID eintragen
-@portfolioId = 2002
+@portfolioId = 1
 
 # Nach Create-Antworten die IDs eintragen
 @projectId = INSERT_PROJECT_ID_HERE
@@ -12,6 +12,10 @@
 @linkId = INSERT_LINK_ID_HERE
 @experienceId = INSERT_EXPERIENCE_ID_HERE
 @educationId = INSERT_EDUCATION_ID_HERE
+
+### Portfolio komplett abrufen (inkl. Projekte, Skills, Links, Experience, Education)
+GET {{baseUrl}}/portfolio/{{portfolioId}}/full
+Authorization: Bearer {{accessToken}}
 
 ### Projekte im Portfolio auflisten
 GET {{baseUrl}}/portfolio/{{portfolioId}}/projects

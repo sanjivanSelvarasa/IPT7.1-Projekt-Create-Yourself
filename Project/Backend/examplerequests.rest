@@ -3,11 +3,11 @@
 @password = password123
 
 # Nach dem Login aus der Antwort einsetzen
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdpYW5AYmVpc3BpZWwuY2giLCJpYXQiOjE3NzYzNzk3NTcsImV4cCI6MTc3NjM4MDk1N30.M9T7yAZZP3w10Hu9v4Cxw_qO_O1B6Yhh9mlrECh8sH0
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdpYW5AYmVpc3BpZWwuY2giLCJpYXQiOjE3NzY5MzQ5NDYsImV4cCI6MTc3NjkzNjE0Nn0.Dorkk7Tk6cRzMv7NvYdxB3_ht6r1q8uz_kJDs-UsUXo
 @refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdpYW5AYmVpc3BpZWwuY2giLCJpYXQiOjE3NzYzNzY1NTl9.BMbC0SLUr5rLHl5pyy5MVWt0nGbfzBdJ4BHYATh5YPI
 
 # Nach dem Erstellen aus der Antwort einsetzen
-@portfolioId = 2002
+@portfolioId = 1
 
 ### Benutzer registrieren
 POST {{baseUrl}}/users/register

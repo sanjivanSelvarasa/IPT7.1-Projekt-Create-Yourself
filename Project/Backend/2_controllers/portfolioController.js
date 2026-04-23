@@ -20,6 +20,11 @@ async function getPortfolioById(req, res) {
     res.json(portfolio)
 }
 
+async function getPortfolioFullById(req, res) {
+    const portfolio = await portfolioService.getPortfolioFullById(req.user.email, req.params.id)
+    res.json(portfolio)
+}
+
 async function updatePortfolio(req, res) {
     const portfolio = await portfolioService.updatePortfolio(req.user.email, req.params.id, req.body)
     res.json(portfolio)
@@ -145,6 +150,7 @@ module.exports = {
     getPortfolios,
     createPortfolio,
     getPortfolioById,
+    getPortfolioFullById,
     updatePortfolio,
     deletePortfolio,
     listProjects,

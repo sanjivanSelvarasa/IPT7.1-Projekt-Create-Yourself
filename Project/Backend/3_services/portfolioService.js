@@ -8,6 +8,11 @@ const {
 } = require('../5_utils/validators')
 const { findUserOrThrow, getOwnedPortfolio } = require('./helpers/portfolioAccess')
 const portfolioModel = require('../4_models/portfolioModel')
+const projectModel = require('../4_models/projectModel')
+const skillModel = require('../4_models/skillModel')
+const socialLinkModel = require('../4_models/socialLinkModel')
+const experienceModel = require('../4_models/experienceModel')
+const educationModel = require('../4_models/educationModel')
 
 function generateSlug(base) {
     return `${base}-${Date.now()}`
@@ -54,6 +59,27 @@ async function getPortfolioById(email, rawPortfolioId) {
     return portfolio
 }
 
+async function getPortfolioFullById(email, rawPortfolioId) {
+    const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
+
+    const [projects, skills, socialLinks, experiences, educations] = await Promise.all([
+        projectModel.getProjectsByPortfolioId(portfolio.id),
+        skillModel.getPortfolioSkillsByPortfolioId(portfolio.id),
+        socialLinkModel.getSocialLinksByPortfolioId(portfolio.id),
+        experienceModel.getExperiencesByPortfolioId(portfolio.id),
+        educationModel.getEducationsByPortfolioId(portfolio.id)
+    ])
+
+    return {
+        portfolio,
+        projects,
+        skills,
+        socialLinks,
+        experiences,
+        educations
+    }
+}
+
 async function updatePortfolio(email, rawPortfolioId, data) {
     const portfolioId = parseId(rawPortfolioId, 'Portfolio-ID')
     const existing = await getOwnedPortfolio(email, portfolioId)
@@ -95,6 +121,7 @@ module.exports = {
     getPortfoliosForUser,
     createPortfolio,
     getPortfolioById,
+    getPortfolioFullById,
     updatePortfolio,
     deletePortfolio
 }
