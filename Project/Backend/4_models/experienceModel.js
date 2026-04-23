@@ -13,7 +13,7 @@ async function getExperiencesByPortfolioId(portfolioId) {
                 portfolio_id AS portfolioId,
                 company_name AS companyName,
                 position,
-                [desc] AS description,
+                description,
                 [start_date] AS startDate,
                 end_date AS endDate,
                 created_at AS createdAt
@@ -36,7 +36,7 @@ async function getExperienceById(experienceId) {
                 portfolio_id AS portfolioId,
                 company_name AS companyName,
                 position,
-                [desc] AS description,
+                description,
                 [start_date] AS startDate,
                 end_date AS endDate,
                 created_at AS createdAt
@@ -62,7 +62,7 @@ async function createExperienceForPortfolio(portfolioId, experience) {
                 portfolio_id,
                 company_name,
                 position,
-                [desc],
+                description,
                 [start_date],
                 end_date,
                 created_at
@@ -72,7 +72,7 @@ async function createExperienceForPortfolio(portfolioId, experience) {
                 inserted.portfolio_id AS portfolioId,
                 inserted.company_name AS companyName,
                 inserted.position,
-                inserted.[desc] AS description,
+                inserted.description,
                 inserted.[start_date] AS startDate,
                 inserted.end_date AS endDate,
                 inserted.created_at AS createdAt
@@ -105,7 +105,7 @@ async function updateExperience(experienceId, experience) {
             SET
                 company_name = @companyName,
                 position = @position,
-                [desc] = @description,
+                description = @description,
                 [start_date] = @startDate,
                 end_date = @endDate
             OUTPUT
@@ -113,7 +113,7 @@ async function updateExperience(experienceId, experience) {
                 inserted.portfolio_id AS portfolioId,
                 inserted.company_name AS companyName,
                 inserted.position,
-                inserted.[desc] AS description,
+                inserted.description,
                 inserted.[start_date] AS startDate,
                 inserted.end_date AS endDate,
                 inserted.created_at AS createdAt

@@ -90,7 +90,7 @@ async function addRefreshToken(token, userId) {
         .query(`
             INSERT INTO UserRefreshToken (
                 user_id,
-                token,
+                token_hash,
                 created_at
             )
             VALUES (
@@ -106,7 +106,7 @@ async function hasRefreshToken(token) {
     const result = await pool
         .request()
         .input('token', sql.NVarChar(2048), token)
-        .query('SELECT TOP 1 id FROM UserRefreshToken WHERE token = @token')
+        .query('SELECT TOP 1 id FROM UserRefreshToken WHERE token_hash = @token')
 
     return result.recordset.length > 0
 }
@@ -117,7 +117,7 @@ async function removeRefreshToken(token) {
     await pool
         .request()
         .input('token', sql.NVarChar(2048), token)
-        .query('DELETE FROM UserRefreshToken WHERE token = @token')
+    .query('DELETE FROM UserRefreshToken WHERE token_hash = @token')
 }
 
 module.exports = {

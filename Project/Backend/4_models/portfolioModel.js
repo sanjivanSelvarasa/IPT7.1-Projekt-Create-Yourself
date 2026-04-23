@@ -27,7 +27,7 @@ async function getPortfoliosByUserId(userId) {
             SELECT
                 id,
                 title,
-                [desc] AS description,
+                description,
                 slug,
                 visibility,
                 created_at AS createdAt,
@@ -54,7 +54,7 @@ async function createPortfolioForUser(userId, portfolio) {
                 [user_id],
                 template_id,
                 title,
-                [desc],
+                description,
                 slug,
                 visibility,
                 created_at,
@@ -64,7 +64,7 @@ async function createPortfolioForUser(userId, portfolio) {
                 inserted.id,
                 inserted.[user_id] AS userId,
                 inserted.title,
-                inserted.[desc] AS description,
+                inserted.description,
                 inserted.slug,
                 inserted.visibility,
                 inserted.created_at AS createdAt,
@@ -94,7 +94,7 @@ async function getPortfolioById(portfolioId) {
                 id,
                 [user_id] AS userId,
                 title,
-                [desc] AS description,
+                description,
                 slug,
                 visibility,
                 created_at AS createdAt,
@@ -119,7 +119,7 @@ async function updatePortfolio(portfolioId, portfolio) {
             UPDATE Portfolio
             SET
                 title = @title,
-                [desc] = @description,
+                description = @description,
                 slug = @slug,
                 visibility = @visibility,
                 updated_at = SYSUTCDATETIME()
@@ -127,7 +127,7 @@ async function updatePortfolio(portfolioId, portfolio) {
                 inserted.id,
                 inserted.[user_id] AS userId,
                 inserted.title,
-                inserted.[desc] AS description,
+                inserted.description,
                 inserted.slug,
                 inserted.visibility,
                 inserted.created_at AS createdAt,

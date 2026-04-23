@@ -11,7 +11,7 @@ async function findSkillByName(name) {
             SELECT TOP 1
                 id,
                 [name] AS name,
-                [desc] AS description,
+                description,
                 created_at AS createdAt
             FROM Skill
             WHERE LOWER([name]) = LOWER(@name)
@@ -29,13 +29,13 @@ async function createSkill(skill) {
         .query(`
             INSERT INTO Skill (
                 [name],
-                [desc],
+                description,
                 created_at
             )
             OUTPUT
                 inserted.id,
                 inserted.[name] AS name,
-                inserted.[desc] AS description,
+                inserted.description,
                 inserted.created_at AS createdAt
             VALUES (
                 @name,
@@ -58,7 +58,7 @@ async function getPortfolioSkillsByPortfolioId(portfolioId) {
                 ps.portfolio_id AS portfolioId,
                 ps.skill_id AS skillId,
                 s.[name] AS name,
-                s.[desc] AS description,
+                s.description,
                 ps.[level] AS [level],
                 ps.created_at AS createdAt
             FROM PortfolioSkill ps
@@ -81,7 +81,7 @@ async function getPortfolioSkillById(portfolioSkillId) {
                 ps.portfolio_id AS portfolioId,
                 ps.skill_id AS skillId,
                 s.[name] AS name,
-                s.[desc] AS description,
+                s.description,
                 ps.[level] AS [level],
                 ps.created_at AS createdAt
             FROM PortfolioSkill ps
