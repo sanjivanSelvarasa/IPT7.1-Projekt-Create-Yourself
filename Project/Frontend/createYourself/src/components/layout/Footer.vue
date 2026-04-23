@@ -8,7 +8,7 @@
       <span>© 2026 CreateYourself</span>
     </div>
     <div>
-      <span>Entwicklet von Sanjivan, Egor, Gian, Kenan</span>
+      <span>Entwickelt von Sanjivan, Egor, Gian, Kenan</span>
     </div>
   </div>
 </template>
