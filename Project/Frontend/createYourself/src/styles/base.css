@@ -34,3 +34,18 @@ h2{
   background-image:  linear-gradient(oklch(70.7% 0.022 261.325) 1px, transparent 1px), linear-gradient(to right, oklch(70.7% 0.022 261.325) 1px, var(--background-color) 1px);
   background-size: 45px 45px;
 }
+
+::-webkit-scrollbar{
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
