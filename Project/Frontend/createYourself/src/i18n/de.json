@@ -1,0 +1,216 @@
+{
+  "hero": {
+    "title": "Dein Portfolio.",
+    "title-sub-one": "Deine Identität.",
+    "title-sub-two": "Deine Zukunft.",
+    "title-sub-three": "Deine Inhalte.",
+    "description": "Erstelle dein Online-Portfolio mit einem modularen Editor. Inhalte können strukturiert aufgebaut, bearbeitet und als persönliche Seite dargestellt werden.",
+    "cta-one": "Jetzt starten",
+    "cta-two": "Anmelden",
+    "bp-one": {
+      "title": "Modular",
+      "description": "Portfolio in Blöcken aufbauen"
+    },
+    "bp-two": {
+      "title": "Flexibel",
+      "description": "Inhalte selbst anordnen"
+    },
+    "bp-three": {
+      "title": "Persönlich",
+      "description": "Eigene Seite gestalten"
+    },
+    "fact-one": {
+      "title": "Portfolio Aufrufe",
+      "value": "2.848"
+    },
+    "fact-two": {
+      "title": "Status",
+      "value": "Live & sichtbar"
+    },
+    "fact-three": {
+      "title": "Editor",
+      "value": "Blöcke bearbeiten"
+    },
+    "visual-one": "Skills",
+    "visual-two": "Projekte"
+  },
+  "function": {
+    "sectionTitle": {
+      "title": "Alles, was du für dein Portfolio brauchst",
+      "tag": "Kernfunktionen",
+      "description": "Die Website konzentriert sich auf das strukturierte Erstellen, Bearbeiten und Darstellen persönlicher Portfolio-Inhalte."
+    },
+    "facts-box-one": {
+      "title": "Baukasten-Editor",
+      "description": "Erstelle dein Portfolio aus modulen Inhaltsblöcken. Abschnitte können hinzugefügt, bearbeite und in der Reihenfolge angepasst werden.",
+      "fact-one": "Modulare Inhaltsblöcke",
+      "fact-two": "Reihenfolge anpassen",
+      "fact-three": "Vorschau der Inhalte"
+    },
+    "facts-box-two": {
+      "title": "Persönliche Inhalte",
+      "description": "Zeige Informationen über dich, deine Projekte, Fähigkeiten und weitere Inhalte in einer klaren und strukturierten Form.",
+      "fact-one": "Über-mich-Bereich",
+      "fact-two": "Projekte und Skills darstellen",
+      "fact-three": "Strukturierte Portfolio-Abschnitte"
+    },
+    "facts-box-three": {
+      "title": "Einfache Bearbeitung",
+      "description": "Inhalte sollen direkt im Editor verwaltet werden können. Der Fokus liegt auf einer verständlichen und übersichtlichen Bedienung.",
+      "fact-one": "Übersichtlicher Aufbau",
+      "fact-two": "Inhalte bearbeiten",
+      "fact-three": "Änderungen direkt sichbar"
+    },
+    "facts-box-four": {
+      "title": "Portfolio veröffentlichen",
+      "description": "Das Portfolio soll nach dem Bearbeiten online aufrufbar sein, damit die eigene Arbeit digital präsentiert werden kann.",
+      "fact-one": "Online aufrufbare Portfolio-Seite",
+      "fact-two": "Änderungen erneut veröffentlichen",
+      "fact-three": "Persönliche Präsentation im Web"
+    }
+  },
+  "editor":{
+    "sectionTitle": {
+      "title": "Wie der Baukasten-Editor funktioniert",
+      "tag": "Der Editor",
+      "description": "Jeder Abschnitt deines Portfolios ist als Block aufgebaut und kann im Editor bearbeitett und angeordnet werden."
+    },
+    "fact-one": {
+      "title": "Block auswählen",
+      "description": "Wähle aus den verfügbaren Blocktypen den Abschnitt aus, den du in deinem Portfolio verwenden möchtest."
+    },
+    "fact-two": {
+      "title": "Inhalte bearbeiten",
+      "description": "Ergänze Texte, Bilder und weitere Informationen direkt im jeweiligen Abschnitt deines Portfolios."
+    },
+    "fact-three": {
+      "title": "Struktur anpassen",
+      "description": "Ordne die einzelnen Bereiche so an, dass dein Portfolio übersichtlich und passend zu deinen Inhalten aufgebaut ist."
+    },
+    "fact-four": {
+      "title": "Portfolio veröffentlichen",
+      "description": "Wenn dein Inhalt fertig ist, kann dein Portfolio online dargestellt und später weiter aktualisiert werden."
+    },
+    "visual": {
+      "title": "Mein Portfolio - Entwurf",
+      "nav-one": "Bearbeiten",
+      "nav-two": "Vorschau",
+      "nav-three": "Einstellungen",
+      "box-one": {
+        "title": "Hero-Section",
+        "subtitle": "Name, Titel, Bild, CTA-Button"
+      },
+      "box-two": {
+        "title": "Über mich",
+        "subtitle": "Biografie & Porträtbild"
+      },
+      "box-three": {
+        "title": "Projektgalerie",
+        "subtitle": "Projekte mit Beschreibung und Verweisen"
+      },
+      "box-four": {
+        "title": "Skills-Liste",
+        "subtitle": "Die derzeigen Erfahrungen und das Können"
+      }
+    }
+  },
+  "howWorks": {
+    "sectionTitle": {
+      "title": "Vom Konto zum eigenen Portfolio in drei Schritten",
+      "tag": "Wie es funktioniert",
+      "description": "Der Ablauf ist klar aufgebaut: registrieren, Inhalte erfassen und das Portfolio online darstellen"
+    },
+    "fact-one": {
+      "title": "Registrieren",
+      "description": "Erstelle ein Konto, um deien persönlichen Bereich und den Portfolio-Editor zu nutzen.",
+      "bp-one": "E-Mail und Passwort eingeben",
+      "bp-two": "Zugang zum Benutzerberiech erhalten",
+      "bp-three": "Mit dem Portfolio beginnen"
+    },
+    "fact-two": {
+      "title": "Portfolio erstellen",
+      "description": "Füge Inhalte in Blöcken hinzu und stelle die Informationen so zusammen, wie du dich präsentieren möchtest.",
+      "bp-one": "Blöcke auswählen",
+      "bp-two": "Inhalte im Editor erfassen",
+      "bp-three": "Reihenfolge der Bereiche anpassen"
+    },
+    "fact-three": {
+      "title": "Veröffentlichen",
+      "description": "Sobald dein Portfolio fertig ist, kann es online angezeigt und bei Bedarf später weiter angepasst werden.",
+      "bp-one": "Portfolio online darstellen",
+      "bp-two": "Änderungen später anpassen",
+      "bp-three": "Eigene Inhalte digital präsentieren"
+    }
+  },
+  "target": {
+    "sectionTitle": {
+      "title": "Gemacht für Menschen, die ihre Arbeit digital zeigen wollen",
+      "tag": "Für wen ist createyourself",
+      "description": "CreateYourself eignet sich für alle, die ihre Inhalte strukturiert online präsentieren wollen"
+    },
+    "fact-one": {
+      "subtitle": "Lernende & Bewerbende",
+      "title": "Zeige deinen Werdegang und deine Projekte übersichtlich",
+      "description": "Stelle Informationen über dich, deine Fähigkeiten und deine Arbeiten in einer eigenen Portfolio-Seite zusammen.",
+      "bp-one": "Persönliche Informationen darstellen",
+      "bp-two": "Projekte und Skills zeigen",
+      "bp-three": "Portfolio als digitale Präsentation nutzen"
+    },
+    "fact-two": {
+      "subtitle": "Entwicklerinnen & Entwickler",
+      "title": "Präsentiere technische Projekte in einer eigenen Seite",
+      "description": "Beschreibe Projekte, zeige verwendete Technologien und gib einen strukturierten Überblick über deine Arbeiten.",
+      "bp-one": "Projekte strukturiert darstellen",
+      "bp-two": "Technologien und Skills auflisten",
+      "bp-three": "Eigene Arbeiten online zeigen"
+    },
+    "fact-three": {
+      "subtitle": "Kreative & Gestaltende",
+      "title": "Zeige Inhalte in einer klaren visuellen Struktur",
+      "description": "Nutze verschiedene Portfolio-Bereiche, um Arbeiten, Beschreibungen und persönliche Informationenübersichtlich aufzubauen.",
+      "bp-one": "Inhalte visuell gliedern",
+      "bp-two": "Projekte und Texte kombinieren",
+      "bp-three": "Eigene Präsentationsseite erstellen"
+    }
+  },
+  "public": {
+    "visual": {
+      "title": "Veröffentlichung",
+      "public": "Bereit zur Veröffentlichung",
+      "box-one": {
+        "title": "Portfolio",
+        "value": "Persönliche URL"
+      },
+      "box-two": {
+        "title": "Online",
+        "value": "Im Web erreichbar"
+      },
+      "bp-one": "Portfolio sichbar",
+      "bp-two": "Inhalte aktualisieren",
+      "bp-three": "Entwurf bearbeiten"
+    },
+    "title": "Online zeigen und später weiter bearbeiten",
+    "fact-one": {
+      "title": "Persönliche Portfolio-Seite",
+      "description": "Das Ziel der Website ist, persönliche Inhalte als eigene Portfolio-Seite online darzustellen."
+    },
+    "fact-two": {
+      "title": "Bearbeiten und Veröffentlichen",
+      "description": "Inhalte werden im Editor vorbereitet und können anschliessend fpr die Portfolio-Seite übernommen werden."
+    },
+    "fact-three": {
+      "title": "Inhalte später anpassen",
+      "description": "Das Portfolio kann nach der Veröffentlichung weiter bearbeitet und erneut aktualisiert werden."
+    },
+    "fact-four": {
+      "title": "Digitale Präsentation",
+      "description": "CreateYourself soll es ermöglichen, persönliche Informationen und Projekte gesammelt online zu präsentieren."
+    }
+  },
+  "cta": {
+    "title": "Bereit, dein Portfolio zu erstellen?",
+    "subtitle": "Stelle deine Projekte, Fähigkeiten und Informationen in einer eigenen Portfolio-Seite zusammen. Alles an einem Ort, klar strukturiert und online präsentierbar.",
+    "cta-one": "Jetzt starten",
+    "cta-two": "Anmelden"
+  }
+}
