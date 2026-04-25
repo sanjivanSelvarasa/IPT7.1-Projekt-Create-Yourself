@@ -1,6 +1,7 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
 import {loginApi, logoutApi, registerApi, tokenApi} from "@/api/auth.api.ts";
+import type {tokenType} from "@/types/tokenType.ts";
 
 export const useAuthStore = defineStore('auth', () => {
   const error = ref<string | null>(null)
@@ -19,7 +20,8 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
 
     try{
-      await loginApi(email, password)
+      const data = await loginApi(email, password)
+      token.value = data.accessToken
     }catch(err){
       error.value = err ? err.text : 'Login failed'
     }
