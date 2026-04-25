@@ -1,4 +1,5 @@
 import {apiFetch} from "@/api/api.ts";
+import type {tokenType} from "@/types/tokenType.ts";
 
 export async function registerApi(email: string, password: string){
   return apiFetch(`/users/register`, {
@@ -10,11 +11,11 @@ export async function registerApi(email: string, password: string){
   })
 }
 
-export async function loginApi(username: string, password: string) {
+export async function loginApi(email: string, password: string) : Promise<tokenType> {
   return apiFetch(`/users/login`, {
     method: 'POST',
     body: JSON.stringify({
-      username,
+      email,
       password,
     }),
   })
