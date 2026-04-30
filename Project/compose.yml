@@ -61,7 +61,7 @@ services:
   frontend:
     container_name: createyourself-frontend
     build: 
-      context: ./Frontend\createYourself
+      context: ./Frontend/createYourself
       dockerfile: Dockerfile
     command: npm run dev -- --host 0.0.0.0 --port 5173
     working_dir: /app
