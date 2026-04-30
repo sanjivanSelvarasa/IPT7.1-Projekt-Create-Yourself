@@ -12,9 +12,68 @@
 @linkId = INSERT_LINK_ID_HERE
 @experienceId = INSERT_EXPERIENCE_ID_HERE
 @educationId = INSERT_EDUCATION_ID_HERE
+@translationId = INSERT_TRANSLATION_ID_HERE
+@versionId = INSERT_VERSION_ID_HERE
+@themeId = INSERT_THEME_ID_HERE
+@templateId = INSERT_TEMPLATE_ID_HERE
 
-### Portfolio komplett abrufen (inkl. Projekte, Skills, Links, Experience, Education)
+### Portfolio komplett abrufen (inkl. Projekte, Skills, Links, Experience, Education, Themes)
 GET {{baseUrl}}/portfolio/{{portfolioId}}/full
+Authorization: Bearer {{accessToken}}
+
+### Alle Templates abrufen
+GET {{baseUrl}}/templates
+
+### Einzelnes Template abrufen
+GET {{baseUrl}}/templates/{{templateId}}
+
+### Uebersetzungen im Portfolio auflisten
+GET {{baseUrl}}/portfolio/{{portfolioId}}/translations
+Authorization: Bearer {{accessToken}}
+
+### Uebersetzung erstellen
+POST {{baseUrl}}/portfolio/{{portfolioId}}/translations
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "languageCode": "en",
+    "title": "My Portfolio",
+    "description": "English translation"
+}
+
+### Uebersetzung aktualisieren
+PUT {{baseUrl}}/portfolio/{{portfolioId}}/translations/{{translationId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "title": "My Updated Portfolio",
+    "description": "Updated English translation"
+}
+
+### Uebersetzung loeschen
+DELETE {{baseUrl}}/portfolio/{{portfolioId}}/translations/{{translationId}}
+Authorization: Bearer {{accessToken}}
+
+### Versionen im Portfolio auflisten
+GET {{baseUrl}}/portfolio/{{portfolioId}}/versions
+Authorization: Bearer {{accessToken}}
+
+### Version aus aktuellem Portfoliozustand erstellen
+POST {{baseUrl}}/portfolio/{{portfolioId}}/versions
+Authorization: Bearer {{accessToken}}
+
+### Einzelne Version abrufen
+GET {{baseUrl}}/portfolio/{{portfolioId}}/versions/{{versionId}}
+Authorization: Bearer {{accessToken}}
+
+### Version aktivieren
+POST {{baseUrl}}/portfolio/{{portfolioId}}/versions/{{versionId}}/activate
+Authorization: Bearer {{accessToken}}
+
+### Version loeschen
+DELETE {{baseUrl}}/portfolio/{{portfolioId}}/versions/{{versionId}}
 Authorization: Bearer {{accessToken}}
 
 ### Projekte im Portfolio auflisten
@@ -179,4 +238,41 @@ Authorization: Bearer {{accessToken}}
 
 ### Education-Eintrag loeschen
 DELETE {{baseUrl}}/portfolio/{{portfolioId}}/educations/{{educationId}}
+Authorization: Bearer {{accessToken}}
+
+### Themes im Portfolio auflisten
+GET {{baseUrl}}/portfolio/{{portfolioId}}/themes
+Authorization: Bearer {{accessToken}}
+
+### Theme erstellen
+POST {{baseUrl}}/portfolio/{{portfolioId}}/themes
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "primaryColor": "#1f2937",
+    "secondaryColor": "#4b5563",
+    "backgroundColor": "#ffffff",
+    "surfaceColor": "#f9fafb",
+    "textColor": "#111827",
+    "accentColor": "#2563eb",
+    "fontFamily": "Poppins"
+}
+
+### Theme aktualisieren
+PUT {{baseUrl}}/portfolio/{{portfolioId}}/themes/{{themeId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "accentColor": "#0ea5e9",
+    "fontFamily": "Montserrat"
+}
+
+### Theme aktivieren
+POST {{baseUrl}}/portfolio/{{portfolioId}}/themes/{{themeId}}/activate
+Authorization: Bearer {{accessToken}}
+
+### Theme loeschen
+DELETE {{baseUrl}}/portfolio/{{portfolioId}}/themes/{{themeId}}
 Authorization: Bearer {{accessToken}}

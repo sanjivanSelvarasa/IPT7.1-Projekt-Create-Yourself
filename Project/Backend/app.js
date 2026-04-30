@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const path = require('path')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 
 const authRoutes = require('./0_routes/authRoutes')
 const portfolioRoutes = require('./0_routes/portfolioRoutes')
@@ -16,9 +17,15 @@ const configuredOrigins = process.env.CORS_ORIGIN
     ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim()).filter(Boolean)
     : ['http://localhost:5173']
 
+const allowAnyOrigin = configuredOrigins.includes('*') // I've only added this for development purposes, but it should be removed in production to avoid security risks.
+
 app.use(cors({
     origin(origin, callback) {
-        if (!origin || configuredOrigins.includes(origin)) {
+        if (!origin) {
+            return callback(null, true)
+        }
+
+        if (allowAnyOrigin || configuredOrigins.includes(origin)) {
             return callback(null, true)
         }
 
@@ -26,9 +33,10 @@ app.use(cors({
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'credentials']
+    allowedHeaders: ['Content-Type', 'Authorization']
 }))
 app.use(express.json())
+app.use(cookieParser())
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 app.use('/', authRoutes)

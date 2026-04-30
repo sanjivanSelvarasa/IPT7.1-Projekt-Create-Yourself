@@ -4,6 +4,8 @@ const skillService = require('../3_services/skillService')
 const socialLinkService = require('../3_services/socialLinkService')
 const experienceService = require('../3_services/experienceService')
 const educationService = require('../3_services/educationService')
+const themeService = require('../3_services/themeService')
+const templateService = require('../3_services/templateService')
 
 async function getPortfolios(req, res) {
     const portfolios = await portfolioService.getPortfoliosForUser(req.user.email)
@@ -33,6 +35,57 @@ async function updatePortfolio(req, res) {
 async function deletePortfolio(req, res) {
     await portfolioService.deletePortfolio(req.user.email, req.params.id)
     res.sendStatus(204)
+}
+
+async function listTranslations(req, res) {
+    const translations = await portfolioService.listTranslations(req.user.email, req.params.id)
+    res.json(translations)
+}
+
+async function createTranslation(req, res) {
+    const translation = await portfolioService.createTranslation(req.user.email, req.params.id, req.body)
+    res.status(201).json(translation)
+}
+
+async function updateTranslation(req, res) {
+    const translation = await portfolioService.updateTranslation(
+        req.user.email,
+        req.params.id,
+        req.params.translationId,
+        req.body
+    )
+
+    res.json(translation)
+}
+
+async function deleteTranslation(req, res) {
+    await portfolioService.deleteTranslation(req.user.email, req.params.id, req.params.translationId)
+    res.sendStatus(204)
+}
+
+async function listVersions(req, res) {
+    const versions = await portfolioService.listVersions(req.user.email, req.params.id)
+    res.json(versions)
+}
+
+async function createVersion(req, res) {
+    const version = await portfolioService.createVersion(req.user.email, req.params.id)
+    res.status(201).json(version)
+}
+
+async function getVersionById(req, res) {
+    const version = await portfolioService.getVersionById(req.user.email, req.params.id, req.params.versionId)
+    res.json(version)
+}
+
+async function deleteVersion(req, res) {
+    await portfolioService.deleteVersion(req.user.email, req.params.id, req.params.versionId)
+    res.sendStatus(204)
+}
+
+async function activateVersion(req, res) {
+    const activation = await portfolioService.activateVersion(req.user.email, req.params.id, req.params.versionId)
+    res.json(activation)
 }
 
 async function listProjects(req, res) {
@@ -146,6 +199,41 @@ async function deleteEducation(req, res) {
     res.sendStatus(204)
 }
 
+async function listThemes(req, res) {
+    const themes = await themeService.listThemes(req.user.email, req.params.id)
+    res.json(themes)
+}
+
+async function createTheme(req, res) {
+    const theme = await themeService.createTheme(req.user.email, req.params.id, req.body)
+    res.status(201).json(theme)
+}
+
+async function updateTheme(req, res) {
+    const theme = await themeService.updateTheme(req.user.email, req.params.id, req.params.themeId, req.body)
+    res.json(theme)
+}
+
+async function deleteTheme(req, res) {
+    await themeService.deleteTheme(req.user.email, req.params.id, req.params.themeId)
+    res.sendStatus(204)
+}
+
+async function activateTheme(req, res) {
+    const activation = await themeService.activateTheme(req.user.email, req.params.id, req.params.themeId)
+    res.json(activation)
+}
+
+async function listTemplates(req, res) {
+    const templates = await templateService.listTemplates()
+    res.json(templates)
+}
+
+async function getTemplateById(req, res) {
+    const template = await templateService.getTemplateById(req.params.templateId)
+    res.json(template)
+}
+
 async function getPublicPortfolioBySlug(req, res) {
     const portfolio = await portfolioService.getPublicPortfolioBySlug(req.params.slug)
     res.json(portfolio)
@@ -163,6 +251,15 @@ module.exports = {
     getPortfolioFullById,
     updatePortfolio,
     deletePortfolio,
+    listTranslations,
+    createTranslation,
+    updateTranslation,
+    deleteTranslation,
+    listVersions,
+    createVersion,
+    getVersionById,
+    deleteVersion,
+    activateVersion,
     listProjects,
     createProject,
     updateProject,
@@ -184,6 +281,13 @@ module.exports = {
     createEducation,
     updateEducation,
     deleteEducation,
+    listThemes,
+    createTheme,
+    updateTheme,
+    deleteTheme,
+    activateTheme,
+    listTemplates,
+    getTemplateById,
     getPublicPortfolioBySlug,
     getPublicPortfolioFullBySlug
 }

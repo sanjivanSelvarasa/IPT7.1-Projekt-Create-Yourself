@@ -117,6 +117,36 @@ function parseSkillLevel(value) {
     return parsed
 }
 
+function parseOptionalSortOrder(value, fieldLabel = 'Sortierung') {
+    if (value === undefined || value === null || value === '') {
+        return null
+    }
+
+    const parsed = Number(value)
+    if (!Number.isInteger(parsed) || parsed < 0) {
+        throw new ApiError(400, `${fieldLabel} muss eine ganze Zahl >= 0 sein.`)
+    }
+
+    return parsed
+}
+
+function parseLanguageCode(value, fieldLabel = 'Sprachcode') {
+    if (typeof value !== 'string' || value.trim() === '') {
+        throw new ApiError(400, `${fieldLabel} ist erforderlich.`)
+    }
+
+    const parsed = value.trim().toLowerCase()
+    if (parsed.length > 10) {
+        throw new ApiError(400, `${fieldLabel} darf maximal 10 Zeichen lang sein.`)
+    }
+
+    if (!/^[a-z]{2,3}(?:-[a-z0-9]{2,6})?$/.test(parsed)) {
+        throw new ApiError(400, `${fieldLabel} ist ungültig. Erwartet wird z. B. de oder en.`)
+    }
+
+    return parsed
+}
+
 function parseSlug(value) {
     if (typeof value !== 'string' || value.trim() === '') {
         throw new ApiError(400, 'Slug ist erforderlich.')
@@ -151,6 +181,8 @@ module.exports = {
     parseRequiredUrl,
     parseOptionalUrl,
     parseSkillLevel,
+    parseOptionalSortOrder,
+    parseLanguageCode,
     parseSlug,
     validateVisibility
 }
