@@ -185,4 +185,8 @@ const tl = (key: string) => t(`login.${key}`);
 .grid-bg {
   opacity: 0.15;
 }
+
+main, header{
+  max-width: none;
+}
 </style>
