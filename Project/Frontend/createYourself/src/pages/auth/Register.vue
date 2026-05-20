@@ -219,4 +219,8 @@ const tl = (key: string) => t(`register.${key}`);
 .grid-bg {
   opacity: 0.15;
 }
+
+main, header{
+  max-width: none;
+}
 </style>
