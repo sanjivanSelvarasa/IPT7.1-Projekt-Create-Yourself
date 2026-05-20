@@ -47,6 +47,26 @@ button{
   @apply my-5 w-full h-[1px] bg-gray-200;
 }
 
+.divider-vertical{
+  @apply mx-5 h-full w-[1px] bg-gray-200;
+}
+
+.sm-subtitle{
+  @apply font-semibold uppercase text-sm;
+}
+
+.md-subtitle{
+  @apply font-semibold uppercase;
+}
+
+.default-input{
+  @apply px-3 py-2 border border-gray-300 rounded-md text-[var(--text-color)] bg-transparent;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 ::-webkit-scrollbar{
   width: 5px;
 }
