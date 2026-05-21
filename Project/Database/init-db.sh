@@ -32,7 +32,7 @@ wait_for_database_online() {
     local db_name="$1"
     echo "Waiting for database ${db_name} to become online..."
 
-    until [[ "$(sqlcmd_scalar -Q "SET NOCOUNT ON; SELECT state_desc FROM sys.databases WHERE name = '${db_name}'")" == "ONLINE" ]]; do
+    until [[ "$(sqlcmd_scalar -d master -Q "SET NOCOUNT ON; SELECT state_desc FROM sys.databases WHERE name = '${db_name}'")" == "ONLINE" ]]; do
         sleep 2
     done
 }
