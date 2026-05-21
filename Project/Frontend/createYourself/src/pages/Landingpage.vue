@@ -542,7 +542,7 @@ function changeLang(lang: string) {
     </section>
 
     <section id="public">
-      <div class="flex items-start justify-between gap-8 w-[1200px]">
+      <div class="w-full max-w-[1200px] mx-auto px-4 flex items-start justify-between gap-8">
         <div class="hidden lg:block select-none w-[600px] h-[450px] bg-[var(--surface-color)] rounded-[30px] shadow-lg text-sm overflow-hidden border-2 border-gray-200 ">
           <div class="flex items-center justify-between w-full h-fit bg-gray-50 border border-transparent border-b-gray-200 px-6 py-6">
             <span class="font-semibold">{{ tl("public.visual.title")}}</span>
@@ -610,8 +610,8 @@ function changeLang(lang: string) {
         </div>
 
         <div class="w-full lg:max-w-[600px] flex flex-col lg:items-start items-center">
-          <div class="max-w-[600px] flex flex-col gap-2">
-            <span class="text-[35px] leading-11 font-extrabold text-wrap">{{ tl("public.title")}}</span>
+          <div class="w-full max-w-[600px] flex flex-col gap-2">
+            <span class="text-2xl sm:text-3xl md:text-[35px] leading-tight md:leading-11 font-extrabold break-words text-center lg:text-left">{{ tl("public.title")}}</span>
 
             <div class="flex items-start justify-start gap-4 mt-4">
               <div class="flex items-center justify-center min-w-[45px] min-h-[45px] rounded-lg bg-[var(--primary-color-light)] text-[var(--primary-color)]">
