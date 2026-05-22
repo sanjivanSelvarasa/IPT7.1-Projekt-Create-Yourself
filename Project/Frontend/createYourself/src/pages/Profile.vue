@@ -1,31 +1,112 @@
 <script lang="ts" setup>
-
 import NavApp from "@/components/layout/NavApp.vue";
+import HeaderComp from "@/components/layout/HeaderComp.vue";
+import Background from "@/components/layout/Background.vue";
+import Interface from "@/components/ui/Interface.vue";
+import MainContent from "@/components/layout/MainContent.vue";
+import {useProfileStore} from "@/stores/profileStore.ts";
+import {computed, onMounted, ref, watch} from "vue";
+import type {ProfileType} from "@/types/profileType.ts";
+import type {ChangeProfileType} from "@/types/changeProfileType.ts";
+import {updateProfileApi} from "@/api/profile.api.ts";
+import profile from "@/pages/Profile.vue";
+
+const profileStore = useProfileStore();
+
+const profileData = ref<ProfileType | null>(null);
+
+const firstname = ref<string | null>(null);
+const lastname = ref<string | null>( null);
+const username = ref<string | null>(null);
+const email = ref<string | null>(null);
+const bio = ref<string>('')
+
+const name = computed(() => {
+  if(profileData.value?.firstName && profileData.value?.lastName)
+    return `${profileData.value?.firstName} ${profileData.value?.lastName}`;
+  else if(!profileData.value?.lastName && profileData.value?.firstName)
+    return profileData.value?.firstName
+  else if(!profileData.value?.firstName && profileData.value?.lastName)
+    return profileData.value?.lastName
+  else
+    return profileData.value?.email
+})
+
+onMounted(async () => {
+  await profileStore.getProfile()
+  profileData.value = profileStore.profileData
+
+  setProfileAttributs()
+})
+
+const message = ref<string | null>(null);
+const error = ref<string | null>(null);
+async function submitProfileChanges(){
+  error.value = null
+  message.value = null
+
+  const profile : ChangeProfileType = {
+    firstname: firstname.value ?? '',
+    lastname: lastname.value ?? '',
+    username: username.value ?? '',
+    email: profileData.value?.email!,
+    bio: bio.value ?? '',
+  }
+
+  try{
+    const res = await profileStore.updateProfile(profile)
+    profileData.value = res ? res : profileStore.profileData
+
+    message.value = 'Profildaten erfolgreich geändert.'
+  }catch(err){
+    error.value = err ? err.message : 'Änderungen fehlgeschlagen.'
+  }
+}
+
+async function cancelProfileChanges(){
+  error.value = null
+  message.value = null
+
+  await profileStore.getProfile()
+  profileData.value = profileStore.profileData
+
+  setProfileAttributs()
+
+  message.value = 'Daten wurden wiederhergestellt.'
+}
+
+function setProfileAttributs(){
+  firstname.value = profileData.value?.firstName ?? ''
+  lastname.value = profileData.value?.lastName ?? ''
+  username.value = profileData.value?.username ?? ''
+  email.value = profileData.value?.email ?? ''
+  bio.value = profileData.value?.bio ?? ''
+}
+
+watch(bio, (newValue) => {
+  if(newValue.length > 220){
+    bio.value = bio.value?.slice(0, 220)
+  }
+})
 </script>
 
 <template>
-  <div class="overflow-x-hidden bg-[var(--background-color)] w-full min-h-[100vh] h-full mx-auto">
+  <Background>
+    <NavApp></NavApp>
 
-    <NavApp @logout=""></NavApp>
+    <HeaderComp title="Mein Profil" tag="Verwaltung" subtitle="Verwalte deine persönlichen Daten und Kontoeinstellungen"></HeaderComp>
 
-    <header class="w-full flex items-center justify-start gap-5 mt-40 xl:mx-auto px-5">
-      <div class="flex flex-col items-start justify-between gap-2">
-        <span class="uppercase text-[var(--primary-color)]">Verwaltung</span>
-        <h1>Mein Profil</h1>
-        <span class="text-[var(--text-color-light)]">Verwalte deine persönlichen Daten und Kontoeinstellungen</span>
-      </div>
-    </header>
-    <main class="w-full flex flex-col items-start justify-center gap-10 mt-10 px-4 xl:mx-auto">
-      <div class="w-full border border-gray-200 rounded-2xl overflow-hidden px-8 py-8 bg-[var(--surface-color)]">
+    <MainContent>
+      <Interface>
         <div class="w-full flex items-center justify-start gap-4">
           <div class="select-none flex items-center justify-center bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)] text-[var(--text-color-white)] font-bold text-3xl rounded-full w-[100px] h-[100px]">
-            AS
+            {{ name?.slice(0,2).toUpperCase() }}
           </div>
 
           <div class="flex flex-col gap-2">
-            <p class="text-nowrap font-semibold">Anna Schmidt</p>
-            <button class="cursor-pointer px-2.5 py-1.5 rounded-lg text-[var(--primary-color)] bg-blue-50 border border-blue-300 text-xs">
-              <div class="flex items-center justify-center gap-1">
+            <p class="text-nowrap font-semibold">{{ name }}</p>
+            <button class="w-fit cursor-pointer px-2.5 py-1.5 rounded-lg text-[var(--primary-color)] bg-blue-50 border border-blue-300 text-xs">
+              <div class=" flex items-center justify-center gap-1">
                 <div class="flex items-center justify-center text-sm">
                   <i class="fa-regular fa-image"></i>
                 </div>
@@ -44,42 +125,46 @@ import NavApp from "@/components/layout/NavApp.vue";
 
             <div class="flex items-center justify-center gap-2">
               <div class="w-full flex flex-col items-start justify-center gap-1">
-                <label for="fname" class="text-sm font-semibold text-[var(--text-color-light)]">Vorname</label>
-                <input disabled class="outline-none w-full cursor-not-allowed bg-[var(--background-color)] border border-gray-300 px-4 py-2 rounded-lg text-sm" type="text" name="fname" id="fname" placeholder="Anna" autocomplete="off" />
+                <label for="fname" class="sm-subtitle text-[var(--text-color-light)]">Vorname</label>
+                <input v-model="firstname" class="outline-none w-full bg-[var(--background-color)] border border-gray-300 px-4 py-2 rounded-lg text-sm" type="text" name="fname" id="fname" autocomplete="off" />
               </div>
               <div class="w-full flex flex-col items-start justify-center gap-1">
-                <label for="lname" class="text-sm font-semibold text-[var(--text-color-light)]">Nachname</label>
-                <input disabled class=" outline-none w-full cursor-not-allowed bg-[var(--background-color)] border border-gray-300 px-4 py-2 rounded-lg text-sm" type="text" name="lname" id="lname" placeholder="Schmidt" autocomplete="off" />
+                <label for="lname" class="sm-subtitle text-[var(--text-color-light)]">Nachname</label>
+                <input v-model="lastname" class=" outline-none w-full bg-[var(--background-color)] border border-gray-300 px-4 py-2 rounded-lg text-sm" type="text" name="lname" id="lname" autocomplete="off" />
               </div>
             </div>
 
             <div class="w-full flex flex-col items-start justify-center gap-1 mt-4">
-              <label for="username" class="text-sm font-semibold text-[var(--text-color-light)]">Benutzername</label>
-              <input disabled class="outline-none w-full cursor-not-allowed bg-[var(--background-color)] border border-gray-300 px-4 py-2 rounded-lg text-sm" type="text" name="username" id="username" placeholder="Anna.Schmidt" autocomplete="off" />
+              <label for="username" class="sm-subtitle text-[var(--text-color-light)]">Benutzername</label>
+              <input v-model="username" class="outline-none w-full bg-[var(--background-color)] border border-gray-300 px-4 py-2 rounded-lg text-sm" type="text" name="username" id="username" autocomplete="off" />
             </div>
 
             <div class="w-full flex flex-col items-start justify-center gap-1 mt-4">
-              <label for="email" class="text-sm font-semibold text-[var(--text-color-light)]">E-Mail</label>
-              <input disabled class="outline-none w-full cursor-not-allowed bg-[var(--background-color)] border border-gray-300 px-4 py-2 rounded-lg text-sm" type="email" name="email" id="email" placeholder="anna.schmidt@sluz.ch" autocomplete="off" />
+              <label for="email" class="sm-subtitle text-[var(--text-color-light)]">E-Mail</label>
+              <input disabled class="cursor-not-allowed outline-none w-full bg-[var(--background-color)] border border-gray-300 px-4 py-2 rounded-lg text-sm" type="email" name="email" id="email" :placeholder="email ?? '' " autocomplete="off" />
             </div>
 
             <div class="w-full flex flex-col items-start justify-center gap-1 mt-4">
-              <label for="email" class="text-sm font-semibold text-[var(--text-color-light)]">Kurzbeschreibung</label>
-              <textarea disabled class="outline-none w-full cursor-not-allowed bg-[var(--background-color)] border border-gray-300 px-4 py-2 rounded-lg text-sm" type="email" name="email" id="email" placeholder="Ich bin Programmierer in Luzern und erstelle Applikationen ..." autocomplete="off" />
+              <label for="email" class="sm-subtitle text-[var(--text-color-light)]">Kurzbeschreibung</label>
+              <textarea v-model="bio" class="outline-none w-full bg-[var(--background-color)] border border-gray-300 px-4 py-2 rounded-lg text-sm" type="email" name="email" id="email" autocomplete="off" />
               <div class="flex w-full items-center justify-end text-xs text-[var(--text-color-light)]">
-                <span>87 / 220 Zeichen</span>
+                <span>{{ bio ? bio.length : 0 }} / 220 Zeichen</span>
               </div>
             </div>
           </form>
 
-          <div class="pt-8 border border-t-gray-200 border-transparent">
+          <div class="flex items-center justify-between pt-8 border border-t-gray-200 border-transparent">
+            <div>
+              <span v-if="message" class="text-sm text-green-500">{{ message }}</span>
+              <span v-if="error" class="text-sm text-red-500">{{ error }}</span>
+            </div>
             <div class="flex items-center justify-end gap-2">
-              <button class="px-4 py-2 rounded-lg border border-gray-200 font-semibold bg-transparent text-[var(--text-color-light)]">Abbrechen</button>
-              <button class="px-4 py-2 rounded-lg border border-gray-200 text-[var(--text-color-white)] bg-[var(--primary-color)]">Änderungen speichern</button>
+              <button @click="cancelProfileChanges()" class="hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] transition duration-75 px-4 py-2 rounded-lg border border-gray-200 font-semibold bg-transparent text-[var(--text-color-light)]">Abbrechen</button>
+              <button @click="submitProfileChanges()" class="hover:bg-transparent hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-75 px-4 py-2 rounded-lg border border-gray-200 text-[var(--text-color-white)] bg-[var(--primary-color)]">Änderungen speichern</button>
             </div>
           </div>
         </div>
-      </div>
-    </main>
-  </div>
+      </Interface>
+    </MainContent>
+  </Background>
 </template>
