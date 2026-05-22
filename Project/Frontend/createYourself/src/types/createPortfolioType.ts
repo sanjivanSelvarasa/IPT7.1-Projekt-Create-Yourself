@@ -3,4 +3,5 @@ export type CreatePortfolioType = {
   description: string,
   visibility: string,
   slug: string,
+  languageCode: string,
 }
