@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser')
 
 const authRoutes = require('./0_routes/authRoutes')
 const portfolioRoutes = require('./0_routes/portfolioRoutes')
+const accountRoutes = require('./0_routes/accountRoutes')
 const notFoundHandler = require('./1_middleware/notFoundHandler')
 const errorHandler = require('./1_middleware/errorHandler')
 const database = require('./4_models/database')
@@ -41,6 +42,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 app.use('/', authRoutes)
 app.use('/', portfolioRoutes)
+app.use('/', accountRoutes)
 app.use(notFoundHandler)
 app.use(errorHandler)
 

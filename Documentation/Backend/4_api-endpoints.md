@@ -456,6 +456,20 @@ Statuscodes:
 
 ---
 
+### [GET] /p/:slug/available
+**Beschreibung:** Prüft ob ein Slug noch frei ist (kein Login nötig).
+
+**Response (200):**
+```json
+{ "available": true }
+```
+
+Statuscodes:
+- `200` Immer (Ergebnis im Body)
+- `400` Ungültiger Slug-Format
+
+---
+
 ## Geplante Module (noch nicht implementiert)
 
 Hinweis:
@@ -551,3 +565,144 @@ Statuscodes (geplant):
 - `403` Kein Zugriff
 
 ---
+
+## Account Modul
+
+Alle Endpunkte erfordern `Authorization: Bearer <accessToken>`.
+
+### [GET] /account/profile
+**Beschreibung:** Eigenes Profil laden.
+
+**Response (200):**
+```json
+{
+  "id": 1,
+  "username": "john",
+  "email": "john@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "profileImg": "/uploads/profiles/abc.jpg",
+  "bio": "Kurzbeschreibung",
+  "preferredLanguage": "de",
+  "createdAt": "2026-...",
+  "updatedAt": "2026-..."
+}
+```
+
+Statuscodes:
+- `200` Erfolgreich
+- `401` Kein Token
+- `403` Ungültiger Token
+
+---
+
+### [PUT] /account/profile
+**Beschreibung:** Eigenes Profil aktualisieren (alle Felder optional).
+
+**Request Body:**
+```json
+{
+  "first_name": "string",
+  "last_name": "string",
+  "username": "string",
+  "email": "string",
+  "bio": "string (max 220 Zeichen)"
+}
+```
+
+**Response (200):** Aktualisiertes Profil-Objekt (gleiche Struktur wie GET).
+
+Statuscodes:
+- `200` Erfolgreich
+- `400` Validierungsfehler
+- `401` Kein Token
+- `403` Ungültiger Token
+- `409` E-Mail oder Benutzername bereits vergeben
+
+---
+
+### [POST] /account/profile/picture
+**Beschreibung:** Profilbild hochladen. Altes Bild wird automatisch gelöscht.
+
+Request type: `multipart/form-data`, Feld `image` (PNG, JPG, WEBP, max 5 MB).
+
+**Response (200):**
+```json
+{
+  "id": 1,
+  "profileImg": "/uploads/profiles/uuid.jpg",
+  "updatedAt": "2026-..."
+}
+```
+
+Statuscodes:
+- `200` Erfolgreich
+- `400` Kein Bild / falscher Typ / zu groß
+- `401` Kein Token
+- `403` Ungültiger Token
+
+---
+
+### [PUT] /account/language
+**Beschreibung:** Bevorzugte Sprache setzen.
+
+**Request Body:**
+```json
+{ "language_code": "de" }
+```
+
+**Response (200):**
+```json
+{
+  "id": 1,
+  "preferredLanguage": "de",
+  "updatedAt": "2026-..."
+}
+```
+
+Statuscodes:
+- `200` Erfolgreich
+- `400` Ungültiger Sprachcode
+- `401` Kein Token
+- `403` Ungültiger Token
+
+---
+
+### [PUT] /account/password
+**Beschreibung:** Passwort ändern.
+
+**Request Body:**
+```json
+{
+  "current_password": "string",
+  "new_password": "string (min 8 Zeichen)",
+  "confirm_password": "string"
+}
+```
+
+**Response (200):**
+```json
+{ "message": "Passwort erfolgreich geändert." }
+```
+
+Statuscodes:
+- `200` Erfolgreich
+- `400` Validierungsfehler / Passwörter stimmen nicht überein
+- `401` Aktuelles Passwort falsch / kein Token
+- `403` Ungültiger Token
+
+---
+
+### [DELETE] /account
+**Beschreibung:** Eigenen Account permanent löschen inkl. aller Portfolios, Projekte, Uploads etc.
+
+**Response (200):**
+```json
+{ "message": "Account erfolgreich gelöscht." }
+```
+
+Statuscodes:
+- `200` Erfolgreich gelöscht
+- `401` Kein Token
+- `403` Ungültiger Token
+

@@ -11,6 +11,7 @@ const {
 } = require('../5_utils/validators')
 const { getOwnedPortfolio } = require('./helpers/portfolioAccess')
 const projectModel = require('../4_models/projectModel')
+const { deleteUploadedFile } = require('../5_utils/fileHelpers')
 
 async function listProjects(email, rawPortfolioId) {
     const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
@@ -101,6 +102,7 @@ async function deleteProject(email, rawPortfolioId, rawProjectId) {
     }
 
     await projectModel.deleteProjectById(projectId)
+    deleteUploadedFile(existing.imageUrl)
 }
 
 async function uploadProjectImage(email, rawPortfolioId, rawProjectId, file) {
@@ -118,6 +120,7 @@ async function uploadProjectImage(email, rawPortfolioId, rawProjectId, file) {
 
     const imageUrl = `/uploads/projects/${file.filename}`
     const updated = await projectModel.updateProjectImageUrl(projectId, imageUrl)
+    deleteUploadedFile(existing.imageUrl)
 
     return {
         id: updated.id,

@@ -34,37 +34,62 @@ Backend runs on:
 	- Social Links
 	- Experiences
 	- Educations
+3. Manage your own account (profile, password, language, profile picture)
 
-All module routes are under:
+All portfolio module routes are under:
 
 `/portfolio/:id/...`
 
-## 4) Image upload (project image)
+All account routes are under:
 
-Use:
+`/account/...`
+
+## 4) Image upload
+
+### Project image
 
 `POST /portfolio/:id/projects/:projectId/image`
 
-Request type:
+Request type: `multipart/form-data`, field name `image`
 
-`multipart/form-data` with field name `image`
+Result: file saved in `uploads/projects/`, `imageUrl` saved in DB as `/uploads/projects/<filename>`.
+Accessible at: `http://localhost:3000/uploads/projects/<filename>`
 
-Result:
+Old images are automatically deleted when replaced or when the project is deleted.
 
-1. File is saved locally in backend uploads
-2. Project gets an `imageUrl` saved in database (`Project.img_url`)
+### Profile picture
 
-## 5) Easiest way to test
+`POST /account/profile/picture`
+
+Request type: `multipart/form-data`, field name `image`
+
+Result: file saved in `uploads/profiles/`, `profileImg` saved in DB as `/uploads/profiles/<filename>`.
+Accessible at: `http://localhost:3000/uploads/profiles/<filename>`
+
+Old pictures are automatically deleted when replaced or when the account is deleted.
+
+## 5) Account management
+
+| Method | Route | Description |
+|---|---|---|
+| `GET` | `/account/profile` | Read own profile |
+| `PUT` | `/account/profile` | Update profile (firstName, lastName, username, email, bio) |
+| `POST` | `/account/profile/picture` | Upload profile picture |
+| `PUT` | `/account/language` | Set preferred language (`{ "language_code": "de" }`) |
+| `PUT` | `/account/password` | Change password (`current_password`, `new_password` ≥8 chars, `confirm_password`) |
+| `DELETE` | `/account` | Delete own account (full cascade) |
+
+## 6) Easiest way to test
 
 Use VS Code REST Client with:
 
 1. `Project/Backend/examplerequests.rest` (auth + portfolio basics)
 2. `Project/Backend/examplerequests.modules.rest` (translations, versions, module CRUD + upload)
 
-## 6) Notes
+## 7) Notes
 
 1. SQL data is persisted in Docker volume `mssql-data`
-2. Uploaded image files are currently local backend files
+2. Uploaded image files are persisted in Docker volume `backend-uploads` (mounted at `/app/uploads`)
 
 If something is unclear, ask directly.
 to play around with the backend simply use the examplerequests.rest and examplerequests.modules.rest files with the VS-CODE Rest-Client Extension!

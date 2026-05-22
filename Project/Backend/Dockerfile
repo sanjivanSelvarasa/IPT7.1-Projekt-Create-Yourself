@@ -13,4 +13,6 @@ COPY 4_models ./4_models
 COPY 5_utils ./5_utils
 COPY app.js ./
 
+RUN mkdir -p uploads/projects uploads/profiles
+
 EXPOSE 3000

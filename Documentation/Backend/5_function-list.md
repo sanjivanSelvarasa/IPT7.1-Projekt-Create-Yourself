@@ -89,9 +89,55 @@ uploadProjectImage()
 ```
 
 ### uploadProjectImage()
-**Beschreibung:** Speichert hochgeladene Bilddatei lokal und setzt `img_url` im Projekt.
+**Beschreibung:** Speichert hochgeladene Bilddatei lokal und setzt `img_url` im Projekt. Löscht das vorherige Bild von Disk falls vorhanden.
 **Parameter:** `email`, `portfolioId`, `projectId`, `file`
 **Rückgabe:** `{ id, portfolioId, imageUrl, updatedAt }`
+
+### deleteProject()
+**Beschreibung:** Löscht ein Projekt aus der DB und entfernt das zugehörige Bild von Disk falls vorhanden.
+**Parameter:** `email`, `portfolioId`, `projectId`
+**Rückgabe:** Kein Wert.
+
+## Account-Modul
+
+```
+getProfile()
+updateProfile()
+changePassword()
+changeLanguage()
+updateProfilePicture()
+deleteAccount()
+```
+
+### getProfile()
+**Beschreibung:** Gibt Profildaten des eingeloggten Benutzers zurück.
+**Parameter:** `email`
+**Rückgabe:** User-Objekt (ohne Passwort-Hash).
+
+### updateProfile()
+**Beschreibung:** Aktualisiert Profildaten (firstName, lastName, username, email, bio) mit Eindeutigkeitsprüfung.
+**Parameter:** `email`, `data`
+**Rückgabe:** Aktualisiertes Profil-Objekt.
+
+### changePassword()
+**Beschreibung:** Vergleicht aktuelles Passwort, validiert neues (min 8 Zeichen, Bestätigung) und speichert neuen Hash.
+**Parameter:** `email`, `data` (`current_password`, `new_password`, `confirm_password`)
+**Rückgabe:** Kein Wert.
+
+### changeLanguage()
+**Beschreibung:** Setzt bevorzugte Sprache des Benutzers.
+**Parameter:** `email`, `data` (`language_code`)
+**Rückgabe:** `{ id, preferredLanguage, updatedAt }`
+
+### updateProfilePicture()
+**Beschreibung:** Speichert neues Profilbild, aktualisiert `profile_img` in DB und löscht altes Bild von Disk.
+**Parameter:** `email`, `filename`
+**Rückgabe:** `{ id, profileImg, updatedAt }`
+
+### deleteAccount()
+**Beschreibung:** Löscht den Account vollständig (transaktionale Kaskade: Portfolios, Projekte, Tokens, etc.) und bereinigt alle hochgeladenen Dateien von Disk.
+**Parameter:** `email`
+**Rückgabe:** Kein Wert.
 
 ## Skill-Modul
 
@@ -144,6 +190,8 @@ parseSlug()
 validateVisibility()
 getOwnedPortfolio()
 findUserOrThrow()
+isSlugAvailable()
+deleteUploadedFile()
 ```
 
 ### getOwnedPortfolio()
@@ -160,6 +208,16 @@ findUserOrThrow()
 **Beschreibung:** Prüft, dass Startdatum nicht nach Enddatum liegt.
 **Parameter:** `startDate`, `endDate`
 **Rückgabe:** Kein Wert, wirft ggf. Fehler (`400`).
+
+### isSlugAvailable()
+**Beschreibung:** Prüft ob ein Slug noch frei ist (kein Datenbankkonflikt).
+**Parameter:** `slug`
+**Rückgabe:** `true` (frei) oder `false` (bereits vergeben).
+
+### deleteUploadedFile()
+**Beschreibung:** Löscht eine hochgeladene Datei von Disk anhand des gespeicherten URL-Pfads (z. B. `/uploads/projects/abc.jpg`). Nur Pfade unter `/uploads/` werden gelöscht. Fehler werden ignoriert.
+**Parameter:** `urlPath`
+**Rückgabe:** Kein Wert.
 
 ## Hinweis
 
