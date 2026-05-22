@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import {useI18n} from "vue-i18n";
 import Logo from "@/components/ui/Logo.vue";
+import {apiFetch} from "@/api/api.ts";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -40,6 +41,7 @@ async function submit() {
 const { t } = useI18n();
 
 const tl = (key: string) => t(`login.${key}`);
+
 </script>
 
 <template>
@@ -92,7 +94,7 @@ const tl = (key: string) => t(`login.${key}`);
 
             <input
               v-model="email"
-              class="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+              class="rounded-none! w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
               type="email"
               placeholder="name@example.com"
               autocomplete="email"
@@ -113,7 +115,7 @@ const tl = (key: string) => t(`login.${key}`);
 
             <input
               v-model="password"
-              class="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+              class="rounded-none! w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
               :type="showPassword ? 'text' : 'password'"
               placeholder="•••••••••"
               autocomplete="current-password"
