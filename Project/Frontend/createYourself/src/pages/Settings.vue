@@ -6,7 +6,7 @@ import Interface from "@/components/ui/Interface.vue";
 import MainContent from "@/components/layout/MainContent.vue";
 import {useProfileStore} from "@/stores/profileStore.ts";
 import {onMounted, ref} from "vue";
-import type {PasswordChange} from "@/types/passwordChange.ts";
+import type {PasswordChangeType} from "@/types/passwordChangeType.ts";
 import {useRouter} from "vue-router";
 import SvgStruct from "@/components/ui/SvgStruct.vue";
 
@@ -41,7 +41,7 @@ async function submitPassword() {
   errorPassword.value = null
   messagePassword.value = null
 
-  const password : PasswordChange = {
+  const password : PasswordChangeType = {
     currentPassword: currPassword.value,
     newPassword: newPassword.value,
     confirmPassword: confirmPassword.value,

@@ -10,7 +10,7 @@ import {
 import type {ProfileType} from "@/types/profileType.ts";
 import type {ChangeProfileType} from "@/types/changeProfileType.ts";
 import type {LanguageType} from "@/types/languageType.ts";
-import type {PasswordChange} from "@/types/passwordChange.ts";
+import type {PasswordChangeType} from "@/types/passwordChangeType.ts";
 
 export const useProfileStore = defineStore('profile', () =>{
   const loading = ref<boolean>(false)
@@ -64,7 +64,7 @@ export const useProfileStore = defineStore('profile', () =>{
     }
   }
 
-  async function updatePassword(password: PasswordChange){
+  async function updatePassword(password: PasswordChangeType){
     error.value = null
 
     try{

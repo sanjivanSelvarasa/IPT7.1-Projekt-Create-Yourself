@@ -1,6 +1,6 @@
 import {apiFetch} from "@/api/api.ts";
 import type {ChangeProfileType} from "@/types/changeProfileType.ts";
-import type {PasswordChange} from "@/types/passwordChange.ts";
+import type {PasswordChangeType} from "@/types/passwordChangeType.ts";
 import type {ProfileType} from "@/types/profileType.ts";
 import type {LanguageType} from "@/types/languageType.ts";
 
@@ -51,7 +51,7 @@ export async function updateLanguageApi(language: string) : Promise<LanguageType
   })
 }
 
-export async function updatePasswordApi(password: PasswordChange){
+export async function updatePasswordApi(password: PasswordChangeType){
   return await apiFetch('/account/password', {
     method: 'PUT',
     body: JSON.stringify({
