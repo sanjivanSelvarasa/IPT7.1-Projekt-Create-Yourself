@@ -24,7 +24,10 @@ export async function createPortfolioApi(portfolio: CreatePortfolioType){
   return await apiFetch(`/portfolio`, {
     method: 'POST',
     body: JSON.stringify({
-      portfolio
+      title: portfolio.title,
+      description: portfolio.description,
+      slug: portfolio.slug,
+      visibility: portfolio.visibility,
     }),
     headers: {
       Authorization: `BEARER ${localStorage.getItem('token')}`
@@ -47,5 +50,11 @@ export async function deletePortfolioApi(id: number){
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`
     }
+  })
+}
+
+export async function slugAvailableApi(slug: string) : Promise<boolean>{
+  return await apiFetch(`/p/${slug}/available`, {
+    method: 'GET',
   })
 }
