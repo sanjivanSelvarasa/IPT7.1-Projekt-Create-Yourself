@@ -4,10 +4,11 @@ import type {PortfolioType} from "@/types/portfolioType.ts";
 import {
   createPortfolioApi, deletePortfolioApi,
   getPortfolioByIdApi,
-  getPortoliosApi,
+  getPortoliosApi, slugAvailableApi,
   updatePortfolioByIdApi
 } from "@/api/portfolio.api.ts";
 import type {CreatePortfolioType} from "@/types/createPortfolioType.ts";
+import {apiFetch} from "@/api/api.ts";
 
 export const usePortfolioStore = defineStore('portfolio', () => {
   const loading = ref<boolean>(false)
@@ -39,7 +40,6 @@ export const usePortfolioStore = defineStore('portfolio', () => {
 
   async function createPortfolio(portfolio: CreatePortfolioType){
     error.value = null
-
     try{
       return await createPortfolioApi(portfolio)
     }catch(err){
@@ -67,5 +67,15 @@ export const usePortfolioStore = defineStore('portfolio', () => {
     }
   }
 
-  return {loading, error, portfolios, getPortfolio, getPortfolioById, createPortfolio, updatePortfolio, deletePortfolio}
+  async function slugAvailable(slug: string){
+    error.value = null
+
+    try{
+      return await slugAvailableApi(slug)
+    }catch(err){
+      error.value = err ? err.message : 'Check slug failed.'
+    }
+  }
+
+  return {loading, error, portfolios, getPortfolio, getPortfolioById, createPortfolio, updatePortfolio, deletePortfolio, slugAvailable}
 })
