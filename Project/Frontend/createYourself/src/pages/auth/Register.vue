@@ -106,7 +106,7 @@ const tl = (key: string) => t(`register.${key}`);
 
             <input
               v-model="email"
-              class="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+              class="rounded-none! w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
               type="email"
               placeholder="name@example.com"
               autocomplete="email"
@@ -127,7 +127,7 @@ const tl = (key: string) => t(`register.${key}`);
 
             <input
               v-model="password"
-              class="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+              class="rounded-none! w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
               :type="showPassword ? 'text' : 'password'"
               :placeholder=" tl('card.register-textboxes.textbox-two-content') "
               autocomplete="new-password"
@@ -156,7 +156,7 @@ const tl = (key: string) => t(`register.${key}`);
 
             <input
               v-model="confirmPassword"
-              class="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+              class="rounded-none! w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
               :type="showConfirmPassword ? 'text' : 'password'"
               :placeholder=" tl('card.register-textboxes.textbox-three-content') "
               autocomplete="new-password"
