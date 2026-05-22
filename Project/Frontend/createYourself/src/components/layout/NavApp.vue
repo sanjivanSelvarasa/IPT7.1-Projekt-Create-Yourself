@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import Logo from "@/components/ui/Logo.vue";
 import {ref} from "vue";
+import {useAuthStore} from "@/stores/authStore.ts";
+import {useRouter} from "vue-router";
 
-const emit = defineEmits<{
-  (e: 'logout'): void;
-}>()
+const authStore = useAuthStore();
+const router = useRouter();
 
-function onLogout() {
-  emit('logout');
+async function onLogout() {
+  try{
+    await authStore.logout();
+    await router.push("/login");
+  }catch{
+  }
 }
 
 const showBugermenu = ref<boolean>(false);
