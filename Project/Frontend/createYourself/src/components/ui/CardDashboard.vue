@@ -72,19 +72,19 @@
     </div>
 
     <div class="flex items-center justify-start">
-      <button class="hover:scale-101 hover:bg-blue-100 transition duration-100 cursor-pointer mt-3 flex items-center justify-center gap-2 text-[var(--primary-color)] text-sm ml-4 px-3 py-1 bg-[var(--primary-color-light)] border border-blue-200 rounded-lg">
+      <RouterLink to="/editor" class="hover:scale-101 hover:bg-blue-100 transition duration-100 cursor-pointer mt-3 flex items-center justify-center gap-2 text-[var(--primary-color)] text-sm ml-4 px-3 py-1 bg-[var(--primary-color-light)] border border-blue-200 rounded-lg">
         <div class="flex items-center justify-center">
           <i class="fa-regular fa-pen-to-square"></i>
         </div>
         <span>{{ tl("saved-card.edit-button") }}</span>
-      </button>
+      </RouterLink>
 
-      <button v-if="props.portfolio.visibility === 'private'" class="hover:scale-101 hover:bg-green-100 transition duration-100 cursor-pointer mt-3 flex items-center justify-center gap-2 text-[var(--accent-color)] text-sm ml-4 px-3 py-1 bg-green-50 border border-green-200 rounded-lg">
+      <RouterLink to="/publish" v-if="props.portfolio.visibility === 'private'" class="hover:scale-101 hover:bg-green-100 transition duration-100 cursor-pointer mt-3 flex items-center justify-center gap-2 text-[var(--accent-color)] text-sm ml-4 px-3 py-1 bg-green-50 border border-green-200 rounded-lg">
         <div class="flex items-center justify-center">
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
         </div>
         <span>{{ tl("saved-card.publish") }}</span>
-      </button>
+      </RouterLink>
 
       <button v-if="props.portfolio.visibility === 'public'" class="hover:scale-101 hover:bg-yellow-100 transition duration-100 cursor-pointer mt-3 flex items-center justify-center gap-2 text-yellow-600 text-sm ml-4 px-3 py-1 bg-yellow-50 border border-yellow-400 rounded-lg">
         <div class="flex items-center justify-center">
