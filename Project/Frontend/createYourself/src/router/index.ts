@@ -9,6 +9,9 @@ import Register from "@/pages/auth/Register.vue";
 import {useAuthStore} from "@/stores/authStore.ts";
 import Profile from "@/pages/Profile.vue";
 import Settings from "@/pages/Settings.vue";
+import CreatePortfolio from "@/pages/CreatePortfolio.vue";
+import {typescriptRules} from "eslint-plugin-oxlint/rules-by-scope";
+import PublishPortfolio from "@/pages/PublishPortfolio.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,6 +56,18 @@ const router = createRouter({
       path: '/theme',
       name: 'Theme',
       component: Theme,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/create',
+      name: 'CreatePortfolio',
+      component: CreatePortfolio,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/publish',
+      name: 'PublishPortfolio',
+      component: PublishPortfolio,
       meta: { requiresAuth: true },
     },
     {
