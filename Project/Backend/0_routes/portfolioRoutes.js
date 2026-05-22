@@ -8,6 +8,7 @@ const asyncHandler = require('../5_utils/asyncHandler')
 const router = express.Router()
 
 // Öffentliche Portfolio-Ansicht (ohne Authentifizierung mit slug_link)
+router.get('/p/:slug/available', asyncHandler(portfolioController.checkSlugAvailability))
 router.get('/p/:slug', asyncHandler(portfolioController.getPublicPortfolioBySlug))
 router.get('/p/:slug/full', asyncHandler(portfolioController.getPublicPortfolioFullBySlug))
 

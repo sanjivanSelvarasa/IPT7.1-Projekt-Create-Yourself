@@ -234,6 +234,11 @@ async function getTemplateById(req, res) {
     res.json(template)
 }
 
+async function checkSlugAvailability(req, res) {
+    const available = await portfolioService.isSlugAvailable(req.params.slug)
+    res.json({ available })
+}
+
 async function getPublicPortfolioBySlug(req, res) {
     const portfolio = await portfolioService.getPublicPortfolioBySlug(req.params.slug)
     res.json(portfolio)
@@ -289,5 +294,6 @@ module.exports = {
     listTemplates,
     getTemplateById,
     getPublicPortfolioBySlug,
-    getPublicPortfolioFullBySlug
+    getPublicPortfolioFullBySlug,
+    checkSlugAvailability
 }

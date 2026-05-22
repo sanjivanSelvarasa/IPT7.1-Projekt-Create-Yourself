@@ -230,6 +230,15 @@ async function deletePortfolioById(portfolioId) {
         .query('DELETE FROM Portfolio WHERE id = @portfolioId')
 }
 
+async function isSlugAvailable(slug) {
+    const pool = await database.getPool()
+    const result = await pool
+        .request()
+        .input('slug', sql.NVarChar(100), slug)
+        .query(`SELECT COUNT(1) AS cnt FROM Portfolio WHERE slug = @slug`)
+    return result.recordset[0].cnt === 0
+}
+
 async function getPortfolioBySlug(slug) {
     const pool = await database.getPool()
     const result = await pool
@@ -533,6 +542,7 @@ module.exports = {
     getPortfoliosByUserId,
     createPortfolioForUser,
     getPortfolioById,
+    isSlugAvailable,
     getPortfolioBySlug,
     updatePortfolio,
     deletePortfolioById,

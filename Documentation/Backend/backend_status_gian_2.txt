@@ -1,0 +1,42 @@
+Statusbericht Backend – Gian (Stand: 20.05.2026)
+
+
+1. Arbeitspakete mit Fertigstellungsgrad
+
+Projektsetup & Docker         95 %   Container und Struktur stabil, kleinere Details ausstehend
+Datenbankanbindung (MS SQL)   95 %   Verbindung mit Retry-Logik stabil, Schema-Abgleich abgeschlossen
+Authentifizierung             100 %  Registrierung, Login, Logout, Refresh-Token vollständig
+Portfolio CRUD                100 %  Alle Operationen inkl. öffentlichem Slug-Zugriff
+Portfolio Versionierung       100 %  Versionen erstellen, aktivieren, löschen
+Medien-Upload                 95 %   Dateitypprüfung, UUID-Dateinamen, 5 MB-Limit
+Eingabevalidierung            100 %  URLs, Daten, Farben, Sprachcodes, Slugs, Skill-Level
+Sicherheit                    90 %   JWT-Middleware, Ownership-Prüfung, parameterisierte Queries
+Theme-System                  100 %  Themes erstellen, bearbeiten, aktivieren (7 Farben + Schriftart)
+Template-Verwaltung           100 %  Templates auflisten und abrufen
+Mehrsprachige Übersetzungen   100 %  CRUD-Endpunkte für Portfolio-Übersetzungen
+Weitere CRUD-Module           100 %  Projekte, Skills, Social Links, Experience, Education
+
+
+4. Aktueller Projektstand
+
+Das Backend ist seit dem letzten Bericht (21.04.2026) deutlich gewachsen. Alle
+damals noch offenen Kernfunktionen wurden umgesetzt.
+
+Portfolio-Versionierung wurde vollständig implementiert. Versionen können
+erstellt, abgerufen, gelöscht und als aktive Version gesetzt werden.
+
+Mehrsprachige Übersetzungen ermöglichen es, ein Portfolio in mehreren Sprachen
+zu pflegen. Alle CRUD-Operationen stehen als Endpunkte zur Verfügung.
+
+Das Theme-System erlaubt es Benutzern, eigene Farbschemata und Schriftarten
+zu definieren und einem Portfolio zuzuweisen.
+
+Portfolios sind nun ohne Authentifizierung über einen eindeutigen Slug öffentlich
+abrufbar, was die spätere Anzeige im Frontend vereinfacht.
+
+Die Ownership-Prüfung wurde in einen zentralen Helper ausgelagert und die
+Eingabevalidierung über alle Endpunkte vereinheitlicht.
+
+Insgesamt umfasst das Backend nun 88 implementierte Endpunkte. Die Architektur
+folgt einer klaren Schichtentrennung (Routes, Controller, Service, Model) und
+läuft stabil in der Docker-Umgebung mit MS SQL.

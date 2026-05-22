@@ -143,6 +143,11 @@ async function deletePortfolio(email, rawPortfolioId) {
     await portfolioModel.deletePortfolioById(portfolioId)
 }
 
+async function isSlugAvailable(slug) {
+    const parsedSlug = parseSlug(slug)
+    return portfolioModel.isSlugAvailable(parsedSlug)
+}
+
 async function getPublicPortfolioBySlug(slug) {
     const parsedSlug = parseSlug(slug)
     const portfolio = await portfolioModel.getPortfolioBySlug(parsedSlug)
@@ -315,6 +320,7 @@ module.exports = {
     getPortfolioFullById,
     updatePortfolio,
     deletePortfolio,
+    isSlugAvailable,
     getPublicPortfolioBySlug,
     getPublicPortfolioFullBySlug,
     listTranslations,
