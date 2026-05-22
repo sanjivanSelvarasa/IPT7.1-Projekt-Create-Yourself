@@ -30,11 +30,12 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function logout() {
     try{
-      await logoutApi(localStorage.getItem("token") ?? "")
+      await logoutApi(localStorage.getItem("token")!)
       token.value = null
       localStorage.removeItem("token")
     }catch(err){
       error.value = err ? err.text : 'Logout failed'
+      throw error
     }
   }
 
@@ -45,7 +46,7 @@ export const useAuthStore = defineStore('auth', () => {
     try{
       const data = await tokenApi()
       token.value = data
-      localStorage.setItem("token", data)
+      localStorage.setItem("token", data.accessToken)
     }catch(err){
       error.value = err ? err.text : 'Getting refresh token failed'
     }
