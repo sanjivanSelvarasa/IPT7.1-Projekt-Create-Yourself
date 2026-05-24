@@ -40,6 +40,9 @@ const updatedPortfolios = computed(() => {
     return filteredPortfolios?.filter(t => t.visibility.toLowerCase() === "public");
 })
 
+async function pushToEditor(id: number){
+  await router.push(`/portfolio/${id}/editor`);
+}
 
 // language
 const { t, locale } = useI18n();
@@ -117,7 +120,7 @@ const tl = (key: string) => t(`dashboard.${key}`);
       </div>
 
       <div class="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 grid-rows-[auto_1fr] gap-4 w-full mb-8">
-        <CardDashboard v-for="portfolio in updatedPortfolios" :key="portfolio.id" :portfolio="portfolio"></CardDashboard>
+        <CardDashboard @edit="pushToEditor" v-for="portfolio in updatedPortfolios" :key="portfolio.id" :portfolio="portfolio"></CardDashboard>
 
         <!-- create project-->
         <RouterLink to="/create" v-if="!noResults" class="select-none group hover:border-[var(--primary-color)] cursor-pointer transition duration-150 relative bg-transparent w-full h-[350px] aspect-square rounded-2xl overflow-hidden border-3 border-gray-200 border-dashed">
