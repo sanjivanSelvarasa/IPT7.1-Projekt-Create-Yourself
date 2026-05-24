@@ -20,6 +20,15 @@ export async function getPortfolioByIdApi(id: number) : Promise<PortfolioType>{
   })
 }
 
+export async function getFullPortfolioByIdApi(id: number) : Promise<PortfolioType>{
+  return await apiFetch(`/portfolio/${id}/full`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  })
+}
+
 export async function createPortfolioApi(portfolio: CreatePortfolioType){
   return await apiFetch(`/portfolio`, {
     method: 'POST',
