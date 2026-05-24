@@ -81,6 +81,12 @@ router.put('/portfolio/:id/themes/:themeId', authenticateToken, asyncHandler(por
 router.delete('/portfolio/:id/themes/:themeId', authenticateToken, asyncHandler(portfolioController.deleteTheme))
 router.post('/portfolio/:id/themes/:themeId/activate', authenticateToken, asyncHandler(portfolioController.activateTheme))
 
+// Sections einer Portfolio-Version verwalten
+router.get('/portfolio/:id/versions/:versionId/sections', authenticateToken, asyncHandler(portfolioController.listSections))
+router.post('/portfolio/:id/versions/:versionId/sections', authenticateToken, asyncHandler(portfolioController.createSection))
+router.put('/portfolio/:id/versions/:versionId/sections/:sectionId', authenticateToken, asyncHandler(portfolioController.updateSection))
+router.delete('/portfolio/:id/versions/:versionId/sections/:sectionId', authenticateToken, asyncHandler(portfolioController.deleteSection))
+
 // Verfügbare Templates abrufen
 router.get('/templates', asyncHandler(portfolioController.listTemplates))
 router.get('/templates/:templateId', asyncHandler(portfolioController.getTemplateById))

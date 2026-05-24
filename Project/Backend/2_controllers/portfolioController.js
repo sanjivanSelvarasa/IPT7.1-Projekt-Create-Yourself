@@ -6,6 +6,7 @@ const experienceService = require('../3_services/experienceService')
 const educationService = require('../3_services/educationService')
 const themeService = require('../3_services/themeService')
 const templateService = require('../3_services/templateService')
+const sectionService = require('../3_services/sectionService')
 
 async function getPortfolios(req, res) {
     const portfolios = await portfolioService.getPortfoliosForUser(req.user.email)
@@ -249,6 +250,26 @@ async function getPublicPortfolioFullBySlug(req, res) {
     res.json(portfolio)
 }
 
+async function listSections(req, res) {
+    const sections = await sectionService.listSections(req.user.email, req.params.id, req.params.versionId)
+    res.json(sections)
+}
+
+async function createSection(req, res) {
+    const section = await sectionService.createSection(req.user.email, req.params.id, req.params.versionId, req.body)
+    res.status(201).json(section)
+}
+
+async function updateSection(req, res) {
+    const section = await sectionService.updateSection(req.user.email, req.params.id, req.params.versionId, req.params.sectionId, req.body)
+    res.json(section)
+}
+
+async function deleteSection(req, res) {
+    await sectionService.deleteSection(req.user.email, req.params.id, req.params.versionId, req.params.sectionId)
+    res.sendStatus(204)
+}
+
 module.exports = {
     getPortfolios,
     createPortfolio,
@@ -295,5 +316,9 @@ module.exports = {
     getTemplateById,
     getPublicPortfolioBySlug,
     getPublicPortfolioFullBySlug,
-    checkSlugAvailability
+    checkSlugAvailability,
+    listSections,
+    createSection,
+    updateSection,
+    deleteSection
 }

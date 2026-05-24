@@ -469,6 +469,39 @@ Statuscodes:
 
 ---
 
+## PortfolioSection Modul
+
+### [GET] /portfolio/:id/versions/:versionId/sections
+**Beschreibung:** Alle Sections einer Portfolio-Version laden.
+
+### [POST] /portfolio/:id/versions/:versionId/sections
+**Beschreibung:** Neue Section in einer Portfolio-Version erstellen.
+
+**Request Body (Beispiel):**
+```json
+{
+  "sectionType": "hero",
+  "title": "Startbereich",
+  "sortOrder": 1,
+  "isVisible": true
+}
+```
+
+### [PUT] /portfolio/:id/versions/:versionId/sections/:sectionId
+**Beschreibung:** Section aktualisieren (alle Felder optional).
+
+### [DELETE] /portfolio/:id/versions/:versionId/sections/:sectionId
+**Beschreibung:** Section löschen.
+
+Statuscodes:
+- `200`, `201`, `204`
+- `400` Validierungsfehler
+- `401` Kein Token
+- `404` Section, Version oder Portfolio nicht gefunden
+- `403` Kein Zugriff
+
+---
+
 ## Geplante Module (noch nicht implementiert)
 
 Hinweis:
@@ -502,33 +535,7 @@ Statuscodes (geplant):
 
 ### PortfolioSection Modul
 
-### [GET] /portfolio/:id/versions/:versionId/sections
-**Beschreibung:** Sections einer Portfolio-Version laden.
-
-### [POST] /portfolio/:id/versions/:versionId/sections
-**Beschreibung:** Neue Section hinzufügen.
-
-**Request Body (Beispiel):**
-```json
-{
-  "sectionType": "hero",
-  "title": "Startbereich",
-  "sortOrder": 1,
-  "isVisible": true
-}
-```
-
-### [PUT] /portfolio/:id/versions/:versionId/sections/:sectionId
-**Beschreibung:** Section aktualisieren.
-
-### [DELETE] /portfolio/:id/versions/:versionId/sections/:sectionId
-**Beschreibung:** Section löschen.
-
-Statuscodes (geplant):
-- `200`, `201`, `204`
-- `400` Validierungsfehler
-- `404` Section, Version oder Portfolio nicht gefunden
-- `403` Kein Zugriff
+~~Implementiert — siehe oben.~~
 
 ---
 

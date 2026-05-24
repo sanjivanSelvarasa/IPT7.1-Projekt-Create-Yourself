@@ -7,6 +7,7 @@
 | Portfolio              | Portfolio CRUD und Ownership-Prüfung                  |
 | PortfolioTranslation   | CRUD für Übersetzungen eines Portfolios               |
 | PortfolioVersion       | CRUD + Aktivierung von Portfolio-Versionen            |
+| PortfolioSection       | CRUD für Sections innerhalb einer Portfolio-Version   |
 | Project                | CRUD für Projekte innerhalb eines Portfolios          |
 | Skill                  | CRUD für PortfolioSkill-Zuordnungen                   |
 | SocialLink             | CRUD für Social Links im Portfolio                    |
@@ -158,6 +159,20 @@
 - Abhängigkeiten:
     - Portfolio-Service
     - Access-Helper
+
+#### Modul: PortfolioSection
+- Zweck:
+    Verwaltung von Sections (Abschnitten) innerhalb einer Portfolio-Version.
+- Hauptfunktionen:
+    - Sections auflisten
+    - Section anlegen
+    - Section aktualisieren
+    - Section löschen
+- Abhängigkeiten:
+    - Section-Service und Section-Model
+    - Portfolio-Model (Versions-Prüfung)
+    - Access-Helper
+    - Validatoren
 
 #### Modul: Theme
 - Zweck:
