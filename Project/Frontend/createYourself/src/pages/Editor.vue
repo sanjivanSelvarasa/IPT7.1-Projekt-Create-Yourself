@@ -5,13 +5,46 @@ import Sections from "@/components/ui/editor/Sections.vue";
 import ScreenButton from "@/components/ui/editor/ScreenButton.vue";
 import Content from "@/components/ui/editor/Content.vue";
 import SectionStruct from "@/components/ui/editor/SectionStruct.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
+import {usePortfolioStore} from "@/stores/portfolioStore.ts";
+import type {PortfolioType} from "@/types/portfolioType.ts";
+import {useRoute} from "vue-router";
+import {getDateGap} from "@/utils/date.ts";
+import AddSection from "@/components/ui/editor/AddSection.vue";
 
-const portfolioName = ref<string>('MaxMustermann - Portfolio');
+const portfolioName = ref<string>('');
+
+const portfolioStore = usePortfolioStore()
+const route = useRoute();
+const portfolioId = route.params.id
+const portfolio = ref<any | null>(null);
+const portfolioFacts = ref<PortfolioType | null>(null);
+
+onMounted(async () => {
+  portfolio.value = await portfolioStore.getFullPortfolioById(Number(portfolioId)) ?? null
+
+  portfolioFacts.value = {
+    id: portfolio.value.portfolio.id,
+    userId: portfolio.value.portfolio.userId,
+    templateId: portfolio.value.portfolio.templateId,
+    title: portfolio.value.portfolio.title,
+    description: portfolio.value.portfolio.description,
+    slug: portfolio.value.portfolio.slug,
+    visibility: portfolio.value.portfolio.visibility,
+    createdAt: new Date(portfolio.value.portfolio.createdAt),
+    updatedAt: new Date(portfolio.value.portfolio.updatedAt),
+  }
+
+  portfolioName.value = portfolioFacts.value?.title ?? ''
+})
 
 </script>
 
 <template>
+  <div v-if="true">
+    <AddSection></AddSection>
+  </div>
+
   <div class="flex flex-col bg-[var(--background-color)] w-full h-[100vh] overflow-y-hidden">
     <nav class="z-999 px-3 py-2 flex items-center justify-between w-full h-fit bg-[var(--surface-color)] border border-b-gray-200 border-transparent">
       <logo link="/dashboard"></logo>
@@ -26,7 +59,7 @@ const portfolioName = ref<string>('MaxMustermann - Portfolio');
                 <div class="w-full h-full bg-green-500 rounded-full"></div>
                 <div class="absolute w-full h-full bg-green-300 rounded-full animate-ping -translate-y-[7px]"></div>
               </div>
-              <span>Gespeichert - vor 2 Min</span>
+              <span>Gespeichert - {{ portfolioFacts?.updatedAt ? getDateGap(portfolioFacts?.updatedAt) : 'FEHLER' }}</span>
             </div>
           </div>
 
