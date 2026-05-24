@@ -5,10 +5,14 @@ const path = require('path')
 
 const uploadRoot = path.join(__dirname, '..', 'uploads', 'profiles')
 
+const ALLOWED_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp'])
+
 function resolveExtension(file) {
     if (file.mimetype === 'image/png') return '.png'
     if (file.mimetype === 'image/jpeg') return '.jpg'
     if (file.mimetype === 'image/webp') return '.webp'
+    const ext = path.extname(file.originalname).toLowerCase()
+    if (ALLOWED_EXTENSIONS.has(ext)) return ext
     return '.img'
 }
 
@@ -26,9 +30,14 @@ const storage = multer.diskStorage({
 })
 
 function fileFilter(req, file, callback) {
-    if (!file.mimetype || !file.mimetype.startsWith('image/')) {
+    const mimeOk = file.mimetype && file.mimetype.startsWith('image/')
+    const ext = path.extname(file.originalname).toLowerCase()
+    const extOk = ALLOWED_EXTENSIONS.has(ext)
+
+    if (!mimeOk && !extOk) {
         return callback(new multer.MulterError('LIMIT_UNEXPECTED_FILE', 'image'))
     }
+
     return callback(null, true)
 }
 
