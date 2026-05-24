@@ -2,7 +2,7 @@ import {defineStore} from "pinia";
 import {ref} from "vue";
 import type {PortfolioType} from "@/types/portfolioType.ts";
 import {
-  createPortfolioApi, deletePortfolioApi,
+  createPortfolioApi, deletePortfolioApi, getFullPortfolioByIdApi,
   getPortfolioByIdApi,
   getPortoliosApi, slugAvailableApi,
   updatePortfolioByIdApi
@@ -33,6 +33,16 @@ export const usePortfolioStore = defineStore('portfolio', () => {
 
     try{
       return await getPortfolioByIdApi(id)
+    }catch(err){
+      error.value = err ? err.message : 'Getting Portfolio by id failed.'
+    }
+  }
+
+  async function getFullPortfolioById(id: number){
+    error.value = null
+
+    try{
+      return await getFullPortfolioByIdApi(id)
     }catch(err){
       error.value = err ? err.message : 'Getting Portfolio by id failed.'
     }
@@ -77,5 +87,5 @@ export const usePortfolioStore = defineStore('portfolio', () => {
     }
   }
 
-  return {loading, error, portfolios, getPortfolio, getPortfolioById, createPortfolio, updatePortfolio, deletePortfolio, slugAvailable}
+  return {loading, error, portfolios, getFullPortfolioById, getPortfolio, getPortfolioById, createPortfolio, updatePortfolio, deletePortfolio, slugAvailable}
 })
