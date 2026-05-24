@@ -41,7 +41,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/editor',
+      path: '/portfolio/:id/editor',
       name: 'Editor',
       component: Editor,
       meta: { requiresAuth: true },
