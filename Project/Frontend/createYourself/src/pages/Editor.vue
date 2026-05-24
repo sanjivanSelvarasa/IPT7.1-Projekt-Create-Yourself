@@ -11,20 +11,28 @@ import type {PortfolioType} from "@/types/portfolioType.ts";
 import {useRoute} from "vue-router";
 import {getDateGap} from "@/utils/date.ts";
 import AddSection from "@/components/ui/editor/AddSection.vue";
+import {createSectionApi, getSectionsApi} from "@/api/portfolioSection.api.ts";
+import type {SectionType} from "@/types/sectionType.ts";
+import SvgStruct from "@/components/ui/SvgStruct.vue";
 
 const portfolioName = ref<string>('');
 
 const portfolioStore = usePortfolioStore()
 const route = useRoute();
-const portfolioId = route.params.id
+const portfolioId = Number(route.params.id)
 const portfolio = ref<any | null>(null);
 const portfolioFacts = ref<PortfolioType | null>(null);
 
+const sections = ref<any | null>(null);
+
 onMounted(async () => {
-  portfolio.value = await portfolioStore.getFullPortfolioById(Number(portfolioId)) ?? null
+  portfolio.value = await portfolioStore.getFullPortfolioById(portfolioId) ?? null
 
   portfolioFacts.value = {
     id: portfolio.value.portfolio.id,
+    currentThemeId: portfolio.value.portfolio.currentThemeId,
+    currentVersionId: portfolio.value.portfolio.currentVersionId,
+    languageCode: portfolio.value.portfolio.languageCode,
     userId: portfolio.value.portfolio.userId,
     templateId: portfolio.value.portfolio.templateId,
     title: portfolio.value.portfolio.title,
@@ -36,13 +44,37 @@ onMounted(async () => {
   }
 
   portfolioName.value = portfolioFacts.value?.title ?? ''
+
+  sections.value = await getSectionsApi(portfolioFacts.value.id, portfolioFacts.value.currentVersionId)
 })
+
+const addSectionVisible = ref<boolean>(false);
+const error = ref<string | null>(null);
+async function submitSection(sectionHeader: string) {
+  if(portfolioFacts.value === null) return;
+
+  error.value = null
+
+  const section : SectionType = {
+    sectionType: sectionHeader,
+    title: 'PLATZHALTER TITEL',
+    sortOrder: 1,
+    isVisible: true,
+  }
+
+  try{
+    await createSectionApi(portfolioFacts.value.id, portfolioFacts.value.currentVersionId, section)
+    addSectionVisible.value = false
+  }catch(err: any){
+    error.value = err ? err.message : 'Failed to create section.';
+  }
+}
 
 </script>
 
 <template>
-  <div v-if="true">
-    <AddSection></AddSection>
+  <div v-if="addSectionVisible">
+    <AddSection @submit="submitSection" @cancel="addSectionVisible = !addSectionVisible" :error="error ?? '' "></AddSection>
   </div>
 
   <div class="flex flex-col bg-[var(--background-color)] w-full h-[100vh] overflow-y-hidden">
@@ -132,14 +164,14 @@ onMounted(async () => {
             <Sections title="Projekte" svg="fa-solid fa-diagram-project" :count="2"></Sections>
             <Sections title="Skills" svg="fa-regular fa-star" :count="4"></Sections>
 
-            <div class="transition-all duration-75 mt-2 select-none cursor-pointer group hover:text-[var(--primary-color)] hover:bg-[var(--primary-color-light)] hover:border-[var(--primary-color)] border-3 border-dashed border-gray-200 rounded-lg w-full flex items-center justify-center px-1 py-2 text-[var(--text-color-light)]">
+            <button @click="addSectionVisible = !addSectionVisible" class="transition-all duration-75 mt-2 select-none cursor-pointer group hover:text-[var(--primary-color)] hover:bg-[var(--primary-color-light)] hover:border-[var(--primary-color)] border-3 border-dashed border-gray-200 rounded-lg w-full flex items-center justify-center px-1 py-2 text-[var(--text-color-light)]">
               <div class="flex justify-center items-center gap-2">
                 <div class="flex items-center justify-center">
                   <i class="fa-solid fa-plus"></i>
                 </div>
                 <span>Section hinzufügen</span>
               </div>
-            </div>
+            </button>
           </div>
         </div>
       </aside>
@@ -163,6 +195,13 @@ onMounted(async () => {
           <div class="flex flex-col gap-5 w-full box-content flex-1 min-h-0 overflow-y-scroll no-scrollbar">
             <SectionStruct name="Einführung" title="Hero"></SectionStruct>
             <SectionStruct name="Ausgewählte Arbeiten" title="Projekte"></SectionStruct>
+
+            <button class="hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] transition duration-75  px-4 py-3 select-none cursor-pointer text-[var(--text-color-light)] flex items-center justify-center gap-2 w-full h-fit rounded-lg border-2 border-dashed border-gray-200">
+              <SvgStruct>
+                <i class="fa-solid fa-plus"></i>
+              </SvgStruct>
+              <span>Section hinzufügen</span>
+            </button>
           </div>
         </div>
       </div>
