@@ -7,6 +7,14 @@
     portfolio: PortfolioType,
   }>()
 
+  const emit = defineEmits<{
+    (e: 'edit', id: number): void
+  }>()
+
+  function submitEdit(): void{
+    emit('edit', props.portfolio.id)
+  }
+
   const { t } = useI18n();
 
   const tl = (key: string) => t(`cardDashboard.${key}`)
@@ -72,12 +80,12 @@
     </div>
 
     <div class="flex items-center justify-start">
-      <RouterLink to="/editor" class="hover:scale-101 hover:bg-blue-100 transition duration-100 cursor-pointer mt-3 flex items-center justify-center gap-2 text-[var(--primary-color)] text-sm ml-4 px-3 py-1 bg-[var(--primary-color-light)] border border-blue-200 rounded-lg">
+      <button @click="submitEdit()" class="hover:scale-101 hover:bg-blue-100 transition duration-100 cursor-pointer mt-3 flex items-center justify-center gap-2 text-[var(--primary-color)] text-sm ml-4 px-3 py-1 bg-[var(--primary-color-light)] border border-blue-200 rounded-lg">
         <div class="flex items-center justify-center">
           <i class="fa-regular fa-pen-to-square"></i>
         </div>
         <span>{{ tl("saved-card.edit-button") }}</span>
-      </RouterLink>
+      </button>
 
       <RouterLink to="/publish" v-if="props.portfolio.visibility === 'private'" class="hover:scale-101 hover:bg-green-100 transition duration-100 cursor-pointer mt-3 flex items-center justify-center gap-2 text-[var(--accent-color)] text-sm ml-4 px-3 py-1 bg-green-50 border border-green-200 rounded-lg">
         <div class="flex items-center justify-center">
