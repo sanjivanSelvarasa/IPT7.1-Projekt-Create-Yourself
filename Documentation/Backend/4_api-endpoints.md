@@ -147,7 +147,8 @@ Statuscodes:
   "description": "Kurzbeschreibung",
   "languageCode": "de",
   "visibility": "private",
-  "slug": "mein-portfolio"
+  "slug": "mein-portfolio",
+  "template_id": 1
 }
 ```
 
@@ -189,6 +190,18 @@ Statuscodes:
 Statuscodes:
 - `200` Erfolgreich
 - `404` Portfolio nicht gefunden oder nicht öffentlich
+
+### [GET] /p/:slug/available
+**Beschreibung:** Prüft ob ein Slug noch frei ist (kein Login nötig).
+
+**Response (200):**
+```json
+{ "available": true }
+```
+
+Statuscodes:
+- `200` Immer (Ergebnis im Body)
+- `400` Ungültiger Slug-Format
 
 ### [PUT] /portfolio/:id
 **Beschreibung:** Eigenes Portfolio aktualisieren.
@@ -453,20 +466,6 @@ Hinweis:
 Statuscodes:
 - `200`
 - `404` Template nicht gefunden
-
----
-
-### [GET] /p/:slug/available
-**Beschreibung:** Prüft ob ein Slug noch frei ist (kein Login nötig).
-
-**Response (200):**
-```json
-{ "available": true }
-```
-
-Statuscodes:
-- `200` Immer (Ergebnis im Body)
-- `400` Ungültiger Slug-Format
 
 ---
 

@@ -1,16 +1,21 @@
 ### Backend-Module
 
-| Modulname        | Beschreibung                          |
-|------------------|--------------------------------------|
-| Auth             | Login, Registrierung, Logout, Token-Refresh |
-| Portfolio        | Portfolio CRUD und Ownership-Prüfung |
-| Project          | CRUD für Projekte innerhalb eines Portfolios |
-| Skill            | CRUD für PortfolioSkill-Zuordnungen |
-| SocialLink       | CRUD für Social Links im Portfolio |
-| Experience       | CRUD für Berufserfahrungen |
-| Education        | CRUD für Bildungsdaten |
-| Upload           | Projektbild-Upload und URL-Speicherung |
-| Validation/Errors| Gemeinsame Validierung + Fehlerformat |
+| Modulname              | Beschreibung                                          |
+|------------------------|-------------------------------------------------------|
+| Auth                   | Login, Registrierung, Logout, Token-Refresh           |
+| Account                | Profilverwaltung, Passwort, Sprache, Account-Löschung |
+| Portfolio              | Portfolio CRUD und Ownership-Prüfung                  |
+| PortfolioTranslation   | CRUD für Übersetzungen eines Portfolios               |
+| PortfolioVersion       | CRUD + Aktivierung von Portfolio-Versionen            |
+| Project                | CRUD für Projekte innerhalb eines Portfolios          |
+| Skill                  | CRUD für PortfolioSkill-Zuordnungen                   |
+| SocialLink             | CRUD für Social Links im Portfolio                    |
+| Experience             | CRUD für Berufserfahrungen                            |
+| Education              | CRUD für Bildungsdaten                                |
+| Theme                  | CRUD + Aktivierung von Portfolio-Themes               |
+| Template               | Abrufen verfügbarer Templates                         |
+| Upload                 | Bild-Upload (Projektbilder & Profilbilder)            |
+| Validation/Errors      | Gemeinsame Validierung + Fehlerformat                 |
 
 ### Moduldetails
 
@@ -113,16 +118,79 @@
     - Access-Helper
     - Validatoren
 
+#### Modul: Account
+- Zweck:
+    Verwaltung der eigenen Benutzerdaten (Profil, Passwort, Sprache, Profilbild, Account-Löschung).
+- Hauptfunktionen:
+    - Profil laden
+    - Profil aktualisieren
+    - Profilbild hochladen
+    - Bevorzugte Sprache setzen
+    - Passwort ändern
+    - Account permanent löschen
+- Abhängigkeiten:
+    - Account-Service und Account-Model
+    - Upload-Middleware (Multer)
+    - Auth-Middleware
+
+#### Modul: PortfolioTranslation
+- Zweck:
+    Verwaltung von Übersetzungen (Titel, Beschreibung) eines Portfolios in verschiedenen Sprachen.
+- Hauptfunktionen:
+    - Übersetzungen auflisten
+    - Übersetzung anlegen
+    - Übersetzung aktualisieren
+    - Übersetzung löschen
+- Abhängigkeiten:
+    - Portfolio-Service
+    - Access-Helper
+    - Validatoren
+
+#### Modul: PortfolioVersion
+- Zweck:
+    Versionierung des Portfoliozustands. Ermöglicht das Erstellen, Laden und Aktivieren von Snapshots.
+- Hauptfunktionen:
+    - Versionen auflisten
+    - Version erstellen (Snapshot)
+    - Einzelne Version laden
+    - Version löschen
+    - Version aktivieren
+- Abhängigkeiten:
+    - Portfolio-Service
+    - Access-Helper
+
+#### Modul: Theme
+- Zweck:
+    Verwaltung von Farbschemata und Schriftarten pro Portfolio.
+- Hauptfunktionen:
+    - Themes auflisten
+    - Theme anlegen
+    - Theme aktualisieren
+    - Theme löschen
+    - Theme aktivieren
+- Abhängigkeiten:
+    - Theme-Service und Theme-Model
+    - Access-Helper
+
+#### Modul: Template
+- Zweck:
+    Bereitstellung verfügbarer Portfolio-Templates zur Auswahl.
+- Hauptfunktionen:
+    - Alle Templates abrufen
+    - Einzelnes Template abrufen
+- Abhängigkeiten:
+    - Template-Service und Template-Model
+
 #### Modul: Upload
 - Zweck:
-    Upload von Projektbildern inklusive lokaler Speicherung und Rückgabe einer abrufbaren URL.
+    Upload von Bilddateien (Projektbilder und Profilbilder) inklusive lokaler Speicherung und URL-Rückgabe.
 - Hauptfunktionen:
     - Bilddatei entgegennehmen (multipart/form-data)
-    - Dateityp und Dateigröße prüfen
+    - Dateityp (MIME + Dateiendung) und Dateigröße prüfen
     - Datei lokal speichern
-    - URL in `Project.img_url` speichern
+    - URL in `Project.img_url` bzw. `Account.profile_img` speichern
 - Abhängigkeiten:
     - Multer Middleware
-    - Project-Service und Project-Model
+    - Project-Service / Account-Service
     - Express Static Serving (`/uploads`)
 
