@@ -7,6 +7,7 @@ const educationService = require('../3_services/educationService')
 const themeService = require('../3_services/themeService')
 const templateService = require('../3_services/templateService')
 const sectionService = require('../3_services/sectionService')
+const blockService = require('../3_services/blockService')
 
 async function getPortfolios(req, res) {
     const portfolios = await portfolioService.getPortfoliosForUser(req.user.email)
@@ -270,6 +271,26 @@ async function deleteSection(req, res) {
     res.sendStatus(204)
 }
 
+async function listBlocks(req, res) {
+    const blocks = await blockService.listBlocks(req.user.email, req.params.id, req.params.versionId, req.params.sectionId)
+    res.json(blocks)
+}
+
+async function createBlock(req, res) {
+    const block = await blockService.createBlock(req.user.email, req.params.id, req.params.versionId, req.params.sectionId, req.body)
+    res.status(201).json(block)
+}
+
+async function updateBlock(req, res) {
+    const block = await blockService.updateBlock(req.user.email, req.params.id, req.params.versionId, req.params.sectionId, req.params.blockId, req.body)
+    res.json(block)
+}
+
+async function deleteBlock(req, res) {
+    await blockService.deleteBlock(req.user.email, req.params.id, req.params.versionId, req.params.sectionId, req.params.blockId)
+    res.sendStatus(204)
+}
+
 module.exports = {
     getPortfolios,
     createPortfolio,
@@ -320,5 +341,9 @@ module.exports = {
     listSections,
     createSection,
     updateSection,
-    deleteSection
+    deleteSection,
+    listBlocks,
+    createBlock,
+    updateBlock,
+    deleteBlock
 }

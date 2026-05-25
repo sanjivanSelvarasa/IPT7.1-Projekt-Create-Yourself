@@ -87,6 +87,12 @@ router.post('/portfolio/:id/versions/:versionId/sections', authenticateToken, as
 router.put('/portfolio/:id/versions/:versionId/sections/:sectionId', authenticateToken, asyncHandler(portfolioController.updateSection))
 router.delete('/portfolio/:id/versions/:versionId/sections/:sectionId', authenticateToken, asyncHandler(portfolioController.deleteSection))
 
+// Blocks einer Section verwalten
+router.get('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks', authenticateToken, asyncHandler(portfolioController.listBlocks))
+router.post('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks', authenticateToken, asyncHandler(portfolioController.createBlock))
+router.put('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId', authenticateToken, asyncHandler(portfolioController.updateBlock))
+router.delete('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId', authenticateToken, asyncHandler(portfolioController.deleteBlock))
+
 // Verfügbare Templates abrufen
 router.get('/templates', asyncHandler(portfolioController.listTemplates))
 router.get('/templates/:templateId', asyncHandler(portfolioController.getTemplateById))
