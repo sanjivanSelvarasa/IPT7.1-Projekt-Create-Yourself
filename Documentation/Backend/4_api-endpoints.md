@@ -228,9 +228,30 @@ Statuscodes:
 ## Project Modul
 
 ### [GET] /portfolio/:id/projects
+**Beschreibung:** Alle Projekte eines Portfolios laden.
+
 ### [POST] /portfolio/:id/projects
+**Beschreibung:** Neues Projekt für ein Portfolio erstellen.
+
+**Request Body:**
+```json
+{
+  "title": "string (erforderlich, max. 100 Zeichen)",
+  "description": "string (optional)",
+  "imageUrl": "string (optional, gültige URL)",
+  "projectUrl": "string (optional, gültige URL)",
+  "githubUrl": "string (optional, gültige URL)",
+  "sortOrder": "integer (optional, >= 0)",
+  "startDate": "YYYY-MM-DD (optional)",
+  "endDate": "YYYY-MM-DD (optional)"
+}
+```
+
 ### [PUT] /portfolio/:id/projects/:projectId
+**Beschreibung:** Bestehendes Projekt aktualisieren (alle Felder optional).
+
 ### [DELETE] /portfolio/:id/projects/:projectId
+**Beschreibung:** Projekt löschen.
 
 Statuscodes (typisch):
 - `200`, `201`, `204`
@@ -264,9 +285,26 @@ Statuscodes:
 ## Skill Modul
 
 ### [GET] /portfolio/:id/skills
+**Beschreibung:** Alle Skills eines Portfolios laden.
+
 ### [POST] /portfolio/:id/skills
+**Beschreibung:** Skill zum Portfolio hinzufügen. Existiert der Skill-Name noch nicht in der Datenbank, wird er automatisch angelegt.
+
+**Request Body:**
+```json
+{
+  "name": "string (erforderlich, max. 50 Zeichen)",
+  "description": "string (optional)",
+  "level": "integer (erforderlich, 1–100)",
+  "sortOrder": "integer (optional, >= 0)"
+}
+```
+
 ### [PUT] /portfolio/:id/skills/:portfolioSkillId
+**Beschreibung:** Skill-Level oder Sortierung aktualisieren.
+
 ### [DELETE] /portfolio/:id/skills/:portfolioSkillId
+**Beschreibung:** Skill-Zuordnung aus dem Portfolio entfernen.
 
 Statuscodes (typisch):
 - `200`, `201`, `204`
@@ -281,9 +319,24 @@ Statuscodes (typisch):
 ## SocialLink Modul
 
 ### [GET] /portfolio/:id/links
+**Beschreibung:** Alle Social-Links eines Portfolios laden.
+
 ### [POST] /portfolio/:id/links
+**Beschreibung:** Neuen Social-Link für ein Portfolio erstellen.
+
+**Request Body:**
+```json
+{
+  "platform": "string (erforderlich, max. 50 Zeichen, z. B. \"GitHub\", \"LinkedIn\")",
+  "url": "string (erforderlich, gültige URL)"
+}
+```
+
 ### [PUT] /portfolio/:id/links/:linkId
+**Beschreibung:** Bestehenden Social-Link aktualisieren.
+
 ### [DELETE] /portfolio/:id/links/:linkId
+**Beschreibung:** Social-Link löschen.
 
 Statuscodes (typisch):
 - `200`, `201`, `204`
@@ -297,9 +350,28 @@ Statuscodes (typisch):
 ## Experience Modul
 
 ### [GET] /portfolio/:id/experiences
+**Beschreibung:** Alle Erfahrungseinträge eines Portfolios laden.
+
 ### [POST] /portfolio/:id/experiences
+**Beschreibung:** Neuen Erfahrungseintrag für ein Portfolio erstellen.
+
+**Request Body:**
+```json
+{
+  "companyName": "string (erforderlich, max. 100 Zeichen)",
+  "position": "string (erforderlich, max. 100 Zeichen)",
+  "description": "string (optional)",
+  "sortOrder": "integer (optional, >= 0)",
+  "startDate": "YYYY-MM-DD (optional)",
+  "endDate": "YYYY-MM-DD (optional)"
+}
+```
+
 ### [PUT] /portfolio/:id/experiences/:experienceId
+**Beschreibung:** Erfahrungseintrag aktualisieren (alle Felder optional).
+
 ### [DELETE] /portfolio/:id/experiences/:experienceId
+**Beschreibung:** Erfahrungseintrag löschen.
 
 Statuscodes (typisch):
 - `200`, `201`, `204`
@@ -313,9 +385,28 @@ Statuscodes (typisch):
 ## Education Modul
 
 ### [GET] /portfolio/:id/educations
+**Beschreibung:** Alle Ausbildungseinträge eines Portfolios laden.
+
 ### [POST] /portfolio/:id/educations
+**Beschreibung:** Neuen Ausbildungseintrag für ein Portfolio erstellen.
+
+**Request Body:**
+```json
+{
+  "institutionName": "string (erforderlich, max. 100 Zeichen)",
+  "degree": "string (erforderlich, max. 100 Zeichen)",
+  "fieldOfStudy": "string (optional, max. 100 Zeichen)",
+  "sortOrder": "integer (optional, >= 0)",
+  "startDate": "YYYY-MM-DD (optional)",
+  "endDate": "YYYY-MM-DD (optional)"
+}
+```
+
 ### [PUT] /portfolio/:id/educations/:educationId
+**Beschreibung:** Ausbildungseintrag aktualisieren (alle Felder optional).
+
 ### [DELETE] /portfolio/:id/educations/:educationId
+**Beschreibung:** Ausbildungseintrag löschen.
 
 Statuscodes (typisch):
 - `200`, `201`, `204`
