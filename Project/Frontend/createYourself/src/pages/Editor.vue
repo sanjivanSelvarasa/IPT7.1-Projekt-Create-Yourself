@@ -5,15 +5,46 @@ import Sections from "@/components/ui/editor/Sections.vue";
 import ScreenButton from "@/components/ui/editor/ScreenButton.vue";
 import Content from "@/components/ui/editor/Content.vue";
 import SectionStruct from "@/components/ui/editor/SectionStruct.vue";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {usePortfolioStore} from "@/stores/portfolioStore.ts";
 import type {PortfolioType} from "@/types/portfolioType.ts";
 import {useRoute} from "vue-router";
 import {getDateGap} from "@/utils/date.ts";
 import AddSection from "@/components/ui/editor/AddSection.vue";
-import {createSectionApi, getSectionsApi} from "@/api/portfolioSection.api.ts";
-import type {SectionType} from "@/types/sectionType.ts";
+import type {CreateSectionType} from "@/types/createSectionType.ts";
 import SvgStruct from "@/components/ui/SvgStruct.vue";
+import {usePortfolioSectionStore} from "@/stores/portfolioSectionStore.ts";
+import {createSkillApi, deleteSkillApi, getSkillsApi, updateSkillApi} from "@/api/skill.api.ts";
+import type {CreateSkillType} from "@/types/createSkillType.ts";
+import {
+  createSocialLinkApi,
+  deleteSocialLinkApi,
+  getSocialLinkApi,
+  updateSocialLinkApi
+} from "@/api/socialLink.api.ts";
+import type {SocialLinkType} from "@/types/SocialLinkType.ts";
+import type {CreateSocialLinkType} from "@/types/createSocialLinkType.ts";
+import {
+  createExperienceApi,
+  deleteExperienceApi,
+  getExperienceApi,
+  updateExperienceApi
+} from "@/api/experience.api.ts";
+import type {CreateExperienceType} from "@/types/createExperienceType.ts";
+import {
+  createEducationApi,
+  deleteEducationApi,
+  getEducationApi,
+  updateEducationApi
+} from "@/api/education.api.ts";
+import type {CreateEducationType} from "@/types/createEducationType.ts";
+import {
+  createEditorBlockApi,
+  deleteEditorBlockApi,
+  getEditorBlockApi,
+  updateEditorBlockApi
+} from "@/api/editor.api.ts";
+import type {CreateEditorBlockType} from "@/types/createEditorBlockType.ts";
 
 const portfolioName = ref<string>('');
 
@@ -23,7 +54,11 @@ const portfolioId = Number(route.params.id)
 const portfolio = ref<any | null>(null);
 const portfolioFacts = ref<PortfolioType | null>(null);
 
-const sections = ref<any | null>(null);
+const portfolioSectionStore = usePortfolioSectionStore();
+
+const sortedSections = computed(() => {
+  return [...portfolioSectionStore.sections].sort((a, b) => a.sortOrder - b.sortOrder)
+})
 
 onMounted(async () => {
   portfolio.value = await portfolioStore.getFullPortfolioById(portfolioId) ?? null
@@ -45,7 +80,7 @@ onMounted(async () => {
 
   portfolioName.value = portfolioFacts.value?.title ?? ''
 
-  sections.value = await getSectionsApi(portfolioFacts.value.id, portfolioFacts.value.currentVersionId)
+  await portfolioSectionStore.getSections(portfolioFacts.value.id, portfolioFacts.value.currentVersionId)
 })
 
 const addSectionVisible = ref<boolean>(false);
@@ -55,21 +90,49 @@ async function submitSection(sectionHeader: string) {
 
   error.value = null
 
-  const section : SectionType = {
+  const section : CreateSectionType = {
     sectionType: sectionHeader,
     title: 'PLATZHALTER TITEL',
-    sortOrder: 1,
+    sortOrder: Math.max(...portfolioSectionStore.sections?.map(section => section.sortOrder) ?? []) + 1,
     isVisible: true,
   }
 
   try{
-    await createSectionApi(portfolioFacts.value.id, portfolioFacts.value.currentVersionId, section)
+    await portfolioSectionStore.createSection(portfolioFacts.value.id, portfolioFacts.value.currentVersionId, section)
+    await portfolioSectionStore.getSections(portfolioId, portfolioFacts.value.currentVersionId)
     addSectionVisible.value = false
   }catch(err: any){
     error.value = err ? err.message : 'Failed to create section.';
   }
 }
 
+function getSvgToSectionType(type: string) : string{
+  if(type === "Hero Section") return "fa-regular fa-user";
+  if(type === "Projekte") return "fa-solid fa-diagram-project";
+  if(type === "Skills") return "fa-solid fa-chart-line";
+  if(type === "Erfahrung") return "fa-solid fa-briefcase";
+  if(type === "Ausbildung") return "fa-solid fa-graduation-cap";
+  if(type === "Kontakt & Social") return "fa-regular fa-envelope";
+  if(type === "Freie Section") return "fa-solid fa-circle-info";
+  else
+    return "fa-solid fa-header";
+}
+
+async function deleteSection(sectionId: number){
+  error.value = null
+  try{
+    if(portfolioFacts.value === null) return;
+    await portfolioSectionStore.deleteSection(portfolioFacts.value.id, portfolioFacts.value.currentVersionId, sectionId);
+    await portfolioSectionStore.getSections(portfolioId, portfolioFacts.value.currentVersionId)
+  }catch(err){
+    error.value = err ? err.message : portfolioSectionStore.error;
+  }
+}
+
+const sectionSelected = ref<number | null>(null);
+function sectionSelectedFunction(sectionId: number){
+  sectionSelected.value = sectionId
+}
 </script>
 
 <template>
@@ -160,9 +223,7 @@ async function submitSection(sectionHeader: string) {
           <span class="sm-subtitle">Sections</span>
 
           <div class="mt-3 flex flex-col justify-center items-center gap-0.5">
-            <Sections title="Hero" svg="fa-solid fa-heading" :count="6"></Sections>
-            <Sections title="Projekte" svg="fa-solid fa-diagram-project" :count="2"></Sections>
-            <Sections title="Skills" svg="fa-regular fa-star" :count="4"></Sections>
+            <Sections v-for="section in sortedSections" :key="section.id" :title="section.sectionType" :svg="getSvgToSectionType(section.sectionType)" :count="2"></Sections>
 
             <button @click="addSectionVisible = !addSectionVisible" class="transition-all duration-75 mt-2 select-none cursor-pointer group hover:text-[var(--primary-color)] hover:bg-[var(--primary-color-light)] hover:border-[var(--primary-color)] border-3 border-dashed border-gray-200 rounded-lg w-full flex items-center justify-center px-1 py-2 text-[var(--text-color-light)]">
               <div class="flex justify-center items-center gap-2">
@@ -193,10 +254,9 @@ async function submitSection(sectionHeader: string) {
 
         <div class="flex flex-col w-full max-w-[1200px] px-5 2xl:px-0 py-10 flex-1 overflow-y-hidden min-h-0">
           <div class="flex flex-col gap-5 w-full box-content flex-1 min-h-0 overflow-y-scroll no-scrollbar">
-            <SectionStruct name="Einführung" title="Hero"></SectionStruct>
-            <SectionStruct name="Ausgewählte Arbeiten" title="Projekte"></SectionStruct>
+            <SectionStruct v-for="section in sortedSections" @selected="sectionSelectedFunction(section.id)" :is-selected="sectionSelected === section.id" @delete="deleteSection(section.id)" :key="section.id" :name="section.sectionType" :title="section.title"></SectionStruct>
 
-            <button class="hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] transition duration-75  px-4 py-3 select-none cursor-pointer text-[var(--text-color-light)] flex items-center justify-center gap-2 w-full h-fit rounded-lg border-2 border-dashed border-gray-200">
+            <button @click="addSectionVisible = !addSectionVisible" class="hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] transition duration-75  px-4 py-3 select-none cursor-pointer text-[var(--text-color-light)] flex items-center justify-center gap-2 w-full h-fit rounded-lg border-2 border-dashed border-gray-200">
               <SvgStruct>
                 <i class="fa-solid fa-plus"></i>
               </SvgStruct>
