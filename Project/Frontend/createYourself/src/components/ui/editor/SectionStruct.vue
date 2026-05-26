@@ -1,19 +1,37 @@
 <script lang="ts" setup>
+  import {ref} from "vue";
+
   const props = defineProps<{
     title: string,
     name: string,
+    isSelected: boolean,
   }>()
+
+  const emit = defineEmits<{
+    (e: 'delete') : void
+    (e: 'selected') : void
+  }>()
+
+  function onDelete(){
+    emit('delete')
+  }
+
+  function onSelected(){
+    emit('selected')
+  }
+
+  const title = ref<string>(props.title)
 </script>
 
 <template>
-  <div class="w-full min-h-fit rounded-2xl bg-[var(--surface-color)] border border-gray-200">
+  <div @click="onSelected" :class="isSelected ? 'active' : '' " class="transition duration-75 w-full min-h-fit rounded-2xl bg-[var(--surface-color)] border border-gray-200">
     <div class="p-4 flex items-center justify-between">
       <div class="flex items-center justify-center gap-3">
         <div class="cursor-grab flex items-center justify-center text-[var(--text-color-light)] text-xs">
           <i class="fa-solid fa-grip-vertical"></i>
         </div>
-        <span class="text-xs uppercase text-[var(--text-color-light)] px-2 py-1 rounded-md border border-gray-200 font-semibold bg-gray-50">{{ props.title }}</span>
-        <span>{{ props.name }}</span>
+        <span class="text-xs uppercase text-[var(--text-color-light)] px-2 py-1 rounded-md border border-gray-200 font-semibold bg-gray-50">{{ props.name }}</span>
+        <input v-model="title" type="text" class="rounded-sm! border border-gray-200 px-2 py-1">
       </div>
       <div class="flex items-center justify-center gap-2 text-[var(--text-color-light)]">
 
@@ -37,7 +55,7 @@
           <i class="fa-regular fa-copy"></i>
         </button>
 
-        <button class="hover:text-red-600 flex items-center justify-center w-[27px] h-[27px] rounded-md">
+        <button @click="onDelete" class="hover:text-red-600 flex items-center justify-center w-[27px] h-[27px] rounded-md">
           <i class="fa-regular fa-trash-can"></i>
         </button>
       </div>
@@ -50,3 +68,9 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+  .active{
+    border-color: var(--primary-color);
+  }
+</style>
