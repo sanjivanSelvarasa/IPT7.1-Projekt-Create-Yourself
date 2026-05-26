@@ -1,7 +1,8 @@
 import {apiFetch} from "@/api/api.ts";
+import type {CreateSectionType} from "@/types/createSectionType.ts";
 import type {SectionType} from "@/types/sectionType.ts";
 
-export async function getSectionsApi(portfolioId: number, versionId: number) {
+export async function getSectionsApi(portfolioId: number, versionId: number) : Promise<SectionType[]> {
   return await apiFetch(`/portfolio/${portfolioId}/versions/${versionId}/sections`, {
     method: 'GET',
     headers: {
@@ -10,7 +11,7 @@ export async function getSectionsApi(portfolioId: number, versionId: number) {
   })
 }
 
-export async function createSectionApi(portfolioId: number, versionId: number, section: SectionType) {
+export async function createSectionApi(portfolioId: number, versionId: number, section: CreateSectionType) {
   return await apiFetch(`/portfolio/${portfolioId}/versions/${versionId}/sections`, {
     method: 'POST',
     headers: {
@@ -25,7 +26,7 @@ export async function createSectionApi(portfolioId: number, versionId: number, s
   })
 }
 
-export async function updateSectionApi(portfolioId: number, versionId: number, sectionId: number, section: SectionType) {
+export async function updateSectionApi(portfolioId: number, versionId: number, sectionId: number, section: CreateSectionType) {
   return await apiFetch(`/portfolio/${portfolioId}/versions/${versionId}/sections/${sectionId}`, {
     method: 'PUT',
     headers: {
