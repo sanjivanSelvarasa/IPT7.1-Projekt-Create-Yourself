@@ -1,6 +1,10 @@
 export type SectionType = {
-  "sectionType": string,
-  "title": string,
-  "sortOrder": number,
-  "isVisible": boolean
+  createdAt: Date,
+  id: number,
+  isVisible: boolean,
+  sectionType: string,
+  sortOrder: number,
+  title: string,
+  updatedAt: Date,
+  versionId: number,
 }
