@@ -30,32 +30,32 @@
         <div class="cursor-grab flex items-center justify-center text-[var(--text-color-light)] text-xs">
           <i class="fa-solid fa-grip-vertical"></i>
         </div>
-        <span class="text-xs uppercase text-[var(--text-color-light)] px-2 py-1 rounded-md border border-gray-200 font-semibold bg-gray-50">{{ props.name }}</span>
-        <input v-model="title" type="text" class="rounded-sm! border border-gray-200 px-2 py-1">
+        <span class="select-none text-xs uppercase text-[var(--text-color-light)] px-2 py-1 rounded-md border border-gray-200 font-semibold bg-gray-50">{{ props.name }}</span>
+        <input v-model="title" type="text" class="hover:bg-gray-50 transition duration-100 rounded-sm! px-2 py-1">
       </div>
       <div class="flex items-center justify-center gap-2 text-[var(--text-color-light)]">
 
         <div class="bg-gray-50 flex justify-center items-center gap-1 rounded-md">
-          <button class="hover:text-gray-500 flex items-center justify-center w-[27px] h-[27px] rounded-md">
+          <button class="hover:text-gray-500 hover:bg-gray-100 transition duration-100 flex items-center justify-center w-[27px] h-[27px] rounded-md">
             <i class="fa-solid fa-angle-up"></i>
           </button>
 
           <div class="divider-vertical mx-0! h-[20px]!"></div>
 
-          <button class="hover:text-gray-500 flex items-center justify-center w-[27px] h-[27px] rounded-md">
+          <button class="hover:text-gray-500 hover:bg-gray-100 transition duration-100 flex items-center justify-center w-[27px] h-[27px] rounded-md">
             <i class="fa-solid fa-angle-down"></i>
           </button>
         </div>
 
-        <button class="hover:text-gray-500 flex items-center justify-center w-[27px] h-[27px] rounded-md">
+        <button class="hover:text-gray-500 hover:bg-gray-100 transition duration-100 flex items-center justify-center w-[27px] h-[27px] rounded-md">
           <i class="fa-solid fa-plus"></i>
         </button>
 
-        <button class="hover:text-gray-500 flex items-center justify-center w-[27px] h-[27px] rounded-md">
+        <button class="hover:text-gray-500 hover:bg-gray-100 transition duration-100 flex items-center justify-center w-[27px] h-[27px] rounded-md">
           <i class="fa-regular fa-copy"></i>
         </button>
 
-        <button @click="onDelete" class="hover:text-red-600 flex items-center justify-center w-[27px] h-[27px] rounded-md">
+        <button @click="onDelete" class="hover:text-red-600 transition duration-100 hover:bg-red-100 flex items-center justify-center w-[27px] h-[27px] rounded-md">
           <i class="fa-regular fa-trash-can"></i>
         </button>
       </div>
@@ -63,7 +63,7 @@
 
     <div class="divider mt-[0]!"></div>
 
-    <div class="p-4">
+    <div class="p-4 pt-0">
       <slot></slot>
     </div>
   </div>
