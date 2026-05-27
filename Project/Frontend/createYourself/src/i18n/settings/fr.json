@@ -1,0 +1,38 @@
+{
+  "Head": {
+    "Title": "Administration",
+    "Settings": "Paramètres",
+    "Lead": "Gérez votre compte, votre langue et vos paramètres de sécurité"
+  },
+  "Language": {
+    "Title": "Langue",
+    "under-title": "Choisis la langue d'affichage de ton choix",
+    "sort-title": "Langue d'affichage",
+    "sort": {
+      "de": "Allemand",
+      "en": "Anglais",
+      "fr": "Français"
+    },
+    "safe": "Enregistrer la langue"
+  },
+  "Safety-Segment": {
+    "Title": "Sécurité",
+    "change-password": {
+      "first-title": "Mot de passe",
+      "second-title": "Nouveau mot de passe",
+      "second-box": "au moins 8 caractères",
+      "third-title": "Confirmer le nouveau mot de passe",
+      "third-box": "Confirmez votre mot de passe"
+    },
+    "button": "Modifier le mot de passe"
+  },
+  "Dangerzone": {
+    "Title": "zone dangereuse",
+    "under-title": "Actions irréversibles - à utiliser avec précaution !",
+    "Account": {
+      "title": "Supprimer le compte",
+      "text": "Toutes les données, la progression et les paramètres seront définitivement supprimés. Cette action est irréversible.",
+      "button": "Supprimer le compte"
+    }
+  }
+}

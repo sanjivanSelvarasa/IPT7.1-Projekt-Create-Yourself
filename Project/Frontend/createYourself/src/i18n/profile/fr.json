@@ -1,0 +1,21 @@
+{
+  "Head": {
+    "Title": "Administration",
+    "Profile": "Mon profil",
+    "Lead": "Gérer vos données personnelles et les paramètres de votre compte"
+  },
+  "Creation-box": {
+    "profile-picture": "Modifier la photo de profil",
+    "data-title": "Données personnelles",
+    "first-name": "Prénom",
+    "surname": "Nom de famille",
+    "username": "Nom d'utilisateur",
+    "e-mail": "E-Mail",
+    "Description": "Brève description",
+    "buttons": {
+      "cancel-button": "Annuler",
+      "cancel-result": "Les données ont été restaurées.",
+      "change-button": "Enregistrer les modifications"
+    }
+  }
+}

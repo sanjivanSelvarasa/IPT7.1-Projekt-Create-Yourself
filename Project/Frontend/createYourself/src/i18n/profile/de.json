@@ -1,0 +1,21 @@
+{
+  "Head": {
+    "Title": "Verwaltung",
+    "Profile": "Mein Profil",
+    "Lead": "Verwalte deine persönlichen Daten und Kontoeinstellungen"
+  },
+  "Creation-box": {
+    "profile-picture": "Profilbild ändern",
+    "data-title": "Persönliche Daten",
+    "first-name": "Vorname",
+    "surname": "Nachname",
+    "username": "Benutzername",
+    "e-mail": "E-Mail",
+    "Description": "Kurzbeschreibung",
+    "buttons": {
+      "cancel-button": "Abbrechen",
+      "cancel-result": "Daten wurden wiederhergestellt.",
+      "change-button": "Änderungen-speichern"
+    }
+  }
+}

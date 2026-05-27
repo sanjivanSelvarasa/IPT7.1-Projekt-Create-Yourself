@@ -1,0 +1,38 @@
+{
+  "Head": {
+    "Title": "Verwaltung",
+    "Settings": "Einstellungen",
+    "Lead": "Verwalte dein Konto, deine Sprache und Sicherheitseinstellungen"
+  },
+  "Language": {
+    "Title": "Sprache",
+    "under-title": "Wähle deine bevorzugte Anzeigesprache",
+    "sort-title": "Anzeigesprache",
+    "sort": {
+      "de": "Deutsch",
+      "en": "Englisch",
+      "fr": "Französisch"
+    },
+    "safe": "Sprache speichern"
+  },
+  "Safety-Segment": {
+    "Title": "Sicherheit",
+    "change-password": {
+      "first-title": "Passwort",
+      "second-title": "Neues Passwort",
+      "second-box": "mind. 8 Zeichen",
+      "third-title": "Neues Passwort bestätigen",
+      "third-box": "Passwort wiederholen"
+    },
+    "button": "Passwort ändern"
+  },
+  "Dangerzone": {
+    "Title": "Gefahrenbereich",
+    "under-title": "Irreversible Aktionen - mit Vorsicht bedienen!",
+    "Account": {
+      "title": "Account löschen",
+      "text": "Alle Daten, Fortschritte und Einstellungen werden dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+      "button": "Account löschen"
+    }
+  }
+}

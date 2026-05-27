@@ -1,0 +1,51 @@
+{
+  "Head": {
+    "Title": "Erschaffen",
+    "New-Portfolio": "Neues Portfolio erstellen",
+    "Lead": "Lege zunächst die Grundinformationen fest. Du kannst Projekte, Skills und weitere Inhalte im Editor festlegen / hinzufügen und jederzeit ändern."
+  },
+  "step-one-box": {
+    "step-overview" : "Schritt 1",
+    "title": "Grundinformationen",
+    "under-title": "Diese Angaben werden auf deimem Portfolio sichtbar sein.",
+    "portfolio-title": "Portfolio-Titel",
+    "portfolio-box": "Mein Portfolio",
+    "description": "Kurzbeschreibung",
+    "description-box": "Eine kurze Beschreibung über dein Portfolio",
+    "Characters": "0 / 180 Zeichen",
+    "portfolio-Link" : "Portfolio-Link",
+    "portfolio-box-left" : "createyourself/",
+    "portfolio-box-right" : "max mustermann"
+  },
+  "step-two-box" : {
+    "step-overview" : "Schritt 2",
+    "title" : "Sichtbarkeit & Sprache",
+    "under-title" : "Bestimme, wer dein Portfolio sehen kann und in welcher Sprache es erscheint.",
+    "Privacy" : {
+      "title" : "Sichtbarkeit",
+      "private" : "Privat",
+      "public" : "Öffentlich"
+    },
+    "Language" : {
+      "title" : "Hauptsprache",
+      "de" : "Deutsch",
+      "en" : "Englisch",
+      "fr" : "Französisch"
+    }
+  },
+  "step-three-box" : {
+    "step-overview" : "Schritt 3",
+    "title" : "Template auswählen",
+    "under-title" : "Wähle eine Vorlage als Ausganspunkt. Du kannst das Design jederzeit anpassen.",
+    "cards" : {
+      "first-title" : "Minimal",
+      "first-subtitle" : "Reduziert, fokussiert auf Inhalt",
+      "second-title" : "Kreativ",
+      "second-subtitle" : "Ausdrucksstark mit visuellen Akzenten",
+      "third-title" : "Professionell",
+      "third-subtitle" : "Strukturiert für Projekte und Erfahrung"
+    },
+    "cancel-button" : "Abbrechen",
+    "portfolio-button" : "Portfolio erstellen"
+  }
+}
