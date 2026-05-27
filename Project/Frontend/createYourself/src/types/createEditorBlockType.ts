@@ -1,17 +1,7 @@
+import type {JsonObject} from "@/utils/jsonObject.ts";
+
 export type CreateEditorBlockType = {
-  blockType: string,
+  blockType: 'image' | 'project' | 'skill',
   contentJson: JsonObject,
   sortOrder: number,
-}
-
-export type JsonValue =
-  | string
-  | number
-  | boolean
-  | null
-  | JsonObject
-  | JsonValue[];
-
-export type JsonObject = {
-  [key: string]: JsonValue
 }
