@@ -14,51 +14,51 @@ import AddSection from "@/components/ui/editor/AddSection.vue";
 import type {CreateSectionType} from "@/types/createSectionType.ts";
 import SvgStruct from "@/components/ui/SvgStruct.vue";
 import {usePortfolioSectionStore} from "@/stores/portfolioSectionStore.ts";
-import {createSkillApi, deleteSkillApi, getSkillsApi, updateSkillApi} from "@/api/skill.api.ts";
-import type {CreateSkillType} from "@/types/createSkillType.ts";
-import {
-  createSocialLinkApi,
-  deleteSocialLinkApi,
-  getSocialLinkApi,
-  updateSocialLinkApi
-} from "@/api/socialLink.api.ts";
-import type {SocialLinkType} from "@/types/SocialLinkType.ts";
-import type {CreateSocialLinkType} from "@/types/createSocialLinkType.ts";
-import {
-  createExperienceApi,
-  deleteExperienceApi,
-  getExperienceApi,
-  updateExperienceApi
-} from "@/api/experience.api.ts";
-import type {CreateExperienceType} from "@/types/createExperienceType.ts";
-import {
-  createEducationApi,
-  deleteEducationApi,
-  getEducationApi,
-  updateEducationApi
-} from "@/api/education.api.ts";
-import type {CreateEducationType} from "@/types/createEducationType.ts";
-import {
-  createEditorBlockApi,
-  deleteEditorBlockApi,
-  getEditorBlockApi,
-  updateEditorBlockApi
-} from "@/api/editor.api.ts";
 import type {CreateEditorBlockType} from "@/types/createEditorBlockType.ts";
+import {useEditorBlockStore} from "@/stores/editorBlockStore.ts";
+import {useEducationStore} from "@/stores/educationStore.ts";
+import {useExperienceStore} from "@/stores/experienceStore.ts";
+import {useSkillStore} from "@/stores/skillStore.ts";
+import {useSocialLinkStore} from "@/stores/socialLinkStore.ts";
+import type {TextBlockContent} from "@/types/textBlockContent.ts";
+import type {CreateTextEditorBlockType} from "@/types/createTextEditorBlockType.ts";
+import TextModul from "@/components/ui/editor/TextModul.vue";
+import ImageModul from "@/components/ui/editor/ImageModul.vue";
+import SkillModul from "@/components/ui/editor/SkillModul.vue";
+import SkillElement from "@/components/ui/editor/SkillElement.vue";
+import ProjectModul from "@/components/ui/editor/ProjectModul.vue";
+import Project from "@/components/ui/editor/Project.vue";
+import type {EditorBlockType} from "@/types/editorBlockType.ts";
+import type {CreateSkillType} from "@/types/createSkillType.ts";
 
 const portfolioName = ref<string>('');
 
 const portfolioStore = usePortfolioStore()
+const portfolioSectionStore = usePortfolioSectionStore();
+const educationStore = useEducationStore();
+const experienceStore = useExperienceStore();
+const skillStore = useSkillStore();
+const socialLinkStore = useSocialLinkStore();
+
 const route = useRoute();
 const portfolioId = Number(route.params.id)
 const portfolio = ref<any | null>(null);
 const portfolioFacts = ref<PortfolioType | null>(null);
 
-const portfolioSectionStore = usePortfolioSectionStore();
 
-const sortedSections = computed(() => {
-  return [...portfolioSectionStore.sections].sort((a, b) => a.sortOrder - b.sortOrder)
-})
+const sortedSections = ref<any[] | null>(null);
+async function loadSortedSections() {
+  const res = [...portfolioSectionStore.sections].sort((a, b) => a.sortOrder - b.sortOrder)
+
+  sortedSections.value = await Promise.all(
+    res.map(async (s) => ({
+      ...s,
+      editorBlock: await getEditorForSection(s.id)
+    }))
+  )
+}
+
+const editorBlockStore = useEditorBlockStore()
 
 onMounted(async () => {
   portfolio.value = await portfolioStore.getFullPortfolioById(portfolioId) ?? null
@@ -81,6 +81,17 @@ onMounted(async () => {
   portfolioName.value = portfolioFacts.value?.title ?? ''
 
   await portfolioSectionStore.getSections(portfolioFacts.value.id, portfolioFacts.value.currentVersionId)
+  await loadSortedSections()
+
+  console.log(sortedSections.value)
+
+  await educationStore.getEducation(portfolioId)
+
+  await experienceStore.getExperience(portfolioId)
+
+  await skillStore.getSkills(portfolioId)
+
+  await socialLinkStore.getSocialLink(portfolioId)
 })
 
 const addSectionVisible = ref<boolean>(false);
@@ -132,6 +143,88 @@ async function deleteSection(sectionId: number){
 const sectionSelected = ref<number | null>(null);
 function sectionSelectedFunction(sectionId: number){
   sectionSelected.value = sectionId
+}
+
+async function getEditorForSection(sectionId: number){
+  if(portfolioFacts.value === null) return;
+
+  const res = await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionId)
+
+  return res?.map(e => {
+    if(e.blockType === 'text'){
+        return {
+          ...e,
+          textBlockContent: JSON.parse(e.contentJson) as TextBlockContent
+        }
+    }
+
+    if(e.blockType === 'skill'){
+      return {
+        ...e,
+        skills: JSON.parse(e.contentJson) as Object
+      }
+    }
+    return e
+  }) ?? []
+}
+
+async function createTextModul(){
+  if(sortedSections.value === null) return;
+
+  const section = sortedSections.value?.find(section => section.id === sectionSelected.value)
+
+  const maxSortCount = section.editorBlock.length > 0 ? Math.max(...(section.editorBlock ?? []).map(s => s.sortOrder)) ?? 0 : 0
+
+  const editorText : CreateTextEditorBlockType = {
+    blockType: "text",
+    contentJson: {
+      text: "PLATZHALTER TEXT",
+      align: "left",
+      tag: "h1",
+      fontSize: 16,
+      fontWeight: "normal",
+      color: "#000000",
+    },
+    sortOrder: maxSortCount + 1,
+  }
+
+  await createEditorBlockFunc(editorText)
+}
+
+async function createSkillModul(){
+  if(sortedSections.value === null) return;
+
+  const section = sortedSections.value?.find(section => section.id === sectionSelected.value)
+  const maxSortCount = section.editorBlock.length > 0 ? Math.max(...(section.editorBlock ?? []).map(s => s.sortOrder)) ?? 0 : 0
+
+  const skill : CreateSkillType = {
+    name: "PLATZHALTER",
+    description: "PLATZHALTER TEXT ...",
+    level: 50,
+    sortOrder: maxSortCount + 1,
+  }
+
+  const res = await skillStore.createSkills(portfolioId, skill)
+  if(res?.id === null || res === null) return;
+
+  const editorText : CreateEditorBlockType = {
+    blockType: "skill",
+    contentJson: {
+      skillId: res!.id,
+    },
+    sortOrder: maxSortCount + 1,
+  }
+
+  await createEditorBlockFunc(editorText)
+}
+
+async function createEditorBlockFunc(editorBlock: CreateEditorBlockType | CreateTextEditorBlockType){
+  if(portfolioFacts.value === null || sectionSelected.value === null) return;
+
+  try{
+    await editorBlockStore.createEditorBlock(portfolioId, portfolioFacts.value?.currentVersionId, sectionSelected.value, editorBlock)
+    await loadSortedSections()
+  }catch{}
 }
 </script>
 
@@ -210,10 +303,10 @@ function sectionSelectedFunction(sectionId: number){
           <span class="sm-subtitle">Blöcke</span>
 
           <div class="grid grid-cols-2 my-5 gap-3">
-            <Block title="Text" svg="fa-solid fa-align-left" subtitle="Absatz / Überschrift"></Block>
-            <Block title="Bild" svg="fa-regular fa-image" subtitle="Foto Hochladen"></Block>
-            <Block title="Projekt" svg="fa-solid fa-briefcase" subtitle="Titel, Beschreibung"></Block>
-            <Block title="Skill" svg="fa-regular fa-star" subtitle="Fähigkeit / Tool"></Block>
+            <Block @click="createTextModul()" title="Text" svg="fa-solid fa-align-left" subtitle="Absatz / Überschrift"></Block>
+            <Block @click="" title="Bild" svg="fa-regular fa-image" subtitle="Foto Hochladen"></Block>
+            <Block @click="" title="Projekt" svg="fa-solid fa-briefcase" subtitle="Titel, Beschreibung"></Block>
+            <Block @click="createSkillModul()" title="Skill" svg="fa-regular fa-star" subtitle="Fähigkeit / Tool"></Block>
           </div>
         </div>
 
@@ -223,7 +316,7 @@ function sectionSelectedFunction(sectionId: number){
           <span class="sm-subtitle">Sections</span>
 
           <div class="mt-3 flex flex-col justify-center items-center gap-0.5">
-            <Sections v-for="section in sortedSections" :key="section.id" :title="section.sectionType" :svg="getSvgToSectionType(section.sectionType)" :count="2"></Sections>
+            <Sections v-for="section in sortedSections" :key="section.id" :title="section.sectionType" :svg="getSvgToSectionType(section.sectionType)" :count="section.editorBlock.length"></Sections>
 
             <button @click="addSectionVisible = !addSectionVisible" class="transition-all duration-75 mt-2 select-none cursor-pointer group hover:text-[var(--primary-color)] hover:bg-[var(--primary-color-light)] hover:border-[var(--primary-color)] border-3 border-dashed border-gray-200 rounded-lg w-full flex items-center justify-center px-1 py-2 text-[var(--text-color-light)]">
               <div class="flex justify-center items-center gap-2">
@@ -254,7 +347,11 @@ function sectionSelectedFunction(sectionId: number){
 
         <div class="flex flex-col w-full max-w-[1200px] px-5 2xl:px-0 py-10 flex-1 overflow-y-hidden min-h-0">
           <div class="flex flex-col gap-5 w-full box-content flex-1 min-h-0 overflow-y-scroll no-scrollbar">
-            <SectionStruct v-for="section in sortedSections" @selected="sectionSelectedFunction(section.id)" :is-selected="sectionSelected === section.id" @delete="deleteSection(section.id)" :key="section.id" :name="section.sectionType" :title="section.title"></SectionStruct>
+            <SectionStruct v-for="section in sortedSections" @selected="sectionSelectedFunction(section.id)" :is-selected="sectionSelected === section.id" @delete="deleteSection(section.id)" :key="section.id" :name="section.sectionType" :title="section.title">
+              <div v-for="editor in section.editorBlock" :key="editor.id">
+                <TextModul v-if="editor.blockType === 'text' " :text-content="editor.textBlockContent"></TextModul>
+              </div>
+            </SectionStruct>
 
             <button @click="addSectionVisible = !addSectionVisible" class="hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] transition duration-75  px-4 py-3 select-none cursor-pointer text-[var(--text-color-light)] flex items-center justify-center gap-2 w-full h-fit rounded-lg border-2 border-dashed border-gray-200">
               <SvgStruct>
