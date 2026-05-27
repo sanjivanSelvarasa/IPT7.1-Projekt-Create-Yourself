@@ -1,0 +1,51 @@
+{
+  "Head": {
+    "Title": "Create",
+    "New-Portfolio": "Create new portfolio",
+    "Lead": "Start by entering the basic information. You can define or add projects, skills and other content in the editor, and change them at any time."
+  },
+  "step-one-box": {
+    "step-overview" : "Step 1",
+    "title": "Basic information",
+    "under-title": "This information will be visible in your portfolio.",
+    "portfolio-title": "Portfolio-Title",
+    "portfolio-box": "My portfolio",
+    "description": "Brief description",
+    "description-box": "A brief description of your portfolio",
+    "Characters": "0 / 180 characters",
+    "portfolio-Link" : "Portfolio-link",
+    "portfolio-box-left" : "createyourself/",
+    "portfolio-box-right" : "max mustermann"
+  },
+  "step-two-box" : {
+    "step-overview" : "Step 2",
+    "title" : "Visibility & Language",
+    "under-title" : "Choose who can view your portfolio and the language in which it is displayed.",
+    "Privacy" : {
+      "title" : "Visibility",
+      "private" : "Private",
+      "public" : "Public"
+    },
+    "Language" : {
+      "title" : "Primary language",
+      "de" : "German",
+      "en" : "English",
+      "fr" : "French"
+    }
+  },
+  "step-three-box" : {
+    "step-overview" : "Step 3",
+    "title" : "Select a template",
+    "under-title" : "Choose a template as a starting point. You can customise the design at any time.",
+    "cards" : {
+      "first-title" : "Minimal",
+      "first-subtitle" : "Streamlined, with a focus on content",
+      "second-title" : "Creative",
+      "second-subtitle" : "Expressive with visual highlights",
+      "third-title" : "Professional",
+      "third-subtitle" : "Structured for projects and experience"
+    },
+    "cancel-button" : "Cancel",
+    "portfolio-button" : "Create portfolio"
+  }
+}

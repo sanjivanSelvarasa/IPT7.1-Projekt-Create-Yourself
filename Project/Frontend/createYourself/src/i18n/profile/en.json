@@ -1,0 +1,21 @@
+{
+  "Head": {
+    "Title": "Administration",
+    "Profile": "My profile",
+    "Lead": "Manage your personal details and account settings"
+  },
+  "Creation-box": {
+    "profile-picture": "Change profile picture",
+    "data-title": "Personal data",
+    "first-name": "First name",
+    "surname": "Surname",
+    "username": "Username",
+    "e-mail": "E-Mail",
+    "Description": "Brief description",
+    "buttons": {
+      "cancel-button": "Cancel",
+      "cancel-result": "The data has been recovered.",
+      "change-button": "Save changes"
+    }
+  }
+}

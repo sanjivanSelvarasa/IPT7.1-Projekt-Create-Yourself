@@ -1,0 +1,51 @@
+{
+  "Head": {
+    "Title": "Créer",
+    "New-Portfolio": "Créer un nouveau portefeuille",
+    "Lead": "Commence par définir les informations de base. Tu peux définir ou ajouter des projets, des compétences et d'autres contenus dans l'éditeur, et les modifier à tout moment."
+  },
+  "step-one-box": {
+    "step-overview" : "Étape 1",
+    "title": "Informations générales",
+    "under-title": "Ces informations seront visibles dans votre portfolio.",
+    "portfolio-title": "Titres du portefeuille",
+    "portfolio-box": "Mon portfolio",
+    "description": "Brève description",
+    "description-box": "Une brève description de ton portfolio",
+    "Characters": "0 / 180 caractères",
+    "portfolio-Link" : "Lien vers le portfolio",
+    "portfolio-box-left" : "createyourself/",
+    "portfolio-box-right" : "max mustermann"
+  },
+  "step-two-box" : {
+    "step-overview" : "Étape 2",
+    "title" : "Visibilité et langue",
+    "under-title" : "Choisis qui peut consulter ton portfolio et dans quelle langue il s'affiche.",
+    "Privacy" : {
+      "title" : "visibilité",
+      "private" : "Privé",
+      "public" : "Public"
+    },
+    "Language" : {
+      "title" : "Langue principale",
+      "de" : "Allemand",
+      "en" : "Anglais",
+      "fr" : "Français"
+    }
+  },
+  "step-three-box" : {
+    "step-overview" : "Étape 3",
+    "title" : "Sélectionner un modèle",
+    "under-title" : "Choisis un modèle comme point de départ. Tu peux modifier le design à tout moment.",
+    "cards" : {
+      "first-title" : "Minimal",
+      "first-subtitle" : "Épuré, axé sur le contenu",
+      "second-title" : "Créatif",
+      "second-subtitle" : "Expressif, avec des touches visuelles",
+      "third-title" : "Professionnel",
+      "third-subtitle" : "Une approche structurée pour les projets et l'expérience"
+    },
+    "cancel-button" : "Annuler",
+    "portfolio-button" : "Créer un portfolio"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "Head": {
+    "Title": "Administration",
+    "Settings": "Settings",
+    "Lead": "Manage your account, language and security settings"
+  },
+  "Language": {
+    "Title": "Language",
+    "under-title": "Select your preferred display language",
+    "sort-title": "Display language",
+    "sort": {
+      "de": "German",
+      "en": "English",
+      "fr": "French"
+    },
+    "safe": "Save language"
+  },
+  "Safety-Segment": {
+    "Title": "Safety",
+    "change-password": {
+      "first-title": "Password",
+      "second-title": "New password",
+      "second-box": "at least 8 characters",
+      "third-title": "Confirm new password",
+      "third-box": "Repeat Password"
+    },
+    "button": "Change password"
+  },
+  "Danger-zone": {
+    "Title": "Danger zone",
+    "under-title": "Irreversible actions – use with caution!",
+    "Account": {
+      "title": "Delete account",
+      "text": "All data, progress and settings will be permanently deleted. This action cannot be undone.",
+      "button": "Delete account"
+    }
+  }
+}
