@@ -1,0 +1,45 @@
+<script lang="ts" setup>
+import SvgStruct from "@/components/ui/SvgStruct.vue";
+
+const props = defineProps<{
+  title: string,
+  description: string,
+  codeUrl?: string,
+  demoUrl?: string,
+}>()
+</script>
+
+<template>
+  <div class="hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col rounded-xl aspect-square overflow-hidden bg-[var(--surface-color)] border border-gray-200">
+    <img class="h-full flex items-center justify-center text-[var(--text-color-white)] w-full bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]" src="../../../assets/" alt="PLACEHOLDER">
+
+    <div class="h-fit p-4">
+      <div class="flex flex-col items-start justify-center">
+        <h3 class="font-bold py-1">{{ props.title }}</h3>
+        <p class="text-sm text-[var(--text-color-light)]">{{ props.description }}</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="flex items-center justify-start gap-2">
+        <a :href="props.codeUrl">
+          <button class="hover:border-[var(--primary-color)] hover:bg-[var(--primary-color-light)] hover:text-[var(--primary-color)] transition duration-75 px-2 py-1 border border-gray-200 rounded-sm bg-gray-50 text-[var(--text-color-light)] flex items-center justify-center gap-1 text-sm">
+            <SvgStruct>
+              <i class="fa-brands fa-github"></i>
+            </SvgStruct>
+            <span>Code</span>
+          </button>
+        </a>
+
+        <a :href="props.codeUrl">
+          <button class="hover:border-[var(--primary-color)] hover:bg-[var(--primary-color-light)] hover:text-[var(--primary-color)] transition duration-75 px-2 py-1 border border-gray-200 rounded-sm bg-gray-50 text-[var(--text-color-light)] flex items-center justify-center gap-1 text-sm">
+            <SvgStruct>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </SvgStruct>
+            <span>Demo</span>
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
