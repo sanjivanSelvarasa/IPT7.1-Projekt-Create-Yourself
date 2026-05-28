@@ -53,14 +53,29 @@ function createPool() {
     validateConfig()
 
     if (!poolPromise) {
-        poolPromise = sql.connect(getConfig())
+        poolPromise = sql.connect(getConfig()).then(pool => {
+            pool.on('error', err => {
+                console.error('Database pool error, resetting pool:', err)
+                poolPromise = undefined
+            })
+            return pool
+        }).catch(err => {
+            poolPromise = undefined
+            throw err
+        })
     }
 
     return poolPromise
 }
 
 async function getPool() {
-    return createPool()
+    const pool = await createPool()
+    if (!pool.connected && !pool.connecting) {
+        console.warn('Database pool is disconnected, reconnecting...')
+        poolPromise = undefined
+        return createPool()
+    }
+    return pool
 }
 
 async function waitForDatabaseOnline(maxAttempts = 10, retryDelayMs = 3000) {

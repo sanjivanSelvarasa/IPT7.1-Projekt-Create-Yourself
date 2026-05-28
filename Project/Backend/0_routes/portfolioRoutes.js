@@ -33,7 +33,6 @@ router.delete('/portfolio/:id', authenticateToken, asyncHandler(portfolioControl
 // Übersetzungen im Portfolio verwalten
 router.get('/portfolio/:id/translations', authenticateToken, asyncHandler(portfolioController.listTranslations))
 router.post('/portfolio/:id/translations', authenticateToken, asyncHandler(portfolioController.createTranslation))
-router.get('/portfolio/:id/translations/:translationId', authenticateToken, asyncHandler(portfolioController.getTranslationById))
 router.put('/portfolio/:id/translations/:translationId', authenticateToken, asyncHandler(portfolioController.updateTranslation))
 router.delete('/portfolio/:id/translations/:translationId', authenticateToken, asyncHandler(portfolioController.deleteTranslation))
 
@@ -47,7 +46,6 @@ router.post('/portfolio/:id/versions/:versionId/activate', authenticateToken, as
 // Projekte im Portfolio verwalten
 router.get('/portfolio/:id/projects', authenticateToken, asyncHandler(portfolioController.listProjects))
 router.post('/portfolio/:id/projects', authenticateToken, asyncHandler(portfolioController.createProject))
-router.get('/portfolio/:id/projects/:projectId', authenticateToken, asyncHandler(portfolioController.getProjectById))
 router.put('/portfolio/:id/projects/:projectId', authenticateToken, asyncHandler(portfolioController.updateProject))
 router.delete('/portfolio/:id/projects/:projectId', authenticateToken, asyncHandler(portfolioController.deleteProject))
 router.post('/portfolio/:id/projects/:projectId/image', authenticateToken, uploadProjectImage.single('image'), asyncHandler(portfolioController.uploadProjectImage))
@@ -55,35 +53,30 @@ router.post('/portfolio/:id/projects/:projectId/image', authenticateToken, uploa
 // Skills im Portfolio verwalten
 router.get('/portfolio/:id/skills', authenticateToken, asyncHandler(portfolioController.listSkills))
 router.post('/portfolio/:id/skills', authenticateToken, asyncHandler(portfolioController.createSkill))
-router.get('/portfolio/:id/skills/:portfolioSkillId', authenticateToken, asyncHandler(portfolioController.getSkillById))
 router.put('/portfolio/:id/skills/:portfolioSkillId', authenticateToken, asyncHandler(portfolioController.updateSkill))
 router.delete('/portfolio/:id/skills/:portfolioSkillId', authenticateToken, asyncHandler(portfolioController.deleteSkill))
 
 // Social Links im Portfolio verwalten
 router.get('/portfolio/:id/links', authenticateToken, asyncHandler(portfolioController.listSocialLinks))
 router.post('/portfolio/:id/links', authenticateToken, asyncHandler(portfolioController.createSocialLink))
-router.get('/portfolio/:id/links/:linkId', authenticateToken, asyncHandler(portfolioController.getSocialLinkById))
 router.put('/portfolio/:id/links/:linkId', authenticateToken, asyncHandler(portfolioController.updateSocialLink))
 router.delete('/portfolio/:id/links/:linkId', authenticateToken, asyncHandler(portfolioController.deleteSocialLink))
 
 // Erfahrungen im Portfolio verwalten
 router.get('/portfolio/:id/experiences', authenticateToken, asyncHandler(portfolioController.listExperiences))
 router.post('/portfolio/:id/experiences', authenticateToken, asyncHandler(portfolioController.createExperience))
-router.get('/portfolio/:id/experiences/:experienceId', authenticateToken, asyncHandler(portfolioController.getExperienceById))
 router.put('/portfolio/:id/experiences/:experienceId', authenticateToken, asyncHandler(portfolioController.updateExperience))
 router.delete('/portfolio/:id/experiences/:experienceId', authenticateToken, asyncHandler(portfolioController.deleteExperience))
 
 // Education-Einträge im Portfolio verwalten
 router.get('/portfolio/:id/educations', authenticateToken, asyncHandler(portfolioController.listEducations))
 router.post('/portfolio/:id/educations', authenticateToken, asyncHandler(portfolioController.createEducation))
-router.get('/portfolio/:id/educations/:educationId', authenticateToken, asyncHandler(portfolioController.getEducationById))
 router.put('/portfolio/:id/educations/:educationId', authenticateToken, asyncHandler(portfolioController.updateEducation))
 router.delete('/portfolio/:id/educations/:educationId', authenticateToken, asyncHandler(portfolioController.deleteEducation))
 
 // Themes im Portfolio verwalten
 router.get('/portfolio/:id/themes', authenticateToken, asyncHandler(portfolioController.listThemes))
 router.post('/portfolio/:id/themes', authenticateToken, asyncHandler(portfolioController.createTheme))
-router.get('/portfolio/:id/themes/:themeId', authenticateToken, asyncHandler(portfolioController.getThemeById))
 router.put('/portfolio/:id/themes/:themeId', authenticateToken, asyncHandler(portfolioController.updateTheme))
 router.delete('/portfolio/:id/themes/:themeId', authenticateToken, asyncHandler(portfolioController.deleteTheme))
 router.post('/portfolio/:id/themes/:themeId/activate', authenticateToken, asyncHandler(portfolioController.activateTheme))
@@ -91,14 +84,12 @@ router.post('/portfolio/:id/themes/:themeId/activate', authenticateToken, asyncH
 // Sections einer Portfolio-Version verwalten
 router.get('/portfolio/:id/versions/:versionId/sections', authenticateToken, asyncHandler(portfolioController.listSections))
 router.post('/portfolio/:id/versions/:versionId/sections', authenticateToken, asyncHandler(portfolioController.createSection))
-router.get('/portfolio/:id/versions/:versionId/sections/:sectionId', authenticateToken, asyncHandler(portfolioController.getSectionById))
 router.put('/portfolio/:id/versions/:versionId/sections/:sectionId', authenticateToken, asyncHandler(portfolioController.updateSection))
 router.delete('/portfolio/:id/versions/:versionId/sections/:sectionId', authenticateToken, asyncHandler(portfolioController.deleteSection))
 
 // Blocks einer Section verwalten
 router.get('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks', authenticateToken, asyncHandler(portfolioController.listBlocks))
 router.post('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks', authenticateToken, asyncHandler(portfolioController.createBlock))
-router.get('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId', authenticateToken, asyncHandler(portfolioController.getBlockById))
 router.put('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId', authenticateToken, asyncHandler(portfolioController.updateBlock))
 router.delete('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId', authenticateToken, asyncHandler(portfolioController.deleteBlock))
 

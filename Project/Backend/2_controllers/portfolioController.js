@@ -44,11 +44,6 @@ async function listTranslations(req, res) {
     res.json(translations)
 }
 
-async function getTranslationById(req, res) {
-    const translation = await portfolioService.getTranslationById(req.user.email, req.params.id, req.params.translationId)
-    res.json(translation)
-}
-
 async function createTranslation(req, res) {
     const translation = await portfolioService.createTranslation(req.user.email, req.params.id, req.body)
     res.status(201).json(translation)
@@ -100,11 +95,6 @@ async function listProjects(req, res) {
     res.json(projects)
 }
 
-async function getProjectById(req, res) {
-    const project = await projectService.getProjectById(req.user.email, req.params.id, req.params.projectId)
-    res.json(project)
-}
-
 async function createProject(req, res) {
     const project = await projectService.createProject(req.user.email, req.params.id, req.body)
     res.status(201).json(project)
@@ -136,11 +126,6 @@ async function listSkills(req, res) {
     res.json(skills)
 }
 
-async function getSkillById(req, res) {
-    const skill = await skillService.getSkillById(req.user.email, req.params.id, req.params.portfolioSkillId)
-    res.json(skill)
-}
-
 async function createSkill(req, res) {
     const skill = await skillService.createSkill(req.user.email, req.params.id, req.body)
     res.status(201).json(skill)
@@ -159,11 +144,6 @@ async function deleteSkill(req, res) {
 async function listSocialLinks(req, res) {
     const links = await socialLinkService.listSocialLinks(req.user.email, req.params.id)
     res.json(links)
-}
-
-async function getSocialLinkById(req, res) {
-    const link = await socialLinkService.getSocialLinkById(req.user.email, req.params.id, req.params.linkId)
-    res.json(link)
 }
 
 async function createSocialLink(req, res) {
@@ -186,11 +166,6 @@ async function listExperiences(req, res) {
     res.json(experiences)
 }
 
-async function getExperienceById(req, res) {
-    const experience = await experienceService.getExperienceById(req.user.email, req.params.id, req.params.experienceId)
-    res.json(experience)
-}
-
 async function createExperience(req, res) {
     const experience = await experienceService.createExperience(req.user.email, req.params.id, req.body)
     res.status(201).json(experience)
@@ -211,11 +186,6 @@ async function listEducations(req, res) {
     res.json(educations)
 }
 
-async function getEducationById(req, res) {
-    const education = await educationService.getEducationById(req.user.email, req.params.id, req.params.educationId)
-    res.json(education)
-}
-
 async function createEducation(req, res) {
     const education = await educationService.createEducation(req.user.email, req.params.id, req.body)
     res.status(201).json(education)
@@ -234,11 +204,6 @@ async function deleteEducation(req, res) {
 async function listThemes(req, res) {
     const themes = await themeService.listThemes(req.user.email, req.params.id)
     res.json(themes)
-}
-
-async function getThemeById(req, res) {
-    const theme = await themeService.getThemeById(req.user.email, req.params.id, req.params.themeId)
-    res.json(theme)
 }
 
 async function createTheme(req, res) {
@@ -291,11 +256,6 @@ async function listSections(req, res) {
     res.json(sections)
 }
 
-async function getSectionById(req, res) {
-    const section = await sectionService.getSectionById(req.user.email, req.params.id, req.params.versionId, req.params.sectionId)
-    res.json(section)
-}
-
 async function createSection(req, res) {
     const section = await sectionService.createSection(req.user.email, req.params.id, req.params.versionId, req.body)
     res.status(201).json(section)
@@ -314,11 +274,6 @@ async function deleteSection(req, res) {
 async function listBlocks(req, res) {
     const blocks = await blockService.listBlocks(req.user.email, req.params.id, req.params.versionId, req.params.sectionId)
     res.json(blocks)
-}
-
-async function getBlockById(req, res) {
-    const block = await blockService.getBlockById(req.user.email, req.params.id, req.params.versionId, req.params.sectionId, req.params.blockId)
-    res.json(block)
 }
 
 async function createBlock(req, res) {
@@ -344,7 +299,6 @@ module.exports = {
     updatePortfolio,
     deletePortfolio,
     listTranslations,
-    getTranslationById,
     createTranslation,
     updateTranslation,
     deleteTranslation,
@@ -354,33 +308,27 @@ module.exports = {
     deleteVersion,
     activateVersion,
     listProjects,
-    getProjectById,
     createProject,
     updateProject,
     deleteProject,
     uploadProjectImage,
     listSkills,
-    getSkillById,
     createSkill,
     updateSkill,
     deleteSkill,
     listSocialLinks,
-    getSocialLinkById,
     createSocialLink,
     updateSocialLink,
     deleteSocialLink,
     listExperiences,
-    getExperienceById,
     createExperience,
     updateExperience,
     deleteExperience,
     listEducations,
-    getEducationById,
     createEducation,
     updateEducation,
     deleteEducation,
     listThemes,
-    getThemeById,
     createTheme,
     updateTheme,
     deleteTheme,
@@ -391,12 +339,10 @@ module.exports = {
     getPublicPortfolioFullBySlug,
     checkSlugAvailability,
     listSections,
-    getSectionById,
     createSection,
     updateSection,
     deleteSection,
     listBlocks,
-    getBlockById,
     createBlock,
     updateBlock,
     deleteBlock

@@ -46,6 +46,16 @@ app.use('/', accountRoutes)
 app.use(notFoundHandler)
 app.use(errorHandler)
 
+process.on('uncaughtException', error => {
+    console.error('Uncaught exception:', error)
+    process.exit(1)
+})
+
+process.on('unhandledRejection', (reason) => {
+    console.error('Unhandled promise rejection:', reason)
+    process.exit(1)
+})
+
 const port = Number(process.env.PORT) || 3000
 
 async function startServer() {
