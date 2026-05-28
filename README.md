@@ -6,7 +6,7 @@
 ## Vorschau
 
 **Landingpage:**
-![Landingpage](./Documentation/ReadMe/CreateYorselfUpdatedLandingpage.png)
+![Landingpage](./Documentation/ReadMe/CreateYourselfUpdatedLandingpage.png)
 
 **Dashboard:**
 ![Dashboard](./Documentation/ReadMe/Dashboard.png)
