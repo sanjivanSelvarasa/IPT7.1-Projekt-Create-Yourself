@@ -16,6 +16,18 @@ async function listExperiences(email, rawPortfolioId) {
     return experienceModel.getExperiencesByPortfolioId(portfolio.id)
 }
 
+async function getExperienceById(email, rawPortfolioId, rawExperienceId) {
+    const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
+    const experienceId = parseId(rawExperienceId, 'Experience-ID')
+
+    const experience = await experienceModel.getExperienceById(experienceId)
+    if (!experience || experience.portfolioId !== portfolio.id) {
+        throw new ApiError(404, 'Experience nicht gefunden.')
+    }
+
+    return experience
+}
+
 async function createExperience(email, rawPortfolioId, data) {
     const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
     ensurePayloadObject(data)
@@ -92,6 +104,7 @@ async function deleteExperience(email, rawPortfolioId, rawExperienceId) {
 
 module.exports = {
     listExperiences,
+    getExperienceById,
     createExperience,
     updateExperience,
     deleteExperience

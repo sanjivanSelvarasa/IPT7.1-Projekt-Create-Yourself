@@ -44,6 +44,18 @@ async function createSection(email, rawPortfolioId, rawVersionId, data) {
     })
 }
 
+async function getSectionById(email, rawPortfolioId, rawVersionId, rawSectionId) {
+    const { version } = await getOwnedVersion(email, rawPortfolioId, rawVersionId)
+    const sectionId = parseId(rawSectionId, 'Section-ID')
+
+    const section = await sectionModel.getSectionById(sectionId)
+    if (!section || section.versionId !== version.id) {
+        throw new ApiError(404, 'Section nicht gefunden.')
+    }
+
+    return section
+}
+
 async function updateSection(email, rawPortfolioId, rawVersionId, rawSectionId, data) {
     const { version } = await getOwnedVersion(email, rawPortfolioId, rawVersionId)
     const sectionId = parseId(rawSectionId, 'Section-ID')
@@ -89,6 +101,7 @@ async function deleteSection(email, rawPortfolioId, rawVersionId, rawSectionId) 
 
 module.exports = {
     listSections,
+    getSectionById,
     createSection,
     updateSection,
     deleteSection

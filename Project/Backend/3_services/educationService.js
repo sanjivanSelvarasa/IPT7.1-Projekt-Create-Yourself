@@ -16,6 +16,18 @@ async function listEducations(email, rawPortfolioId) {
     return educationModel.getEducationsByPortfolioId(portfolio.id)
 }
 
+async function getEducationById(email, rawPortfolioId, rawEducationId) {
+    const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
+    const educationId = parseId(rawEducationId, 'Education-ID')
+
+    const education = await educationModel.getEducationById(educationId)
+    if (!education || education.portfolioId !== portfolio.id) {
+        throw new ApiError(404, 'Education nicht gefunden.')
+    }
+
+    return education
+}
+
 async function createEducation(email, rawPortfolioId, data) {
     const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
     ensurePayloadObject(data)
@@ -92,6 +104,7 @@ async function deleteEducation(email, rawPortfolioId, rawEducationId) {
 
 module.exports = {
     listEducations,
+    getEducationById,
     createEducation,
     updateEducation,
     deleteEducation

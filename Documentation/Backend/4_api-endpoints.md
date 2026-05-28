@@ -215,7 +215,7 @@ Statuscodes:
 - `409` Slug bereits vergeben
 
 ### [DELETE] /portfolio/:id
-**Beschreibung:** Eigenes Portfolio löschen.
+**Beschreibung:** Eigenes Portfolio löschen. Alle zugehörigen Daten (Versionen, Sections, Blocks, Projekte, Skills, Links, Erfahrungen, Ausbildungen, Themes, Übersetzungen) werden automatisch mitgelöscht.
 
 Statuscodes:
 - `204` Erfolgreich gelöscht
@@ -246,6 +246,9 @@ Statuscodes:
   "endDate": "YYYY-MM-DD (optional)"
 }
 ```
+
+### [GET] /portfolio/:id/projects/:projectId
+**Beschreibung:** Einzelnes Projekt eines Portfolios laden.
 
 ### [PUT] /portfolio/:id/projects/:projectId
 **Beschreibung:** Bestehendes Projekt aktualisieren (alle Felder optional).
@@ -300,6 +303,9 @@ Statuscodes:
 }
 ```
 
+### [GET] /portfolio/:id/skills/:portfolioSkillId
+**Beschreibung:** Einzelne Skill-Zuordnung laden.
+
 ### [PUT] /portfolio/:id/skills/:portfolioSkillId
 **Beschreibung:** Skill-Level oder Sortierung aktualisieren.
 
@@ -331,6 +337,9 @@ Statuscodes (typisch):
   "url": "string (erforderlich, gültige URL)"
 }
 ```
+
+### [GET] /portfolio/:id/links/:linkId
+**Beschreibung:** Einzelnen Social-Link laden.
 
 ### [PUT] /portfolio/:id/links/:linkId
 **Beschreibung:** Bestehenden Social-Link aktualisieren.
@@ -367,6 +376,9 @@ Statuscodes (typisch):
 }
 ```
 
+### [GET] /portfolio/:id/experiences/:experienceId
+**Beschreibung:** Einzelnen Erfahrungseintrag laden.
+
 ### [PUT] /portfolio/:id/experiences/:experienceId
 **Beschreibung:** Erfahrungseintrag aktualisieren (alle Felder optional).
 
@@ -401,6 +413,9 @@ Statuscodes (typisch):
   "endDate": "YYYY-MM-DD (optional)"
 }
 ```
+
+### [GET] /portfolio/:id/educations/:educationId
+**Beschreibung:** Einzelnen Ausbildungseintrag laden.
 
 ### [PUT] /portfolio/:id/educations/:educationId
 **Beschreibung:** Ausbildungseintrag aktualisieren (alle Felder optional).
@@ -437,6 +452,9 @@ Statuscodes (typisch):
   "fontFamily": "Poppins"
 }
 ```
+
+### [GET] /portfolio/:id/themes/:themeId
+**Beschreibung:** Einzelnes Theme laden.
 
 ### [PUT] /portfolio/:id/themes/:themeId
 **Beschreibung:** Theme aktualisieren.
@@ -481,6 +499,9 @@ Statuscodes:
 }
 ```
 
+### [GET] /portfolio/:id/translations/:translationId
+**Beschreibung:** Einzelne Übersetzung laden.
+
 ### [PUT] /portfolio/:id/translations/:translationId
 **Beschreibung:** Bestehende Übersetzung aktualisieren.
 
@@ -521,7 +542,7 @@ Statuscodes:
 **Beschreibung:** Konkrete Version laden.
 
 ### [DELETE] /portfolio/:id/versions/:versionId
-**Beschreibung:** Version löschen.
+**Beschreibung:** Version löschen. Alle zugehörigen Sections und Editor-Blöcke werden automatisch mitgelöscht.
 
 ### [POST] /portfolio/:id/versions/:versionId/activate
 **Beschreibung:** Version als aktuelle Version setzen (`current_version_id`).
@@ -578,17 +599,57 @@ Statuscodes:
 }
 ```
 
+### [GET] /portfolio/:id/versions/:versionId/sections/:sectionId
+**Beschreibung:** Einzelne Section laden.
+
 ### [PUT] /portfolio/:id/versions/:versionId/sections/:sectionId
 **Beschreibung:** Section aktualisieren (alle Felder optional).
 
 ### [DELETE] /portfolio/:id/versions/:versionId/sections/:sectionId
-**Beschreibung:** Section löschen.
+**Beschreibung:** Section löschen. Alle zugehörigen Editor-Blöcke werden automatisch mitgelöscht.
 
 Statuscodes:
 - `200`, `201`, `204`
 - `400` Validierungsfehler
 - `401` Kein Token
 - `404` Section, Version oder Portfolio nicht gefunden
+- `403` Kein Zugriff
+
+---
+
+## EditorBlock Modul
+
+### [GET] /portfolio/:id/versions/:versionId/sections/:sectionId/blocks
+**Beschreibung:** Alle Editor-Blöcke einer Section laden.
+
+### [POST] /portfolio/:id/versions/:versionId/sections/:sectionId/blocks
+**Beschreibung:** Neuen Block in einer Section erstellen.
+
+**Request Body (Beispiel):**
+```json
+{
+  "blockType": "text",
+  "contentJson": {
+    "text": "Willkommen auf meinem Portfolio"
+  },
+  "sortOrder": 1
+}
+```
+
+### [GET] /portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId
+**Beschreibung:** Einzelnen Editor-Block laden.
+
+### [PUT] /portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId
+**Beschreibung:** Editor-Block aktualisieren.
+
+### [DELETE] /portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId
+**Beschreibung:** Editor-Block löschen.
+
+Statuscodes:
+- `200`, `201`, `204`
+- `400` Validierungsfehler
+- `401` Kein Token
+- `404` Block, Section, Version oder Portfolio nicht gefunden
 - `403` Kein Zugriff
 
 ---
@@ -620,45 +681,6 @@ Statuscodes (geplant):
 - `200`, `201`, `204`
 - `400` Validierungsfehler / falscher Dateityp / Datei zu groß
 - `404` Medium oder Portfolio nicht gefunden
-- `403` Kein Zugriff
-
----
-
-### PortfolioSection Modul
-
-~~Implementiert — siehe oben.~~
-
----
-
-### EditorBlock Modul
-
-### [GET] /portfolio/:id/versions/:versionId/sections/:sectionId/blocks
-**Beschreibung:** Alle Editor-Blöcke einer Section laden.
-
-### [POST] /portfolio/:id/versions/:versionId/sections/:sectionId/blocks
-**Beschreibung:** Neuen Block in einer Section erstellen.
-
-**Request Body (Beispiel):**
-```json
-{
-  "blockType": "text",
-  "contentJson": {
-    "text": "Willkommen auf meinem Portfolio"
-  },
-  "sortOrder": 1
-}
-```
-
-### [PUT] /portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId
-**Beschreibung:** Editor-Block aktualisieren.
-
-### [DELETE] /portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId
-**Beschreibung:** Editor-Block löschen.
-
-Statuscodes (geplant):
-- `200`, `201`, `204`
-- `400` Validierungsfehler
-- `404` Block, Section, Version oder Portfolio nicht gefunden
 - `403` Kein Zugriff
 
 ---

@@ -13,6 +13,18 @@ async function listSocialLinks(email, rawPortfolioId) {
     return socialLinkModel.getSocialLinksByPortfolioId(portfolio.id)
 }
 
+async function getSocialLinkById(email, rawPortfolioId, rawLinkId) {
+    const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
+    const linkId = parseId(rawLinkId, 'Link-ID')
+
+    const link = await socialLinkModel.getSocialLinkById(linkId)
+    if (!link || link.portfolioId !== portfolio.id) {
+        throw new ApiError(404, 'Social-Link nicht gefunden.')
+    }
+
+    return link
+}
+
 async function createSocialLink(email, rawPortfolioId, data) {
     const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
     ensurePayloadObject(data)
@@ -57,6 +69,7 @@ async function deleteSocialLink(email, rawPortfolioId, rawLinkId) {
 
 module.exports = {
     listSocialLinks,
+    getSocialLinkById,
     createSocialLink,
     updateSocialLink,
     deleteSocialLink

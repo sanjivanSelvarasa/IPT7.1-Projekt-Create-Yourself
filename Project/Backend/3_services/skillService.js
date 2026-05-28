@@ -15,6 +15,18 @@ async function listSkills(email, rawPortfolioId) {
     return skillModel.getPortfolioSkillsByPortfolioId(portfolio.id)
 }
 
+async function getSkillById(email, rawPortfolioId, rawPortfolioSkillId) {
+    const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
+    const portfolioSkillId = parseId(rawPortfolioSkillId, 'PortfolioSkill-ID')
+
+    const skill = await skillModel.getPortfolioSkillById(portfolioSkillId)
+    if (!skill || skill.portfolioId !== portfolio.id) {
+        throw new ApiError(404, 'Skill-Zuordnung nicht gefunden.')
+    }
+
+    return skill
+}
+
 async function createSkill(email, rawPortfolioId, data) {
     const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
     ensurePayloadObject(data)
@@ -98,6 +110,7 @@ async function deleteSkill(email, rawPortfolioId, rawPortfolioSkillId) {
 
 module.exports = {
     listSkills,
+    getSkillById,
     createSkill,
     updateSkill,
     deleteSkill

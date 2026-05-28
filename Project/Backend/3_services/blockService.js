@@ -33,6 +33,18 @@ async function listBlocks(email, rawPortfolioId, rawVersionId, rawSectionId) {
     return blockModel.getBlocksBySectionId(section.id)
 }
 
+async function getBlockById(email, rawPortfolioId, rawVersionId, rawSectionId, rawBlockId) {
+    const { section } = await getOwnedSection(email, rawPortfolioId, rawVersionId, rawSectionId)
+    const blockId = parseId(rawBlockId, 'Block-ID')
+
+    const block = await blockModel.getBlockById(blockId)
+    if (!block || block.sectionId !== section.id) {
+        throw new ApiError(404, 'Block nicht gefunden.')
+    }
+
+    return block
+}
+
 async function createBlock(email, rawPortfolioId, rawVersionId, rawSectionId, data) {
     const { section } = await getOwnedSection(email, rawPortfolioId, rawVersionId, rawSectionId)
     ensurePayloadObject(data)
@@ -108,6 +120,7 @@ async function deleteBlock(email, rawPortfolioId, rawVersionId, rawSectionId, ra
 
 module.exports = {
     listBlocks,
+    getBlockById,
     createBlock,
     updateBlock,
     deleteBlock
