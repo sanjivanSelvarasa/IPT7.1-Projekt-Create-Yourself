@@ -18,6 +18,18 @@ async function listProjects(email, rawPortfolioId) {
     return projectModel.getProjectsByPortfolioId(portfolio.id)
 }
 
+async function getProjectById(email, rawPortfolioId, rawProjectId) {
+    const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
+    const projectId = parseId(rawProjectId, 'Projekt-ID')
+
+    const project = await projectModel.getProjectById(projectId)
+    if (!project || project.portfolioId !== portfolio.id) {
+        throw new ApiError(404, 'Projekt nicht gefunden.')
+    }
+
+    return project
+}
+
 async function createProject(email, rawPortfolioId, data) {
     const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
     ensurePayloadObject(data)
@@ -132,6 +144,7 @@ async function uploadProjectImage(email, rawPortfolioId, rawProjectId, file) {
 
 module.exports = {
     listProjects,
+    getProjectById,
     createProject,
     updateProject,
     deleteProject,

@@ -187,6 +187,18 @@ async function listTranslations(email, rawPortfolioId) {
     return portfolioModel.getTranslationsByPortfolioId(portfolio.id)
 }
 
+async function getTranslationById(email, rawPortfolioId, rawTranslationId) {
+    const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
+    const translationId = parseId(rawTranslationId, 'Übersetzungs-ID')
+
+    const translation = await portfolioModel.getTranslationById(translationId)
+    if (!translation || translation.portfolioId !== portfolio.id) {
+        throw new ApiError(404, 'Übersetzung nicht gefunden.')
+    }
+
+    return translation
+}
+
 function ensureTranslationLanguageIsAvailable(portfolio, languageCode, existingTranslationId = null) {
     if (portfolio.languageCode && portfolio.languageCode === languageCode) {
         throw new ApiError(409, 'Die Hauptsprache des Portfolios kann nicht als zusätzliche Übersetzung angelegt werden.')
@@ -324,6 +336,7 @@ module.exports = {
     getPublicPortfolioBySlug,
     getPublicPortfolioFullBySlug,
     listTranslations,
+    getTranslationById,
     createTranslation,
     updateTranslation,
     deleteTranslation,

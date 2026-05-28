@@ -21,6 +21,18 @@ async function listThemes(email, rawPortfolioId) {
     return themeModel.getThemesByPortfolioId(portfolio.id)
 }
 
+async function getThemeById(email, rawPortfolioId, rawThemeId) {
+    const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
+    const themeId = parseId(rawThemeId, 'Theme-ID')
+
+    const theme = await themeModel.getThemeById(themeId)
+    if (!theme || theme.portfolioId !== portfolio.id) {
+        throw new ApiError(404, 'Theme nicht gefunden.')
+    }
+
+    return theme
+}
+
 async function createTheme(email, rawPortfolioId, data) {
     const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
     ensurePayloadObject(data)
@@ -119,6 +131,7 @@ async function activateTheme(email, rawPortfolioId, rawThemeId) {
 
 module.exports = {
     listThemes,
+    getThemeById,
     createTheme,
     updateTheme,
     deleteTheme,

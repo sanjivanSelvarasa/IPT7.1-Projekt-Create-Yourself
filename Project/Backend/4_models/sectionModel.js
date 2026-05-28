@@ -129,6 +129,10 @@ async function deleteSectionById(sectionId) {
     await pool
         .request()
         .input('sectionId', sql.Int, sectionId)
+        .query('DELETE FROM EditorBlock WHERE section_id = @sectionId')
+    await pool
+        .request()
+        .input('sectionId', sql.Int, sectionId)
         .query('DELETE FROM PortfolioSection WHERE id = @sectionId')
 }
 

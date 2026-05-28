@@ -224,10 +224,57 @@ async function updatePortfolio(portfolioId, portfolio) {
 
 async function deletePortfolioById(portfolioId) {
     const pool = await database.getPool()
-    await pool
-        .request()
+    // Clear circular FKs first
+    await pool.request()
         .input('portfolioId', sql.Int, portfolioId)
-        .query('DELETE FROM Portfolio WHERE id = @portfolioId')
+        .query(`UPDATE Portfolio SET current_theme_id = NULL, current_version_id = NULL WHERE id = @portfolioId`)
+    // Delete EditorBlocks for all sections of all versions
+    await pool.request()
+        .input('portfolioId', sql.Int, portfolioId)
+        .query(`
+            DELETE eb FROM EditorBlock eb
+            INNER JOIN PortfolioSection ps ON ps.id = eb.section_id
+            INNER JOIN PortfolioVersion pv ON pv.id = ps.portfolio_version_id
+            WHERE pv.portfolio_id = @portfolioId
+        `)
+    // Delete Sections for all versions
+    await pool.request()
+        .input('portfolioId', sql.Int, portfolioId)
+        .query(`
+            DELETE ps FROM PortfolioSection ps
+            INNER JOIN PortfolioVersion pv ON pv.id = ps.portfolio_version_id
+            WHERE pv.portfolio_id = @portfolioId
+        `)
+    // Delete Versions
+    await pool.request()
+        .input('portfolioId', sql.Int, portfolioId)
+        .query(`DELETE FROM PortfolioVersion WHERE portfolio_id = @portfolioId`)
+    // Delete flat child tables
+    await pool.request()
+        .input('portfolioId', sql.Int, portfolioId)
+        .query(`DELETE FROM PortfolioTranslation WHERE portfolio_id = @portfolioId`)
+    await pool.request()
+        .input('portfolioId', sql.Int, portfolioId)
+        .query(`DELETE FROM Project WHERE portfolio_id = @portfolioId`)
+    await pool.request()
+        .input('portfolioId', sql.Int, portfolioId)
+        .query(`DELETE FROM PortfolioSkill WHERE portfolio_id = @portfolioId`)
+    await pool.request()
+        .input('portfolioId', sql.Int, portfolioId)
+        .query(`DELETE FROM SocialLink WHERE portfolio_id = @portfolioId`)
+    await pool.request()
+        .input('portfolioId', sql.Int, portfolioId)
+        .query(`DELETE FROM Experience WHERE portfolio_id = @portfolioId`)
+    await pool.request()
+        .input('portfolioId', sql.Int, portfolioId)
+        .query(`DELETE FROM Education WHERE portfolio_id = @portfolioId`)
+    await pool.request()
+        .input('portfolioId', sql.Int, portfolioId)
+        .query(`DELETE FROM Theme WHERE portfolio_id = @portfolioId`)
+    // Delete the portfolio itself
+    await pool.request()
+        .input('portfolioId', sql.Int, portfolioId)
+        .query(`DELETE FROM Portfolio WHERE id = @portfolioId`)
 }
 
 async function isSlugAvailable(slug) {
@@ -531,10 +578,22 @@ async function clearCurrentVersionIfMatching(portfolioId, versionId) {
 
 async function deleteVersionById(versionId) {
     const pool = await database.getPool()
-    await pool
-        .request()
+    // Delete EditorBlocks for all sections of this version
+    await pool.request()
         .input('versionId', sql.Int, versionId)
-        .query('DELETE FROM PortfolioVersion WHERE id = @versionId')
+        .query(`
+            DELETE eb FROM EditorBlock eb
+            INNER JOIN PortfolioSection ps ON ps.id = eb.section_id
+            WHERE ps.portfolio_version_id = @versionId
+        `)
+    // Delete Sections
+    await pool.request()
+        .input('versionId', sql.Int, versionId)
+        .query(`DELETE FROM PortfolioSection WHERE portfolio_version_id = @versionId`)
+    // Delete Version
+    await pool.request()
+        .input('versionId', sql.Int, versionId)
+        .query(`DELETE FROM PortfolioVersion WHERE id = @versionId`)
 }
 
 module.exports = {
