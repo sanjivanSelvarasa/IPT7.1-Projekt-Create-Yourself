@@ -6,10 +6,10 @@
 ## Vorschau
 
 **Landingpage:**
-![Landingpage](./Documentation/ReadMe/CreateYourselfLandingpage.png)
+![Landingpage](./Documentation/ReadMe/CreateYourselfUpdatedLandingpage.png)
 
 **Dashboard:**
-![Dashboard](./Documentation/Frontend/Mockup/Dashboard.png)
+![Dashboard](./Documentation/ReadMe/Dashboard.png)
 
 ## Projektbeschreibung
 
