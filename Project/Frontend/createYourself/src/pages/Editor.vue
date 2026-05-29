@@ -5,7 +5,7 @@ import Sections from "@/components/ui/editor/Sections.vue";
 import ScreenButton from "@/components/ui/editor/ScreenButton.vue";
 import Content from "@/components/ui/editor/Content.vue";
 import SectionStruct from "@/components/ui/editor/SectionStruct.vue";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {usePortfolioStore} from "@/stores/portfolioStore.ts";
 import type {PortfolioType} from "@/types/portfolioType.ts";
 import {useRoute} from "vue-router";
@@ -30,6 +30,17 @@ import ProjectModul from "@/components/ui/editor/ProjectModul.vue";
 import Project from "@/components/ui/editor/Project.vue";
 import type {EditorBlockType} from "@/types/editorBlockType.ts";
 import type {CreateSkillType} from "@/types/createSkillType.ts";
+import type {ModulType} from "@/types/modulType.ts";
+import {useProjectStore} from "@/stores/projectStore.ts";
+import type {CreateProjectType} from "@/types/createProjectType.ts";
+import {getProjectApi, updateProjectApi} from "@/api/project.api.ts";
+import type {CreateEducationType} from "@/types/createEducationType.ts";
+import type {CreateExperienceType} from "@/types/createExperienceType.ts";
+import type {CreateSocialLinkType} from "@/types/createSocialLinkType.ts";
+import EducationModul from "@/components/ui/editor/EducationModul.vue";
+import EducationElement from "@/components/ui/editor/EducationElement.vue";
+import SocialLinkModul from "@/components/ui/editor/SocialLinkModul.vue";
+import SocialLinkElement from "@/components/ui/editor/SocialLinkElement.vue";
 
 const portfolioName = ref<string>('');
 
@@ -39,6 +50,8 @@ const educationStore = useEducationStore();
 const experienceStore = useExperienceStore();
 const skillStore = useSkillStore();
 const socialLinkStore = useSocialLinkStore();
+const editorBlockStore = useEditorBlockStore()
+const projectStore = useProjectStore()
 
 const route = useRoute();
 const portfolioId = Number(route.params.id)
@@ -57,8 +70,6 @@ async function loadSortedSections() {
     }))
   )
 }
-
-const editorBlockStore = useEditorBlockStore()
 
 onMounted(async () => {
   portfolio.value = await portfolioStore.getFullPortfolioById(portfolioId) ?? null
@@ -80,18 +91,14 @@ onMounted(async () => {
 
   portfolioName.value = portfolioFacts.value?.title ?? ''
 
+  await educationStore.getEducation(portfolioId)
+  await experienceStore.getExperience(portfolioId)
+  await skillStore.getSkills(portfolioId)
+  await socialLinkStore.getSocialLink(portfolioId)
+  await projectStore.getProjects(portfolioId)
+
   await portfolioSectionStore.getSections(portfolioFacts.value.id, portfolioFacts.value.currentVersionId)
   await loadSortedSections()
-
-  console.log(sortedSections.value)
-
-  await educationStore.getEducation(portfolioId)
-
-  await experienceStore.getExperience(portfolioId)
-
-  await skillStore.getSkills(portfolioId)
-
-  await socialLinkStore.getSocialLink(portfolioId)
 })
 
 const addSectionVisible = ref<boolean>(false);
@@ -111,6 +118,7 @@ async function submitSection(sectionHeader: string) {
   try{
     await portfolioSectionStore.createSection(portfolioFacts.value.id, portfolioFacts.value.currentVersionId, section)
     await portfolioSectionStore.getSections(portfolioId, portfolioFacts.value.currentVersionId)
+    await loadSortedSections()
     addSectionVisible.value = false
   }catch(err: any){
     error.value = err ? err.message : 'Failed to create section.';
@@ -135,6 +143,7 @@ async function deleteSection(sectionId: number){
     if(portfolioFacts.value === null) return;
     await portfolioSectionStore.deleteSection(portfolioFacts.value.id, portfolioFacts.value.currentVersionId, sectionId);
     await portfolioSectionStore.getSections(portfolioId, portfolioFacts.value.currentVersionId)
+    await loadSortedSections()
   }catch(err){
     error.value = err ? err.message : portfolioSectionStore.error;
   }
@@ -159,21 +168,57 @@ async function getEditorForSection(sectionId: number){
     }
 
     if(e.blockType === 'skill'){
+      const skill = JSON.parse(e.contentJson) as ModulType
       return {
         ...e,
-        skills: JSON.parse(e.contentJson) as Object
+        skills: skillStore.skills?.filter(t => t.skillId === skill.id)
       }
     }
+
+    if(e.blockType === 'project'){
+      const project = JSON.parse(e.contentJson) as ModulType
+      return {
+        ...e,
+        project: projectStore.projects?.filter(t => t.id === project.id)
+      }
+    }
+
+    if(e.blockType === 'education'){
+      const education = JSON.parse(e.contentJson) as ModulType
+      return {
+        ...e,
+        education: educationStore.educations?.filter(t => t.id === education.id)
+      }
+    }
+
+    if(e.blockType === 'experience'){
+      const experience = JSON.parse(e.contentJson) as ModulType
+      return {
+        ...e,
+        experience: experienceStore.experiences?.filter(t => t.id === experience.id)
+      }
+    }
+
+    if(e.blockType === 'link'){
+      const link = JSON.parse(e.contentJson) as ModulType
+      return {
+        ...e,
+        link: socialLinkStore.socialLinks?.filter(t => t.id === link.id)
+      }
+    }
+
     return e
   }) ?? []
+}
+function getMaxSortCount() : number {
+  const section = sortedSections.value?.find(section => section.id === sectionSelected.value)
+  return section.editorBlock.length > 0 ? Math.max(...(section.editorBlock ?? []).map(s => s.sortOrder)) ?? 0 : 0
 }
 
 async function createTextModul(){
   if(sortedSections.value === null) return;
 
-  const section = sortedSections.value?.find(section => section.id === sectionSelected.value)
-
-  const maxSortCount = section.editorBlock.length > 0 ? Math.max(...(section.editorBlock ?? []).map(s => s.sortOrder)) ?? 0 : 0
+  const maxSortCount = getMaxSortCount()
 
   const editorText : CreateTextEditorBlockType = {
     blockType: "text",
@@ -190,15 +235,13 @@ async function createTextModul(){
 
   await createEditorBlockFunc(editorText)
 }
-
 async function createSkillModul(){
   if(sortedSections.value === null) return;
 
-  const section = sortedSections.value?.find(section => section.id === sectionSelected.value)
-  const maxSortCount = section.editorBlock.length > 0 ? Math.max(...(section.editorBlock ?? []).map(s => s.sortOrder)) ?? 0 : 0
+  const maxSortCount = getMaxSortCount()
 
   const skill : CreateSkillType = {
-    name: "PLATZHALTER",
+    name: `PLATZHALTER ${crypto.randomUUID()}`,
     description: "PLATZHALTER TEXT ...",
     level: 50,
     sortOrder: maxSortCount + 1,
@@ -210,14 +253,108 @@ async function createSkillModul(){
   const editorText : CreateEditorBlockType = {
     blockType: "skill",
     contentJson: {
-      skillId: res!.id,
+      id: res!.id,
     },
     sortOrder: maxSortCount + 1,
   }
 
   await createEditorBlockFunc(editorText)
 }
+async function createProjectModul(){
+  if(sortedSections.value === null) return;
 
+  const maxSortCount = getMaxSortCount()
+
+  const project : CreateProjectType = {
+    title: 'PLATZHALTER',
+    description: 'PLATZHALTER TEXT ...',
+    sortOrder: maxSortCount + 1,
+  }
+
+  const res = await projectStore.createProject(portfolioId, project)
+  if(res?.id === null || res === null) return;
+
+  const editorText : CreateEditorBlockType = {
+    blockType: "project",
+    contentJson: {
+      id: res!.id,
+    },
+    sortOrder: maxSortCount + 1,
+  }
+
+  await createEditorBlockFunc(editorText)
+}
+async function createEducationModul(){
+  if(sortedSections.value === null) return;
+
+  const maxSortCount = getMaxSortCount()
+
+  const education : CreateEducationType = {
+    institutionName: 'PLATZHALTER',
+    degree: 'PLATZHALTER TEXT',
+    sortOrder: maxSortCount + 1,
+  }
+
+  const res = await educationStore.createEducation(portfolioId, education)
+  if(res?.id === null || res === null) return;
+
+  const editorText : CreateEditorBlockType = {
+    blockType: "education",
+    contentJson: {
+      id: res!.id,
+    },
+    sortOrder: maxSortCount + 1,
+  }
+
+  await createEditorBlockFunc(editorText)
+}
+async function createExperienceModul(){
+  if(sortedSections.value === null) return;
+
+  const maxSortCount = getMaxSortCount()
+
+  const experience : CreateExperienceType = {
+    companyName: 'Ich Firma',
+    position: 'CEO',
+    sortOrder: maxSortCount + 1,
+  }
+
+  const res = await experienceStore.createExperience(portfolioId, experience)
+  if(res?.id === null || res === null) return;
+
+  const editorText : CreateEditorBlockType = {
+    blockType: "experience",
+    contentJson: {
+      id: res!.id,
+    },
+    sortOrder: maxSortCount + 1,
+  }
+
+  await createEditorBlockFunc(editorText)
+}
+async function createSocialLinkModul(){
+  if(sortedSections.value === null) return;
+
+  const maxSortCount = getMaxSortCount()
+
+  const link : CreateSocialLinkType = {
+    url: 'http://localhost:8080',
+    platform: 'YouTube',
+  }
+
+  const res = await socialLinkStore.createSocialLink(portfolioId, link)
+  if(res?.id === null || res === null) return;
+
+  const editorText : CreateEditorBlockType = {
+    blockType: "link",
+    contentJson: {
+      id: res!.id,
+    },
+    sortOrder: maxSortCount + 1,
+  }
+
+  await createEditorBlockFunc(editorText)
+}
 async function createEditorBlockFunc(editorBlock: CreateEditorBlockType | CreateTextEditorBlockType){
   if(portfolioFacts.value === null || sectionSelected.value === null) return;
 
@@ -305,8 +442,11 @@ async function createEditorBlockFunc(editorBlock: CreateEditorBlockType | Create
           <div class="grid grid-cols-2 my-5 gap-3">
             <Block @click="createTextModul()" title="Text" svg="fa-solid fa-align-left" subtitle="Absatz / Überschrift"></Block>
             <Block @click="" title="Bild" svg="fa-regular fa-image" subtitle="Foto Hochladen"></Block>
-            <Block @click="" title="Projekt" svg="fa-solid fa-briefcase" subtitle="Titel, Beschreibung"></Block>
-            <Block @click="createSkillModul()" title="Skill" svg="fa-regular fa-star" subtitle="Fähigkeit / Tool"></Block>
+            <Block @click="createProjectModul()" title="Projekt" svg="fa-solid fa-diagram-project" subtitle="Titel, Beschreibung"></Block>
+            <Block @click="createSkillModul()" title="Skill" svg="fa-solid fa-chart-line" subtitle="Fähigkeit / Tool"></Block>
+            <Block @click="createEducationModul()" title="Ausbildung" svg="fa-solid fa-graduation-cap" subtitle="Schule, Studium"></Block>
+            <Block @click="createExperienceModul()" title="Erfahrung" svg="fa-solid fa-briefcase" subtitle="Berufe, Firmen"></Block>
+            <Block @click="createSocialLinkModul()" title="Link" svg="fa-regular fa-envelope" subtitle="Social Media"></Block>
           </div>
         </div>
 
@@ -350,6 +490,22 @@ async function createEditorBlockFunc(editorBlock: CreateEditorBlockType | Create
             <SectionStruct v-for="section in sortedSections" @selected="sectionSelectedFunction(section.id)" :is-selected="sectionSelected === section.id" @delete="deleteSection(section.id)" :key="section.id" :name="section.sectionType" :title="section.title">
               <div v-for="editor in section.editorBlock" :key="editor.id">
                 <TextModul v-if="editor.blockType === 'text' " :text-content="editor.textBlockContent"></TextModul>
+
+                <SkillModul v-if="editor.blockType === 'skill' ">
+                  <SkillElement v-for="skill in editor.skills" :key="skill.skillId" :name="skill.name" :level="skill.level"></SkillElement>
+                </SkillModul>
+
+                <ProjectModul v-if="editor.blockType === 'project' ">
+                  <Project v-for="project in editor.project" :key="project.id" :title="project.title" :description="project.description"></Project>
+                </ProjectModul>
+
+                <EducationModul v-if="editor.blockType === 'education' ">
+                  <EducationElement v-for="education in editor.education" :key="education.id" :name="education.institutionName" :degree="education.degree" :field-of-study="education.fieldOfStudy" :start-date="education.startDate" :end-date="education.endDate"></EducationElement>
+                </EducationModul>
+
+                <SocialLinkModul v-if="editor.blockType === 'link' ">
+                  <SocialLinkElement svg="fa-brands fa-github" name="Github" url="/maxmustermann"></SocialLinkElement>
+                </SocialLinkModul>
               </div>
             </SectionStruct>
 
