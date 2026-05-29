@@ -22,7 +22,7 @@ const props = defineProps<{
       <div class="divider"></div>
 
       <div class="flex items-center justify-start gap-2">
-        <a :href="props.codeUrl">
+        <a :href="props.codeUrl" target="_blank">
           <button class="hover:border-[var(--primary-color)] hover:bg-[var(--primary-color-light)] hover:text-[var(--primary-color)] transition duration-75 px-2 py-1 border border-gray-200 rounded-sm bg-gray-50 text-[var(--text-color-light)] flex items-center justify-center gap-1 text-sm">
             <SvgStruct>
               <i class="fa-brands fa-github"></i>
@@ -31,7 +31,7 @@ const props = defineProps<{
           </button>
         </a>
 
-        <a :href="props.codeUrl">
+        <a :href="props.codeUrl" target="_blank">
           <button class="hover:border-[var(--primary-color)] hover:bg-[var(--primary-color-light)] hover:text-[var(--primary-color)] transition duration-75 px-2 py-1 border border-gray-200 rounded-sm bg-gray-50 text-[var(--text-color-light)] flex items-center justify-center gap-1 text-sm">
             <SvgStruct>
               <i class="fa-solid fa-arrow-up-right-from-square"></i>
