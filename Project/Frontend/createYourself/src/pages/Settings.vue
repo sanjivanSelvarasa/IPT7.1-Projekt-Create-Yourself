@@ -93,12 +93,12 @@ async function deleteAccount() {
             <option value="fr" class="cursor-pointer">Französisch</option>
           </select>
 
-          <div class="w-full flex items-center justify-between">
-            <div>
+          <div class="w-full flex-col-reverse sm:flex-row flex items-center justify-between">
+            <div class="mt-3 sm:mt-0">
               <span class="text-sm text-red-500">{{ errorLang }}</span>
               <span class="text-sm text-green-500">{{ messageLanguage }}</span>
             </div>
-            <button @click="submitLang()" class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:bg-transparent transition duration-75 flex items-center justify-center gap-2 px-4 py-3 text-sm bg-[var(--primary-color)] text-[var(--text-color-white)] rounded-lg border border-transparent">
+            <button @click="submitLang()" class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:bg-transparent transition duration-75 mt-4 w-full sm:w-fit flex items-center justify-center gap-2 px-4 py-3 text-sm bg-[var(--primary-color)] text-[var(--text-color-white)] rounded-lg border border-transparent">
               <div class="flex items-center justify-center">
                 <i class="fa-solid fa-check"></i>
               </div>
@@ -137,12 +137,12 @@ async function deleteAccount() {
             <input v-model="confirmPassword" class="outline-none w-full bg-[var(--background-color)] rounded-lg px-4 py-2 border border-gray-200" type="password" name="newPasswordConfirm" id="newPasswordConfirm" placeholder="Passwort wiederholen" />
           </div>
 
-          <div class="w-full flex items-center justify-between">
-            <div>
+          <div class="w-full flex-col-reverse sm:flex-row flex items-center justify-between">
+            <div class="mt-3 sm:mt-0">
               <span v-if="messagePassword" class="text-sm text-green-500">{{ messagePassword }}</span>
               <span v-if="errorPassword" class="text-sm text-red-500">{{ errorPassword }}</span>
             </div>
-            <button class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:bg-transparent transition duration-75 flex items-center justify-center gap-2 px-4 py-3 text-sm bg-[var(--primary-color)] text-[var(--text-color-white)] rounded-lg border border-transparent">
+            <button class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:bg-transparent transition duration-75 w-full sm:w-fit flex items-center justify-center gap-2 px-4 py-3 text-sm bg-[var(--primary-color)] text-[var(--text-color-white)] rounded-lg border border-transparent">
               <div class="flex items-center justify-center">
                 <i class="fa-solid fa-lock"></i>
               </div>
@@ -154,7 +154,7 @@ async function deleteAccount() {
 
       <Interface class="bg-red-50! border-red-500 mb-5 border-2!">
         <div class="flex items-center justify-start gap-3">
-          <SvgStruct class="w-[35px] h-[35px] bg-red-100 text-red-500 rounded-lg border-2 border-red-500 text-xl">
+          <SvgStruct class="min-w-[35px] min-h-[35px] bg-red-100 text-red-500 rounded-lg border-2 border-red-500 text-xl">
             <i class="fa-solid fa-exclamation"></i>
           </SvgStruct>
           <div class="flex flex-col gap-1 justify-center items-start">
@@ -165,12 +165,12 @@ async function deleteAccount() {
 
         <div class="divider bg-red-200!"></div>
 
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <span class="text-red-500 font-semibold">Account löschen</span>
             <p class="text-sm text-red-400 max-w-[400px]">Alle Daten, Fortschritte und Einstellungen werden dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</p>
           </div>
-          <button @click="deleteAccount()" class="flex items-center justify-center gap-1 text-red-500 font-semibold rounded-lg px-4 py-2 border-2 border-red-500 hover:bg-red-500 hover:text-[var(--surface-color)] transition duration-75">
+          <button @click="deleteAccount()" class="w-full sm:w-fit flex items-center justify-center gap-1 text-red-500 font-semibold rounded-lg px-4 py-2 border-2 border-red-500 hover:bg-red-500 hover:text-[var(--surface-color)] transition duration-75">
             <SvgStruct>
               <i class="fa-solid fa-trash-can"></i>
             </SvgStruct>
