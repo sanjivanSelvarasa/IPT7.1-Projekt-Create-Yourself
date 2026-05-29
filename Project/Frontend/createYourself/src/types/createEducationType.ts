@@ -1,8 +1,8 @@
 export type CreateEducationType = {
   institutionName: string,
   degree: string,
-  fieldOfStudy: string,
+  fieldOfStudy?: string,
   sortOrder: Number,
-  startDate: string,
-  endDate: string,
+  startDate?: string,
+  endDate?: string,
 }
