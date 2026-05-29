@@ -51,10 +51,18 @@ const tl = (key: string) => t(`dashboard.${key}`);
 </script>
 
 <template>
+
+  <RouterLink to="/create" class="sm:hidden z-999 m-4 fixed bottom-0 left-0 right-0 flex text-nowrap hover:scale-101 hover:-translate-y-[1px] transition duration-100 items-center justify-center gap-2 px-4 py-3 bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)] rounded-lg shadow-lg text-[var(--text-color-white)] cursor-pointer">
+    <div class="flex items-center justify-center">
+      <i class="fa-solid fa-plus"></i>
+    </div>
+    <span>{{ tl("start.create-button") }}</span>
+  </RouterLink>
+
   <Background>
     <div class="absolute w-full h-full grid-bg -z-99"></div>
     <NavApp></NavApp>
-    <header class="w-full flex items-center justify-between gap-5 mt-40 max-w-[1200px] xl:mx-auto px-5">
+    <header class="w-full flex items-center justify-between gap-5 mt-25 sm:mt-40 max-w-[1200px] xl:mx-auto px-5">
       <div class="flex flex-col items-start justify-between gap-2">
         <span class="uppercase text-[var(--primary-color)]">{{ tl("start.Preview") }}</span>
         <h1>{{ tl("start.title") }}</h1>
