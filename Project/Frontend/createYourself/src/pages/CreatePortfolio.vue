@@ -66,14 +66,14 @@ async function createPortfolioFunction() {
   }
 
   try{
-    await portfolioStore.createPortfolio(portfolio);
+    const res = await portfolioStore.createPortfolio(portfolio);
 
     if(portfolioStore.error) {
       error.value = portfolioStore.error;
       return
     }
 
-    await router.push("/editor");
+    await router.push(`/portfolio/${res.id}/editor`);
   }catch(e){
     error.value = portfolioStore.error ? portfolioStore.error : e;
   }
@@ -113,7 +113,7 @@ async function createPortfolioFunction() {
 
           <InputApp name="Portfolio-Link *" for="link">
             <div class="relative default-input p-0! overflow-hidden flex items-center justify-start w-full">
-              <div class="px-3 py-2 w-fit h-full bg-[var(--background-color)] text-[var(--text-color-light)] border border-transparent border-r-gray-200">
+              <div class="hidden sm:block px-3 py-2 w-fit h-full bg-[var(--background-color)] text-[var(--text-color-light)] border border-transparent border-r-gray-200">
                 <span>createyourself/</span>
               </div>
               <input v-model="slug" class="default-input w-full border-none!" name="link" placeholder="max-mustermann">
@@ -151,16 +151,16 @@ async function createPortfolioFunction() {
             <span class="text-[var(--text-color-light)]">Bestimme, wer dein Portfolio sehen kann und in welcher Sprache es erscheint.</span>
           </div>
 
-          <div class="flex items-center justify-between">
+          <div class="w-full flex flex-col md:flex-row items-center justify-between gap-6">
             <InputApp name="Sichtbarkeit" for="visibility">
-              <div class="flex items-center justify-center gap-2 bg-[var(--background-color)] rounded-lg px-1 py-1">
-                <button @click="visibility = 'private' " :class="visibility === 'private' ? 'visibility-active' : '' " class="hover:bg-gray-100 transition duration-75 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-transparent">
+              <div class="w-full flex items-center justify-center gap-2 bg-[var(--background-color)] rounded-lg px-1 py-1">
+                <button @click="visibility = 'private' " :class="visibility === 'private' ? 'visibility-active' : '' " class="w-full hover:bg-gray-100 transition duration-75 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-transparent">
                   <SvgStruct>
                     <i class="fa-solid fa-lock"></i>
                   </SvgStruct>
                   <span>Privat</span>
                 </button>
-                <button @click="visibility = 'public' " :class="visibility === 'public' ? 'visibility-active' : '' " class="hover:bg-gray-100 transition duration-75 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-transparent ">
+                <button @click="visibility = 'public' " :class="visibility === 'public' ? 'visibility-active' : '' " class="w-full hover:bg-gray-100 transition duration-75 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-transparent ">
                   <SvgStruct>
                     <i class="fa-solid fa-globe"></i>
                   </SvgStruct>
@@ -170,21 +170,21 @@ async function createPortfolioFunction() {
             </InputApp>
 
             <InputApp name="Hauptsprache" for="language">
-              <div class="flex items-center justify-center gap-2 bg-[var(--background-color)] rounded-lg px-1 py-1">
-                <button @click="lang = 'de' " :class="lang === 'de' ? 'lang-active' : '' " class="hover:bg-gray-100 transition duration-75 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-transparent">
+              <div class="w-full flex flex-col md:flex-row items-start sm:items-center justify-center gap-2 bg-[var(--background-color)] rounded-lg px-1 py-1">
+                <button @click="lang = 'de' " :class="lang === 'de' ? 'lang-active' : '' " class="w-full hover:bg-gray-100 transition duration-75 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-transparent">
                   <span class="transition duration-75 text-xs font-semibold text-[var(--text-color-light)] px-1 py-0.5 rounded-sm bg-gray-200">
                     DE
                   </span>
                   <span>Deutsch</span>
                 </button>
-                <button @click="lang = 'en' " :class="lang === 'en' ? 'lang-active' : '' " class="hover:bg-gray-100 transition duration-75 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-transparent">
+                <button @click="lang = 'en' " :class="lang === 'en' ? 'lang-active' : '' " class="w-full hover:bg-gray-100 transition duration-75 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-transparent">
                   <span class="transition duration-75 text-xs font-semibold text-[var(--text-color-light)] px-1 py-0.5 rounded-sm bg-gray-200">
                     EN
                   </span>
                   <span>Englisch</span>
                 </button>
-                <button @click="lang = 'fr' " :class="lang === 'fr' ? 'lang-active' : '' " class="hover:bg-gray-100 transition duration-75 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-transparent">
-                  <span class="transition duration-75 text-xs font-semibold text-[var(--text-color-light)] px-1 py-0.5 rounded-sm bg-gray-200">
+                <button @click="lang = 'fr' " :class="lang === 'fr' ? 'lang-active' : '' " class="w-full hover:bg-gray-100 transition duration-75 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-transparent">
+                  <span class="uppercase transition duration-75 text-xs font-semibold text-[var(--text-color-light)] px-1 py-0.5 rounded-sm bg-gray-200">
                     FR
                   </span>
                   <span>Französisch</span>
@@ -210,8 +210,8 @@ async function createPortfolioFunction() {
             <span class="text-[var(--text-color-light)]">Wähle eine Vorlage als Ausganspunkt. Du kannst das Design jederzeit anpassen.</span>
           </div>
 
-          <div class="grid grid-cols-3 gap-2">
-            <button class="overflow-hidden hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:-translate-y-1 transition-all ease-in-out duration-150 bg-transparent border-2 border-gray-200 rounded-2xl">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-2">
+            <button class="relative overflow-hidden hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:-translate-y-1 transition-all ease-in-out duration-150 bg-transparent border-2 border-gray-200 rounded-2xl">
               <div class="h-[200px] w-full">
                   <svg viewBox="0 0 200 124" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
                     <rect width="200" height="124" fill="#FFFFFF"/>
@@ -228,13 +228,15 @@ async function createPortfolioFunction() {
                     <rect x="20" y="104" width="32" height="2" rx="1" fill="#0F172A"/>
                   </svg>
               </div>
-              <div class="flex flex-col items-start justify-center gap-1 w-full px-4 py-3 border border-transparent border-t-gray-200 mt-1">
-                <span class="font-semibold">Minimal</span>
-                <span class="text-sm">Reduziert, fokussiert auf Inhalt</span>
+              <div class="text-start flex flex-col items-start justify-center gap-1 w-full px-4 py-3 border border-transparent border-t-gray-200 mt-1">
+                <span class="z-10 font-semibold">Minimal</span>
+                <span class="z-10 text-sm">Reduziert, fokussiert auf Inhalt</span>
               </div>
+
+              <div class="z-1 bottom-0 left-0 right-0 absolute w-full min-h-[80px] bg-[var(--surface-color)]"></div>
             </button>
 
-            <button class="overflow-hidden hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:-translate-y-1 transition-all ease-in-out duration-150 bg-transparent border-2 border-gray-200 rounded-2xl">
+            <button class="relative overflow-hidden hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:-translate-y-1 transition-all ease-in-out duration-150 bg-transparent border-2 border-gray-200 rounded-2xl">
               <div class="h-[200px]">
                   <svg viewBox="0 0 200 124" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
                     <rect width="200" height="124" fill="#FFFFFF"/>
@@ -253,13 +255,16 @@ async function createPortfolioFunction() {
                     <rect x="68" y="95" width="64" height="2" rx="1" fill="#CBD5E1"/>
                   </svg>
               </div>
-              <div class="flex flex-col items-start justify-center gap-1 w-full px-4 py-3 border border-transparent border-t-gray-200 mt-1">
-                <span class="font-semibold">Kreativ</span>
-                <span class="text-sm">Ausdrucksstark mit visuellen Akzenten</span>
+              <div class="text-start flex flex-col items-start justify-center gap-1 w-full px-4 py-3 border border-transparent border-t-gray-200 mt-1">
+                <span class="z-10 font-semibold">Kreativ</span>
+                <span class="z-10 text-sm">Ausdrucksstark mit visuellen Akzenten</span>
               </div>
+
+              <div class="z-1 bottom-0 left-0 right-0 absolute w-full min-h-[80px] bg-[var(--surface-color)]"></div>
+
             </button>
 
-            <button class="overflow-hidden hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:-translate-y-1 transition-all ease-in-out duration-150 bg-transparent border-2 border-gray-200 rounded-2xl">
+            <button class="relative overflow-hidden hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:-translate-y-1 transition-all ease-in-out duration-150 bg-transparent border-2 border-gray-200 rounded-2xl">
               <div class="h-[200px]">
                 <svg viewBox="0 0 200 124" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
                   <rect width="200" height="124" fill="#FFFFFF"/>
@@ -290,24 +295,26 @@ async function createPortfolioFunction() {
                   <rect x="136" y="95" width="22" height="2" rx="1" fill="#94A3B8"/>
                 </svg>
               </div>
-              <div class="flex flex-col items-start justify-center gap-1 w-full px-4 py-3 border border-transparent border-t-gray-200 mt-1">
-                <span class="font-semibold">Professionell</span>
-                <span class="text-sm">Strukturiert für Projekte und Erfahrung</span>
+              <div class="text-start flex flex-col items-start justify-center gap-1 w-full px-4 py-3 border border-transparent border-t-gray-200 mt-1">
+                <span class="z-10 font-semibold">Professionell</span>
+                <span class="z-10 text-sm">Strukturiert für Projekte und Erfahrung</span>
               </div>
+
+              <div class="z-1 bottom-0 left-0 right-0 absolute w-full min-h-[80px] bg-[var(--surface-color)]"></div>
             </button>
           </div>
         </div>
 
         <div class="divider"></div>
 
-        <div class="flex items-center justify-between">
-          <SvgStruct class="info relative text-xl cursor-pointer">
+        <div class="w-full flex flex-col-reverse gap-4 sm:flex-row items-center justify-between">
+          <SvgStruct class="hidden sm:block info relative text-xl cursor-pointer">
             <i class="fa-regular fa-circle-question"></i>
             <span class="hidden absolute top-0 left-7 text-sm px-3 w-[350px] py-2 bg-[var(--background-color)] border border-gray-200 rounded-lg">Jegliche Einstellungen kannst du jederzeit nachträglich anpassen.</span>
           </SvgStruct>
-          <div class="flex gap-2">
+          <div class="w-full text-center flex justify-end flex-col-reverse sm:flex-row gap-2 text-nowrap">
             <RouterLink to="/dashboard" class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-75 px-4 py-3 bg-[var(--surface-color)] font-semibold border border-gray-200 rounded-lg">Abbrechen</RouterLink>
-            <button @click="createPortfolioFunction()" class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:bg-transparent transition duration-75 px-4 py-3 bg-[var(--primary-color)] text-[var(--text-color-white)] font-semibold border border-gray-200 rounded-lg flex gap-1">
+            <button @click="createPortfolioFunction()" class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:bg-transparent transition duration-75 px-4 py-3 bg-[var(--primary-color)] text-[var(--text-color-white)] font-semibold border border-gray-200 rounded-lg flex gap-1 justify-center">
               <span>Portfolio erstellen</span>
               <SvgStruct>
                 <i class="fa-solid fa-angle-right"></i>
