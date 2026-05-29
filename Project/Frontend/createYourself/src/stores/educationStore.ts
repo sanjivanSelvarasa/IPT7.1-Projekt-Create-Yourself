@@ -7,13 +7,15 @@ import {
   updateEducationApi
 } from "@/api/education.api.ts";
 import type {EducationType} from "@/types/educationType.ts";
+import type {CreateEditorBlockType} from "@/types/createEditorBlockType.ts";
+import type {CreateEducationType} from "@/types/createEducationType.ts";
 
 export const useEducationStore = defineStore('education', () => {
   const error = ref<string | null>(null)
   const loading = ref<boolean>(false)
   const educations = ref<EducationType[] | null>(null)
 
-  async function getEducation(portfolioId: number) {
+  async function getEducation(portfolioId: number) : Promise<void> {
     error.value = null
     loading.value = true
 
@@ -25,7 +27,7 @@ export const useEducationStore = defineStore('education', () => {
     }
   }
 
-  async function createEducation(portfolioId: number, education: EducationType) {
+  async function createEducation(portfolioId: number, education: CreateEducationType) : Promise<EducationType | undefined> {
     error.value = null
 
     try{
@@ -35,7 +37,7 @@ export const useEducationStore = defineStore('education', () => {
     }
   }
 
-  async function updateEducation(portfolioId: number, educationId: number, education: EducationType) {
+  async function updateEducation(portfolioId: number, educationId: number, education: EducationType) : Promise<EducationType | undefined> {
     error.value = null
 
     try{
@@ -45,7 +47,7 @@ export const useEducationStore = defineStore('education', () => {
     }
   }
 
-  async function deleteEducation(portfolioId: number, educationId: number) {
+  async function deleteEducation(portfolioId: number, educationId: number) : Promise<void> {
     error.value = null
 
     try{
