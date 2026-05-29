@@ -96,7 +96,7 @@ watch(bio, (newValue) => {
 
     <HeaderComp title="Mein Profil" tag="Verwaltung" subtitle="Verwalte deine persönlichen Daten und Kontoeinstellungen"></HeaderComp>
 
-    <MainContent>
+    <MainContent class="mb-4">
       <Interface>
         <div class="w-full flex items-center justify-start gap-4">
           <div class="select-none flex items-center justify-center bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)] text-[var(--text-color-white)] font-bold text-3xl rounded-full w-[100px] h-[100px]">
@@ -105,7 +105,7 @@ watch(bio, (newValue) => {
 
           <div class="flex flex-col gap-2">
             <p class="text-nowrap font-semibold">{{ name }}</p>
-            <button class="w-fit cursor-pointer px-2.5 py-1.5 rounded-lg text-[var(--primary-color)] bg-blue-50 border border-blue-300 text-xs">
+            <button class="hidden sm:block w-fit cursor-pointer px-2.5 py-1.5 rounded-lg text-[var(--primary-color)] bg-blue-50 border border-blue-300 text-xs">
               <div class=" flex items-center justify-center gap-1">
                 <div class="flex items-center justify-center text-sm">
                   <i class="fa-regular fa-image"></i>
@@ -146,21 +146,21 @@ watch(bio, (newValue) => {
 
             <div class="w-full flex flex-col items-start justify-center gap-1 mt-4">
               <label for="email" class="sm-subtitle text-[var(--text-color-light)]">Kurzbeschreibung</label>
-              <textarea v-model="bio" class="outline-none w-full bg-[var(--background-color)] border border-gray-300 px-4 py-2 rounded-lg text-sm" type="email" name="email" id="email" autocomplete="off" />
+              <textarea v-model="bio" class="outline-none w-full bg-[var(--background-color)] border border-gray-300 px-4 py-2 rounded-lg text-sm min-h-[150px]" type="email" name="email" id="email" autocomplete="off" />
               <div class="flex w-full items-center justify-end text-xs text-[var(--text-color-light)]">
                 <span>{{ bio ? bio.length : 0 }} / 220 Zeichen</span>
               </div>
             </div>
           </form>
 
-          <div class="flex items-center justify-between pt-8 border border-t-gray-200 border-transparent">
-            <div>
+          <div class="w-full flex flex-col-reverse sm:flex-row items-center justify-between pt-8 border border-t-gray-200 border-transparent">
+            <div class="mt-3 sm:mt-0">
               <span v-if="message" class="text-sm text-green-500">{{ message }}</span>
               <span v-if="error" class="text-sm text-red-500">{{ error }}</span>
             </div>
-            <div class="flex items-center justify-end gap-2">
-              <button @click="cancelProfileChanges()" class="hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] transition duration-75 px-4 py-2 rounded-lg border border-gray-200 font-semibold bg-transparent text-[var(--text-color-light)]">Abbrechen</button>
-              <button @click="submitProfileChanges()" class="hover:bg-transparent hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-75 px-4 py-2 rounded-lg border border-gray-200 text-[var(--text-color-white)] bg-[var(--primary-color)]">Änderungen speichern</button>
+            <div class="w-full flex flex-col-reverse sm:flex-row items-center justify-end gap-2 text-nowrap">
+              <button @click="cancelProfileChanges()" class="w-full hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] transition duration-75 px-6 py-4 sm:px-4 sm:py-2 rounded-lg border border-gray-200 font-semibold bg-transparent text-[var(--text-color-light)]">Abbrechen</button>
+              <button @click="submitProfileChanges()" class="w-full hover:bg-transparent hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-75 px-6 py-4 sm:px-4 sm:py-2 rounded-lg border border-gray-200 text-[var(--text-color-white)] bg-[var(--primary-color)]">Änderungen speichern</button>
             </div>
           </div>
         </div>
