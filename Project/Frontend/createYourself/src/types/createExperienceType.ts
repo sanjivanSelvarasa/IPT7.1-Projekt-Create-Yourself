@@ -1,8 +1,8 @@
 export type CreateExperienceType = {
   companyName: string,
   position: string,
-  description: string,
+  description?: string,
   sortOrder: number,
-  startDate: string,
-  endDate: string,
+  startDate?: string,
+  endDate?: string,
 }
