@@ -3,6 +3,7 @@ const express = require('express')
 const portfolioController = require('../2_controllers/portfolioController')
 const authenticateToken = require('../1_middleware/authenticateToken')
 const uploadProjectImage = require('../1_middleware/uploadProjectImage')
+const uploadModuleImage = require('../1_middleware/uploadModuleImage')
 const asyncHandler = require('../5_utils/asyncHandler')
 
 const router = express.Router()
@@ -55,6 +56,7 @@ router.get('/portfolio/:id/skills', authenticateToken, asyncHandler(portfolioCon
 router.post('/portfolio/:id/skills', authenticateToken, asyncHandler(portfolioController.createSkill))
 router.put('/portfolio/:id/skills/:portfolioSkillId', authenticateToken, asyncHandler(portfolioController.updateSkill))
 router.delete('/portfolio/:id/skills/:portfolioSkillId', authenticateToken, asyncHandler(portfolioController.deleteSkill))
+router.post('/portfolio/:id/skills/:portfolioSkillId/image', authenticateToken, uploadModuleImage.single('image'), asyncHandler(portfolioController.uploadSkillImage))
 
 // Social Links im Portfolio verwalten
 router.get('/portfolio/:id/links', authenticateToken, asyncHandler(portfolioController.listSocialLinks))
@@ -67,6 +69,7 @@ router.get('/portfolio/:id/experiences', authenticateToken, asyncHandler(portfol
 router.post('/portfolio/:id/experiences', authenticateToken, asyncHandler(portfolioController.createExperience))
 router.put('/portfolio/:id/experiences/:experienceId', authenticateToken, asyncHandler(portfolioController.updateExperience))
 router.delete('/portfolio/:id/experiences/:experienceId', authenticateToken, asyncHandler(portfolioController.deleteExperience))
+router.post('/portfolio/:id/experiences/:experienceId/image', authenticateToken, uploadModuleImage.single('image'), asyncHandler(portfolioController.uploadExperienceImage))
 
 // Education-Einträge im Portfolio verwalten
 router.get('/portfolio/:id/educations', authenticateToken, asyncHandler(portfolioController.listEducations))

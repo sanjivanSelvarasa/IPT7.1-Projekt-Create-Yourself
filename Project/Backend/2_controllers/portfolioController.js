@@ -141,6 +141,17 @@ async function deleteSkill(req, res) {
     res.sendStatus(204)
 }
 
+async function uploadSkillImage(req, res) {
+    const skill = await skillService.uploadSkillImage(
+        req.user.email,
+        req.params.id,
+        req.params.portfolioSkillId,
+        req.file
+    )
+
+    res.status(201).json(skill)
+}
+
 async function listSocialLinks(req, res) {
     const links = await socialLinkService.listSocialLinks(req.user.email, req.params.id)
     res.json(links)
@@ -179,6 +190,17 @@ async function updateExperience(req, res) {
 async function deleteExperience(req, res) {
     await experienceService.deleteExperience(req.user.email, req.params.id, req.params.experienceId)
     res.sendStatus(204)
+}
+
+async function uploadExperienceImage(req, res) {
+    const experience = await experienceService.uploadExperienceImage(
+        req.user.email,
+        req.params.id,
+        req.params.experienceId,
+        req.file
+    )
+
+    res.status(201).json(experience)
 }
 
 async function listEducations(req, res) {
@@ -316,6 +338,7 @@ module.exports = {
     createSkill,
     updateSkill,
     deleteSkill,
+    uploadSkillImage,
     listSocialLinks,
     createSocialLink,
     updateSocialLink,
@@ -324,6 +347,7 @@ module.exports = {
     createExperience,
     updateExperience,
     deleteExperience,
+    uploadExperienceImage,
     listEducations,
     createEducation,
     updateEducation,

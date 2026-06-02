@@ -312,6 +312,20 @@ Statuscodes:
 ### [DELETE] /portfolio/:id/skills/:portfolioSkillId
 **Beschreibung:** Skill-Zuordnung aus dem Portfolio entfernen.
 
+### [POST] /portfolio/:id/skills/:portfolioSkillId/image
+**Beschreibung:** Skill-Bild hochladen (multipart/form-data, Feld `image`).
+
+**Response (201):**
+```json
+{
+  "id": 42,
+  "portfolioId": 10,
+  "skillId": 7,
+  "imageUrl": "/uploads/modules/skill-...png",
+  "createdAt": "2026-..."
+}
+```
+
 Statuscodes (typisch):
 - `200`, `201`, `204`
 - `400` Validierungsfehler
@@ -384,6 +398,19 @@ Statuscodes (typisch):
 
 ### [DELETE] /portfolio/:id/experiences/:experienceId
 **Beschreibung:** Erfahrungseintrag löschen.
+
+### [POST] /portfolio/:id/experiences/:experienceId/image
+**Beschreibung:** Bild für einen Erfahrungseintrag hochladen (multipart/form-data, Feld `image`).
+
+**Response (201):**
+```json
+{
+  "id": 23,
+  "portfolioId": 10,
+  "imageUrl": "/uploads/modules/experience-...jpg",
+  "createdAt": "2026-..."
+}
+```
 
 Statuscodes (typisch):
 - `200`, `201`, `204`

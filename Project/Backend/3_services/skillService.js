@@ -9,6 +9,7 @@ const {
 } = require('../5_utils/validators')
 const { getOwnedPortfolio } = require('./helpers/portfolioAccess')
 const skillModel = require('../4_models/skillModel')
+const { deleteUploadedFile } = require('../5_utils/fileHelpers')
 
 async function listSkills(email, rawPortfolioId) {
     const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
@@ -63,6 +64,7 @@ async function createSkill(email, rawPortfolioId, data) {
         name: skill.name,
         description: skill.description,
         level: relation.level,
+        imageUrl: relation.imageUrl,
         sortOrder: relation.sortOrder,
         createdAt: relation.createdAt
     }
@@ -91,6 +93,7 @@ async function updateSkill(email, rawPortfolioId, rawPortfolioSkillId, data) {
         name: existing.name,
         description: existing.description,
         level: updated.level,
+        imageUrl: updated.imageUrl,
         sortOrder: updated.sortOrder,
         createdAt: updated.createdAt
     }
@@ -106,6 +109,33 @@ async function deleteSkill(email, rawPortfolioId, rawPortfolioSkillId) {
     }
 
     await skillModel.deletePortfolioSkillById(portfolioSkillId)
+    deleteUploadedFile(existing.imageUrl)
+}
+
+async function uploadSkillImage(email, rawPortfolioId, rawPortfolioSkillId, file) {
+    const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
+    const portfolioSkillId = parseId(rawPortfolioSkillId, 'PortfolioSkill-ID')
+
+    const existing = await skillModel.getPortfolioSkillById(portfolioSkillId)
+    if (!existing || existing.portfolioId !== portfolio.id) {
+        throw new ApiError(404, 'Skill-Zuordnung nicht gefunden.')
+    }
+
+    if (!file || typeof file.filename !== 'string' || file.filename.trim() === '') {
+        throw new ApiError(400, 'Es wurde keine Bilddatei hochgeladen.')
+    }
+
+    const imageUrl = `/uploads/modules/${file.filename}`
+    const updated = await skillModel.updatePortfolioSkillImageUrl(portfolioSkillId, imageUrl)
+    deleteUploadedFile(existing.imageUrl)
+
+    return {
+        id: updated.id,
+        portfolioId: updated.portfolioId,
+        skillId: updated.skillId,
+        imageUrl: updated.imageUrl,
+        createdAt: updated.createdAt
+    }
 }
 
 module.exports = {
@@ -113,5 +143,6 @@ module.exports = {
     getSkillById,
     createSkill,
     updateSkill,
-    deleteSkill
+    deleteSkill,
+    uploadSkillImage
 }

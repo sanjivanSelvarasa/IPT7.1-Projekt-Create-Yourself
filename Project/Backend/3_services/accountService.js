@@ -106,9 +106,17 @@ async function changeLanguage(email, data) {
 async function deleteAccount(email) {
     const user = await findUserOrThrow(email)
     const projectImages = await accountModel.getProjectImageUrlsByUserId(user.id)
+    const skillImages = await accountModel.getSkillImageUrlsByUserId(user.id)
+    const experienceImages = await accountModel.getExperienceImageUrlsByUserId(user.id)
     await accountModel.deleteUserCascade(user.id)
     deleteUploadedFile(user.profileImg)
     for (const { imageUrl } of projectImages) {
+        deleteUploadedFile(imageUrl)
+    }
+    for (const { imageUrl } of skillImages) {
+        deleteUploadedFile(imageUrl)
+    }
+    for (const { imageUrl } of experienceImages) {
         deleteUploadedFile(imageUrl)
     }
 }

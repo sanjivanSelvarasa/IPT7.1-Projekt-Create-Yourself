@@ -173,6 +173,38 @@ async function getProjectImageUrlsByUserId(userId) {
     return result.recordset
 }
 
+async function getSkillImageUrlsByUserId(userId) {
+    const pool = await database.getPool()
+    const result = await pool
+        .request()
+        .input('userId', sql.Int, userId)
+        .query(`
+            SELECT ps.img_url AS imageUrl
+            FROM PortfolioSkill ps
+            JOIN Portfolio po ON po.id = ps.portfolio_id
+            WHERE po.user_id = @userId
+              AND ps.img_url IS NOT NULL
+              AND ps.img_url <> ''
+        `)
+    return result.recordset
+}
+
+async function getExperienceImageUrlsByUserId(userId) {
+    const pool = await database.getPool()
+    const result = await pool
+        .request()
+        .input('userId', sql.Int, userId)
+        .query(`
+            SELECT ex.img_url AS imageUrl
+            FROM Experience ex
+            JOIN Portfolio po ON po.id = ex.portfolio_id
+            WHERE po.user_id = @userId
+              AND ex.img_url IS NOT NULL
+              AND ex.img_url <> ''
+        `)
+    return result.recordset
+}
+
 async function deleteUserCascade(userId) {
     const pool = await database.getPool()
     const transaction = new sql.Transaction(pool)
@@ -256,5 +288,7 @@ module.exports = {
     updateLanguage,
     updateProfilePicture,
     getProjectImageUrlsByUserId,
+    getSkillImageUrlsByUserId,
+    getExperienceImageUrlsByUserId,
     deleteUserCascade
 }

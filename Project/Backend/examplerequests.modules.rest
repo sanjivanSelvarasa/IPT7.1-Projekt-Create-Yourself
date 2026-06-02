@@ -150,6 +150,18 @@ Authorization: Bearer {{accessToken}}
 DELETE {{baseUrl}}/portfolio/{{portfolioId}}/skills/{{portfolioSkillId}}
 Authorization: Bearer {{accessToken}}
 
+### Skill-Bild hochladen (multipart/form-data)
+POST {{baseUrl}}/portfolio/{{portfolioId}}/skills/{{portfolioSkillId}}/image
+Authorization: Bearer {{accessToken}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="skillbild.png"
+Content-Type: image/png
+
+< ./skillbild.png
+--WebAppBoundary--
+
 ### Social Links im Portfolio auflisten
 GET {{baseUrl}}/portfolio/{{portfolioId}}/links
 Authorization: Bearer {{accessToken}}
@@ -208,6 +220,18 @@ Authorization: Bearer {{accessToken}}
 ### Experience-Eintrag loeschen
 DELETE {{baseUrl}}/portfolio/{{portfolioId}}/experiences/{{experienceId}}
 Authorization: Bearer {{accessToken}}
+
+### Experience-Bild hochladen (multipart/form-data)
+POST {{baseUrl}}/portfolio/{{portfolioId}}/experiences/{{experienceId}}/image
+Authorization: Bearer {{accessToken}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="experiencebild.jpg"
+Content-Type: image/jpeg
+
+< ./experiencebild.jpg
+--WebAppBoundary--
 
 ### Education-Eintraege im Portfolio auflisten
 GET {{baseUrl}}/portfolio/{{portfolioId}}/educations

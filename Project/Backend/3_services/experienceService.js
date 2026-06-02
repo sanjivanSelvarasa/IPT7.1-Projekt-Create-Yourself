@@ -10,6 +10,7 @@ const {
 } = require('../5_utils/validators')
 const { getOwnedPortfolio } = require('./helpers/portfolioAccess')
 const experienceModel = require('../4_models/experienceModel')
+const { deleteUploadedFile } = require('../5_utils/fileHelpers')
 
 async function listExperiences(email, rawPortfolioId) {
     const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
@@ -100,6 +101,32 @@ async function deleteExperience(email, rawPortfolioId, rawExperienceId) {
     }
 
     await experienceModel.deleteExperienceById(experienceId)
+    deleteUploadedFile(existing.imageUrl)
+}
+
+async function uploadExperienceImage(email, rawPortfolioId, rawExperienceId, file) {
+    const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
+    const experienceId = parseId(rawExperienceId, 'Experience-ID')
+
+    const existing = await experienceModel.getExperienceById(experienceId)
+    if (!existing || existing.portfolioId !== portfolio.id) {
+        throw new ApiError(404, 'Experience nicht gefunden.')
+    }
+
+    if (!file || typeof file.filename !== 'string' || file.filename.trim() === '') {
+        throw new ApiError(400, 'Es wurde keine Bilddatei hochgeladen.')
+    }
+
+    const imageUrl = `/uploads/modules/${file.filename}`
+    const updated = await experienceModel.updateExperienceImageUrl(experienceId, imageUrl)
+    deleteUploadedFile(existing.imageUrl)
+
+    return {
+        id: updated.id,
+        portfolioId: updated.portfolioId,
+        imageUrl: updated.imageUrl,
+        createdAt: updated.createdAt
+    }
 }
 
 module.exports = {
@@ -107,5 +134,6 @@ module.exports = {
     getExperienceById,
     createExperience,
     updateExperience,
-    deleteExperience
+    deleteExperience,
+    uploadExperienceImage
 }

@@ -60,6 +60,7 @@ async function getPortfolioSkillsByPortfolioId(portfolioId) {
                 s.[name] AS name,
                 s.description,
                 ps.[level] AS [level],
+                ps.img_url AS imageUrl,
                 ps.sort_order AS sortOrder,
                 ps.created_at AS createdAt
             FROM PortfolioSkill ps
@@ -87,6 +88,7 @@ async function getPortfolioSkillById(portfolioSkillId) {
                 s.[name] AS name,
                 s.description,
                 ps.[level] AS [level],
+                ps.img_url AS imageUrl,
                 ps.sort_order AS sortOrder,
                 ps.created_at AS createdAt
             FROM PortfolioSkill ps
@@ -109,6 +111,7 @@ async function getPortfolioSkillByPortfolioAndSkillId(portfolioId, skillId) {
                 portfolio_id AS portfolioId,
                 skill_id AS skillId,
                 [level] AS [level],
+                img_url AS imageUrl,
                 sort_order AS sortOrder,
                 created_at AS createdAt
             FROM PortfolioSkill
@@ -131,6 +134,7 @@ async function addSkillToPortfolio(portfolioId, skillId, level, sortOrder) {
                 portfolio_id,
                 skill_id,
                 [level],
+                img_url,
                 sort_order,
                 created_at
             )
@@ -139,12 +143,14 @@ async function addSkillToPortfolio(portfolioId, skillId, level, sortOrder) {
                 inserted.portfolio_id AS portfolioId,
                 inserted.skill_id AS skillId,
                 inserted.[level] AS [level],
+                inserted.img_url AS imageUrl,
                 inserted.sort_order AS sortOrder,
                 inserted.created_at AS createdAt
             VALUES (
                 @portfolioId,
                 @skillId,
                 @level,
+                NULL,
                 @sortOrder,
                 SYSUTCDATETIME()
             )
@@ -170,7 +176,30 @@ async function updatePortfolioSkillLevel(portfolioSkillId, level, sortOrder) {
                 inserted.portfolio_id AS portfolioId,
                 inserted.skill_id AS skillId,
                 inserted.[level] AS [level],
+                inserted.img_url AS imageUrl,
                 inserted.sort_order AS sortOrder,
+                inserted.created_at AS createdAt
+            WHERE id = @portfolioSkillId
+        `)
+
+    return result.recordset[0]
+}
+
+async function updatePortfolioSkillImageUrl(portfolioSkillId, imageUrl) {
+    const pool = await database.getPool()
+    const result = await pool
+        .request()
+        .input('portfolioSkillId', sql.Int, portfolioSkillId)
+        .input('imageUrl', sql.NVarChar(255), imageUrl)
+        .query(`
+            UPDATE PortfolioSkill
+            SET
+                img_url = @imageUrl
+            OUTPUT
+                inserted.id,
+                inserted.portfolio_id AS portfolioId,
+                inserted.skill_id AS skillId,
+                inserted.img_url AS imageUrl,
                 inserted.created_at AS createdAt
             WHERE id = @portfolioSkillId
         `)
@@ -194,5 +223,6 @@ module.exports = {
     getPortfolioSkillByPortfolioAndSkillId,
     addSkillToPortfolio,
     updatePortfolioSkillLevel,
-    deletePortfolioSkillById
+    deletePortfolioSkillById,
+    updatePortfolioSkillImageUrl
 }

@@ -146,6 +146,7 @@ listSkills()
 createSkill()
 updateSkill()
 deleteSkill()
+uploadSkillImage()
 ```
 
 ## SocialLink-Modul
@@ -164,7 +165,18 @@ listExperiences()
 createExperience()
 updateExperience()
 deleteExperience()
+uploadExperienceImage()
 ```
+
+### uploadSkillImage()
+**Beschreibung:** Speichert ein hochgeladenes Bild fuer eine Skill-Zuordnung und aktualisiert `PortfolioSkill.img_url`. Ein zuvor gesetztes Bild wird von Disk geloescht.
+**Parameter:** `email`, `portfolioId`, `portfolioSkillId`, `file`
+**Rückgabe:** `{ id, portfolioId, skillId, imageUrl, createdAt }`
+
+### uploadExperienceImage()
+**Beschreibung:** Speichert ein hochgeladenes Bild fuer einen Experience-Eintrag und aktualisiert `Experience.img_url`. Ein zuvor gesetztes Bild wird von Disk geloescht.
+**Parameter:** `email`, `portfolioId`, `experienceId`, `file`
+**Rückgabe:** `{ id, portfolioId, imageUrl, createdAt }`
 
 ## Education-Modul
 

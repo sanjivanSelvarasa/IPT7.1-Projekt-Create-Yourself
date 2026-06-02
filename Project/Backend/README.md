@@ -57,6 +57,28 @@ Accessible at: `http://localhost:3000/uploads/projects/<filename>`
 
 Old images are automatically deleted when replaced or when the project is deleted.
 
+### Skill image
+
+`POST /portfolio/:id/skills/:portfolioSkillId/image`
+
+Request type: `multipart/form-data`, field name `image`
+
+Result: file saved in `uploads/modules/`, `imageUrl` saved in DB as `/uploads/modules/<filename>`.
+Accessible at: `http://localhost:3000/uploads/modules/<filename>`
+
+Old images are automatically deleted when replaced or when the skill assignment is deleted.
+
+### Experience image
+
+`POST /portfolio/:id/experiences/:experienceId/image`
+
+Request type: `multipart/form-data`, field name `image`
+
+Result: file saved in `uploads/modules/`, `imageUrl` saved in DB as `/uploads/modules/<filename>`.
+Accessible at: `http://localhost:3000/uploads/modules/<filename>`
+
+Old images are automatically deleted when replaced or when the experience entry is deleted.
+
 ### Profile picture
 
 `POST /account/profile/picture`

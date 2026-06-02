@@ -216,6 +216,7 @@ begin
 	portfolio_id int,
 	skill_id int,
 	[level] tinyint,
+		img_url nvarchar(255),
 	sort_order int,
 	created_at datetime2,
 
@@ -248,12 +249,27 @@ begin
 	position nvarchar(100),
 	sort_order int,
 	description nvarchar(max),
+		img_url nvarchar(255),
 	[start_date] date,
 	end_date date,
 	created_at datetime2,
 
 	foreign key (portfolio_id) references Portfolio(id)
 	);
+end
+go
+
+if col_length('dbo.PortfolioSkill', 'img_url') is null
+begin
+	alter table PortfolioSkill
+	add img_url nvarchar(255);
+end
+go
+
+if col_length('dbo.Experience', 'img_url') is null
+begin
+	alter table Experience
+	add img_url nvarchar(255);
 end
 go
 

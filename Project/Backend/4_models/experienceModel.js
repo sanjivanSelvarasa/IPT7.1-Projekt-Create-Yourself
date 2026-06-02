@@ -15,6 +15,7 @@ async function getExperiencesByPortfolioId(portfolioId) {
                 position,
                 sort_order AS sortOrder,
                 description,
+                img_url AS imageUrl,
                 [start_date] AS startDate,
                 end_date AS endDate,
                 created_at AS createdAt
@@ -42,6 +43,7 @@ async function getExperienceById(experienceId) {
                 position,
                 sort_order AS sortOrder,
                 description,
+                img_url AS imageUrl,
                 [start_date] AS startDate,
                 end_date AS endDate,
                 created_at AS createdAt
@@ -68,8 +70,9 @@ async function createExperienceForPortfolio(portfolioId, experience) {
                 portfolio_id,
                 company_name,
                 position,
-            sort_order,
+                sort_order,
                 description,
+                img_url,
                 [start_date],
                 end_date,
                 created_at
@@ -81,6 +84,7 @@ async function createExperienceForPortfolio(portfolioId, experience) {
                 inserted.position,
                 inserted.sort_order AS sortOrder,
                 inserted.description,
+                inserted.img_url AS imageUrl,
                 inserted.[start_date] AS startDate,
                 inserted.end_date AS endDate,
                 inserted.created_at AS createdAt
@@ -90,6 +94,7 @@ async function createExperienceForPortfolio(portfolioId, experience) {
                 @position,
                 @sortOrder,
                 @description,
+                NULL,
                 @startDate,
                 @endDate,
                 SYSUTCDATETIME()
@@ -126,8 +131,30 @@ async function updateExperience(experienceId, experience) {
                 inserted.position,
                 inserted.sort_order AS sortOrder,
                 inserted.description,
+                inserted.img_url AS imageUrl,
                 inserted.[start_date] AS startDate,
                 inserted.end_date AS endDate,
+                inserted.created_at AS createdAt
+            WHERE id = @experienceId
+        `)
+
+    return result.recordset[0]
+}
+
+async function updateExperienceImageUrl(experienceId, imageUrl) {
+    const pool = await database.getPool()
+    const result = await pool
+        .request()
+        .input('experienceId', sql.Int, experienceId)
+        .input('imageUrl', sql.NVarChar(255), imageUrl)
+        .query(`
+            UPDATE Experience
+            SET
+                img_url = @imageUrl
+            OUTPUT
+                inserted.id,
+                inserted.portfolio_id AS portfolioId,
+                inserted.img_url AS imageUrl,
                 inserted.created_at AS createdAt
             WHERE id = @experienceId
         `)
@@ -148,5 +175,6 @@ module.exports = {
     getExperienceById,
     createExperienceForPortfolio,
     updateExperience,
-    deleteExperienceById
+    deleteExperienceById,
+    updateExperienceImageUrl
 }
