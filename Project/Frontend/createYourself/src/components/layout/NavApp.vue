@@ -77,18 +77,6 @@ function onLang(): void {
                 <span>{{ tl("logout") }}</span>
               </button>
             </li>
-<!-- Language -->
-<li>
-  <select
-    v-model="currLang"
-    @change="onLang"
-    class="h-[38px] px-3 rounded-lg border border-gray-200 bg-[var(--surface-color)] text-[var(--text-color-light)] cursor-pointer outline-none hover:border-[var(--primary-color)]"
-  >
-    <option value="de">DE</option>
-    <option value="en">EN</option>
-    <option value="fr">FR</option>
-  </select>
-</li>
           </ul>
         </div>
       </div>
@@ -128,18 +116,6 @@ function onLang(): void {
               <span>{{ tl("logout") }}</span>
             </button>
           </li>
-          <!-- Language -->
-<li>
-  <select
-    v-model="currLang"
-    @change="onLang"
-    class="h-[38px] px-3 rounded-lg border border-gray-200 bg-[var(--surface-color)] text-[var(--text-color-light)] cursor-pointer outline-none hover:border-[var(--primary-color)]"
-  >
-    <option value="de">DE</option>
-    <option value="en">EN</option>
-    <option value="fr">FR</option>
-  </select>
-</li>
         </ul>
       </div>
     </div>
