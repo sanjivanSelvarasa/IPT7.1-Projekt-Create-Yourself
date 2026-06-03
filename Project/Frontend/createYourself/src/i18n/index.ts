@@ -34,6 +34,7 @@ import profileFr from "@/i18n/profile/fr.json";
 import settingsDe from "@/i18n/settings/de.json";
 import settingsEn from "@/i18n/settings/en.json";
 import settingsFr from "@/i18n/settings/fr.json";
+
 import createPortfolioDe from "./createportfolio/de.json";
 import createPortfolioEn from "./createportfolio/en.json";
 import createPortfolioFr from "./createportfolio/fr.json";
