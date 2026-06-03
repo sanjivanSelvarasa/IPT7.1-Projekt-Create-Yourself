@@ -1,4 +1,5 @@
 export type TextBlockContent = {
+  id: number;
   text: string,
   tag?: 'p' | 'h1' | 'h2' | 'h3',
   align?: 'left' | 'center' | 'right',
