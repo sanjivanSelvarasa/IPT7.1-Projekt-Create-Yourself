@@ -30,7 +30,7 @@ export const usePortfolioSectionStore = defineStore('portfolioSection', () => {
     error.value = null
 
     try{
-      await createSectionApi(portfolioId, versionId, section)
+      return await createSectionApi(portfolioId, versionId, section)
     }catch(err){
       error.value = err ? err.message : 'Failed to create section'
     }
@@ -40,7 +40,7 @@ export const usePortfolioSectionStore = defineStore('portfolioSection', () => {
     error.value = null
 
     try{
-      await updateSectionApi(portfolioId, versionId, sectionId, section)
+      return await updateSectionApi(portfolioId, versionId, sectionId, section)
     }catch(err){
       error.value = err ? err.message : 'Failed to update section'
     }
