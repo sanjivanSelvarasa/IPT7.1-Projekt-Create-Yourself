@@ -27,6 +27,18 @@ import registerDe from "@/i18n/registerpage/de.json";
 import registerEn from "@/i18n/registerpage/en.json";
 import registerFr from "@/i18n/registerpage/fr.json";
 
+import profileDe from "@/i18n/profile/de.json";
+import profileEn from "@/i18n/profile/en.json";
+import profileFr from "@/i18n/profile/fr.json";
+
+import settingsDe from "@/i18n/settings/de.json";
+import settingsEn from "@/i18n/settings/en.json";
+import settingsFr from "@/i18n/settings/fr.json";
+
+import createPortfolioDe from "./createportfolio/de.json";
+import createPortfolioEn from "./createportfolio/en.json";
+import createPortfolioFr from "./createportfolio/fr.json";
+
 const savedLang =
   localStorage.getItem("lang") ??
   (navigator.language === ("de" || "en" || "fr") ? navigator.language : "de");
@@ -44,6 +56,9 @@ export const i18n = createI18n({
       login: loginDe,
       navHome: navDe,
       register: registerDe,
+      profile: profileDe,
+      settings: settingsDe,
+      createPortfolio: createPortfolioDe,
     },
     en: {
       landingpage: landingpageEn,
@@ -53,6 +68,9 @@ export const i18n = createI18n({
       login: loginEn,
       navHome: navEn,
       register: registerEn,
+      profile: profileEn,
+      settings: settingsEn,
+      createPortfolio: createPortfolioEn,
     },
     fr: {
       landingpage: landingpageFr,
@@ -62,6 +80,9 @@ export const i18n = createI18n({
       login: loginFr,
       navHome: navFr,
       register: registerFr,
+      profile: profileFr,
+      settings: settingsFr,
+      createPortfolio: createPortfolioFr,
     },
   },
 });
