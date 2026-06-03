@@ -43,6 +43,10 @@ button{
   @apply cursor-pointer;
 }
 
+.element-active{
+  @apply border border-[var(--primary-color)] border-dashed;
+}
+
 .divider{
   @apply my-5 w-full h-[1px] bg-gray-200;
 }
