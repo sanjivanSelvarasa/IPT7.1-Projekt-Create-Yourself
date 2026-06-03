@@ -16,6 +16,19 @@ async function onLogout() {
 }
 
 const showBugermenu = ref<boolean>(false);
+
+import { useI18n } from "vue-i18n";
+
+const { t, locale } = useI18n();
+
+const tl = (key: string) => t(`nav.${key}`);
+
+const currLang = ref<string>(locale.value);
+
+function onLang(): void {
+  locale.value = currLang.value;
+  localStorage.setItem("lang", currLang.value);
+}
 </script>
 
 <template>
@@ -37,7 +50,7 @@ const showBugermenu = ref<boolean>(false);
                 <div class="flex items-center justify-center ">
                   <i class="fa-solid fa-box-open"></i>
                 </div>
-                <span>Dashboard</span>
+                <span>{{ tl("dashboard") }}</span>
               </RouterLink>
             </li>
             <li class="w-full hover:text-[var(--primary-color)] hover:bg-[var(--primary-color-light)] rounded-lg transition duration-200">
@@ -45,7 +58,7 @@ const showBugermenu = ref<boolean>(false);
                 <div class="flex items-center justify-center ">
                   <i class="fa-regular fa-user"></i>
                 </div>
-                <span>Profil</span>
+                <span>{{ tl("profile") }}</span>
               </RouterLink>
             </li>
             <li class="w-full hover:text-[var(--primary-color)] hover:bg-[var(--primary-color-light)] rounded-lg transition duration-200">
@@ -53,7 +66,7 @@ const showBugermenu = ref<boolean>(false);
                 <div class="flex items-center justify-center ">
                   <i class="fa-solid fa-gear"></i>
                 </div>
-                <span>Einstellungen</span>
+                <span>{{ tl("settings") }}</span>
               </RouterLink>
             </li>
             <li class="w-full group hover:text-[var(--primary-color)] rounded-lg transition duration-200">
@@ -61,9 +74,21 @@ const showBugermenu = ref<boolean>(false);
                 <div class="flex items-center justify-center ">
                   <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 </div>
-                <span>Abmelden</span>
+                <span>{{ tl("logout") }}</span>
               </button>
             </li>
+<!-- Language -->
+<li>
+  <select
+    v-model="currLang"
+    @change="onLang"
+    class="h-[38px] px-3 rounded-lg border border-gray-200 bg-[var(--surface-color)] text-[var(--text-color-light)] cursor-pointer outline-none hover:border-[var(--primary-color)]"
+  >
+    <option value="de">DE</option>
+    <option value="en">EN</option>
+    <option value="fr">FR</option>
+  </select>
+</li>
           </ul>
         </div>
       </div>
@@ -76,7 +101,7 @@ const showBugermenu = ref<boolean>(false);
               <div class="flex items-center justify-center ">
                 <i class="fa-solid fa-box-open"></i>
               </div>
-              <span>Dashboard</span>
+              <span>{{ tl("dashboard") }}</span>
             </RouterLink>
           </li>
           <li class="hover:text-[var(--primary-color)] hover:bg-[var(--primary-color-light)] rounded-lg transition duration-200">
@@ -84,7 +109,7 @@ const showBugermenu = ref<boolean>(false);
               <div class="flex items-center justify-center ">
                 <i class="fa-regular fa-user"></i>
               </div>
-              <span>Profil</span>
+              <span>{{ tl("profile") }}</span>
             </RouterLink>
           </li>
           <li class="hover:text-[var(--primary-color)] hover:bg-[var(--primary-color-light)] rounded-lg transition duration-200">
@@ -92,7 +117,7 @@ const showBugermenu = ref<boolean>(false);
               <div class="flex items-center justify-center ">
                 <i class="fa-solid fa-gear"></i>
               </div>
-              <span>Einstellungen</span>
+              <span>{{ tl("settings") }}</span>
             </RouterLink>
           </li>
           <li class="group hover:text-[var(--primary-color)] rounded-lg transition duration-200">
@@ -100,9 +125,21 @@ const showBugermenu = ref<boolean>(false);
               <div class="flex items-center justify-center ">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
               </div>
-              <span>Abmelden</span>
+              <span>{{ tl("logout") }}</span>
             </button>
           </li>
+          <!-- Language -->
+<li>
+  <select
+    v-model="currLang"
+    @change="onLang"
+    class="h-[38px] px-3 rounded-lg border border-gray-200 bg-[var(--surface-color)] text-[var(--text-color-light)] cursor-pointer outline-none hover:border-[var(--primary-color)]"
+  >
+    <option value="de">DE</option>
+    <option value="en">EN</option>
+    <option value="fr">FR</option>
+  </select>
+</li>
         </ul>
       </div>
     </div>
