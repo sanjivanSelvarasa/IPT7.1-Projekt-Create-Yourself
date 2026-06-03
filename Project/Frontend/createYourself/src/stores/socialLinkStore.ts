@@ -7,6 +7,7 @@ import {
   getSocialLinkApi,
   updateSocialLinkApi
 } from "@/api/socialLink.api.ts";
+import type {CreateSocialLinkType} from "@/types/createSocialLinkType.ts";
 
 export const useSocialLinkStore = defineStore('socialLink', () => {
   const error = ref<string | null>(null)
@@ -24,7 +25,7 @@ export const useSocialLinkStore = defineStore('socialLink', () => {
     }
   }
 
-  async function createSocialLink(portfolioId: number, socialLink: SocialLinkType){
+  async function createSocialLink(portfolioId: number, socialLink: CreateSocialLinkType){
     error.value = null
 
     try{
