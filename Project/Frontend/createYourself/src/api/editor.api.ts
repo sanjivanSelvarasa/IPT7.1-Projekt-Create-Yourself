@@ -26,7 +26,7 @@ export async function createEditorBlockApi(portfolioId: number, portfolioVersion
   })
 }
 
-export async function updateEditorBlockApi(portfolioId: number, portfolioVersionId: number, sectionId: number, blockId: number, editorBlock: CreateEditorBlockType) : Promise<EditorBlockType> {
+export async function updateEditorBlockApi(portfolioId: number, portfolioVersionId: number, sectionId: number, blockId: number, editorBlock: CreateEditorBlockType | CreateTextEditorBlockType) : Promise<EditorBlockType> {
   return await apiFetch(`/portfolio/${portfolioId}/versions/${portfolioVersionId}/sections/${sectionId}/blocks/${blockId}`, {
     method: 'PUT',
     headers: {
