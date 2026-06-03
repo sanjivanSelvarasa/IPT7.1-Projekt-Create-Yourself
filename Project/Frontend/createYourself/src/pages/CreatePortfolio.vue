@@ -14,7 +14,7 @@ import { toSlug } from "@/utils/slug.ts";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const tl = (key: string) => t(`createportfolio.${key}`);
+const tl = (key: string) => t(`createPortfolio.${key}`);
 
 const portfolioStore = usePortfolioStore();
 
@@ -89,7 +89,7 @@ async function createPortfolioFunction() {
 
     <HeaderComp
       :title="tl('Head.New-Portfolio')"
-      tag="tl('Head.Title')"
+      :tag="tl('Head.Title')"
       :subtitle="tl('Head.Lead')"
     ></HeaderComp>
 
