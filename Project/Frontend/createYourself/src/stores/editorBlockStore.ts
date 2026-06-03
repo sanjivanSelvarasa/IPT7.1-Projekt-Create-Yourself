@@ -38,7 +38,7 @@ export const useEditorBlockStore = defineStore('editorBlock', () => {
     }
   }
 
-  async function updateEditorBlock(portfolioId: number, portfolioVersionId: number, sectionId: number, blockId: number, editorBlock: CreateEditorBlockType) {
+  async function updateEditorBlock(portfolioId: number, portfolioVersionId: number, sectionId: number, blockId: number, editorBlock: CreateEditorBlockType | CreateTextEditorBlockType) {
     error.value = null
 
     try{
