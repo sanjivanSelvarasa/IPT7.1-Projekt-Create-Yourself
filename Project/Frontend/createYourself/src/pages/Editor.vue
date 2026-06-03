@@ -3,7 +3,7 @@ import Logo from "@/components/ui/Logo.vue";
 import Block from "@/components/ui/editor/Block.vue";
 import Sections from "@/components/ui/editor/Sections.vue";
 import ScreenButton from "@/components/ui/editor/ScreenButton.vue";
-import Content from "@/components/ui/editor/Content.vue";
+import ContentText from "@/components/ui/editor/ContentText.vue";
 import SectionStruct from "@/components/ui/editor/SectionStruct.vue";
 import {computed, onMounted, ref, watch} from "vue";
 import {usePortfolioStore} from "@/stores/portfolioStore.ts";
@@ -41,6 +41,10 @@ import EducationModul from "@/components/ui/editor/EducationModul.vue";
 import EducationElement from "@/components/ui/editor/EducationElement.vue";
 import SocialLinkModul from "@/components/ui/editor/SocialLinkModul.vue";
 import SocialLinkElement from "@/components/ui/editor/SocialLinkElement.vue";
+import ContentProject from "@/components/ui/editor/ContentProject.vue";
+import ContentSkill from "@/components/ui/editor/ContentSkill.vue";
+import ContentEducation from "@/components/ui/editor/ContentEducation.vue";
+import ContentLink from "@/components/ui/editor/ContentLink.vue";
 
 const portfolioName = ref<string>('');
 
@@ -116,8 +120,29 @@ async function submitSection(sectionHeader: string) {
   }
 
   try{
-    await portfolioSectionStore.createSection(portfolioFacts.value.id, portfolioFacts.value.currentVersionId, section)
+    const newSection = await portfolioSectionStore.createSection(portfolioFacts.value.id, portfolioFacts.value.currentVersionId, section)
+    sectionSelected.value = newSection.id
     await portfolioSectionStore.getSections(portfolioId, portfolioFacts.value.currentVersionId)
+
+    if(sectionHeader === 'Hero Section'){
+      await createTextModul()
+    }
+    if(sectionHeader === 'Projekte'){
+      await createProjectModul()
+    }
+    if(sectionHeader === 'Skills'){
+      await createSkillModul()
+    }
+    if(sectionHeader === 'Erfahrung'){
+      await createExperienceModul()
+    }
+    if(sectionHeader === 'Ausbildung'){
+      await createEducationModul()
+    }
+    if(sectionHeader === 'Kontakt & Social'){
+      await createSocialLinkModul()
+    }
+
     await loadSortedSections()
     addSectionVisible.value = false
   }catch(err: any){
@@ -133,6 +158,17 @@ function getSvgToSectionType(type: string) : string{
   if(type === "Ausbildung") return "fa-solid fa-graduation-cap";
   if(type === "Kontakt & Social") return "fa-regular fa-envelope";
   if(type === "Freie Section") return "fa-solid fa-circle-info";
+  else
+    return "fa-solid fa-header";
+}
+function getSvgToElementType(type: string) : string{
+  if(type === "text") return "fa-solid fa-align-left";
+  if(type === "image") return "fa-regular fa-image";
+  if(type === "project") return "fa-solid fa-diagram-project";
+  if(type === "skill") return "fa-solid fa-chart-line";
+  if(type === "experience") return "fa-solid fa-briefcase";
+  if(type === "education") return "fa-solid fa-graduation-cap";
+  if(type === "link") return "fa-regular fa-envelope";
   else
     return "fa-solid fa-header";
 }
@@ -154,6 +190,13 @@ function sectionSelectedFunction(sectionId: number){
   sectionSelected.value = sectionId
 }
 
+const elementSelectedId = ref<number | null>(null);
+const elementSelected = ref<EditorBlockType | null>(null);
+function elementSelectedFunction(elementId: number, element: EditorBlockType){
+  elementSelectedId.value = elementId
+  elementSelected.value = element
+}
+
 async function getEditorForSection(sectionId: number){
   if(portfolioFacts.value === null) return;
 
@@ -168,42 +211,42 @@ async function getEditorForSection(sectionId: number){
     }
 
     if(e.blockType === 'skill'){
-      const skill = JSON.parse(e.contentJson) as ModulType
+      const content = JSON.parse(e.contentJson) as ModulType
       return {
         ...e,
-        skills: skillStore.skills?.filter(t => t.skillId === skill.id)
+        skills: skillStore.skills?.filter(t => content.ids?.includes(t.id))
       }
     }
 
     if(e.blockType === 'project'){
-      const project = JSON.parse(e.contentJson) as ModulType
+      const content = JSON.parse(e.contentJson) as ModulType
       return {
         ...e,
-        project: projectStore.projects?.filter(t => t.id === project.id)
+        project: projectStore.projects?.filter(t => content.ids?.includes(t.id))
       }
     }
 
     if(e.blockType === 'education'){
-      const education = JSON.parse(e.contentJson) as ModulType
+      const content = JSON.parse(e.contentJson) as ModulType
       return {
         ...e,
-        education: educationStore.educations?.filter(t => t.id === education.id)
+        education: educationStore.educations?.filter(t => content.ids?.includes(t.id))
       }
     }
 
     if(e.blockType === 'experience'){
-      const experience = JSON.parse(e.contentJson) as ModulType
+      const content = JSON.parse(e.contentJson) as ModulType
       return {
         ...e,
-        experience: experienceStore.experiences?.filter(t => t.id === experience.id)
+        experience: experienceStore.experiences?.filter(t => content.ids?.includes(t.id))
       }
     }
 
     if(e.blockType === 'link'){
-      const link = JSON.parse(e.contentJson) as ModulType
+      const content = JSON.parse(e.contentJson) as ModulType
       return {
         ...e,
-        link: socialLinkStore.socialLinks?.filter(t => t.id === link.id)
+        link: socialLinkStore.socialLinks?.filter(t => content.ids?.includes(t.id))
       }
     }
 
@@ -212,7 +255,9 @@ async function getEditorForSection(sectionId: number){
 }
 function getMaxSortCount() : number {
   const section = sortedSections.value?.find(section => section.id === sectionSelected.value)
-  return section.editorBlock.length > 0 ? Math.max(...(section.editorBlock ?? []).map(s => s.sortOrder)) ?? 0 : 0
+
+  if(!section || !section.editorBlock || section.editorBlock.length === 0) return 0
+  return Math.max(...(section.editorBlock).map(s => s.sortOrder))
 }
 
 async function createTextModul(){
@@ -223,6 +268,7 @@ async function createTextModul(){
   const editorText : CreateTextEditorBlockType = {
     blockType: "text",
     contentJson: {
+      id: Date.now() + Math.floor(Math.random() * 1000),
       text: "PLATZHALTER TEXT",
       align: "left",
       tag: "h1",
@@ -253,12 +299,15 @@ async function createSkillModul(){
   const editorText : CreateEditorBlockType = {
     blockType: "skill",
     contentJson: {
-      id: res!.id,
+      ids: [res!.id],
     },
     sortOrder: maxSortCount + 1,
   }
 
   await createEditorBlockFunc(editorText)
+
+  await skillStore.getSkills(portfolioId)
+  await loadSortedSections()
 }
 async function createProjectModul(){
   if(sortedSections.value === null) return;
@@ -277,12 +326,15 @@ async function createProjectModul(){
   const editorText : CreateEditorBlockType = {
     blockType: "project",
     contentJson: {
-      id: res!.id,
+      ids: [res!.id],
     },
     sortOrder: maxSortCount + 1,
   }
 
   await createEditorBlockFunc(editorText)
+
+  await projectStore.getProjects(portfolioId)
+  await loadSortedSections()
 }
 async function createEducationModul(){
   if(sortedSections.value === null) return;
@@ -301,12 +353,15 @@ async function createEducationModul(){
   const editorText : CreateEditorBlockType = {
     blockType: "education",
     contentJson: {
-      id: res!.id,
+      ids: [res!.id],
     },
     sortOrder: maxSortCount + 1,
   }
 
   await createEditorBlockFunc(editorText)
+
+  await educationStore.getEducation(portfolioId)
+  await loadSortedSections()
 }
 async function createExperienceModul(){
   if(sortedSections.value === null) return;
@@ -314,8 +369,8 @@ async function createExperienceModul(){
   const maxSortCount = getMaxSortCount()
 
   const experience : CreateExperienceType = {
-    companyName: 'Ich Firma',
-    position: 'CEO',
+    companyName: 'TEMPLATE NAME',
+    position: 'TEMPLATE',
     sortOrder: maxSortCount + 1,
   }
 
@@ -325,12 +380,15 @@ async function createExperienceModul(){
   const editorText : CreateEditorBlockType = {
     blockType: "experience",
     contentJson: {
-      id: res!.id,
+      ids: [res!.id],
     },
     sortOrder: maxSortCount + 1,
   }
 
   await createEditorBlockFunc(editorText)
+
+  await experienceStore.getExperience(portfolioId)
+  await loadSortedSections()
 }
 async function createSocialLinkModul(){
   if(sortedSections.value === null) return;
@@ -348,20 +406,231 @@ async function createSocialLinkModul(){
   const editorText : CreateEditorBlockType = {
     blockType: "link",
     contentJson: {
-      id: res!.id,
+      ids: [res!.id],
     },
     sortOrder: maxSortCount + 1,
   }
 
   await createEditorBlockFunc(editorText)
+
+  await socialLinkStore.getSocialLink(portfolioId)
+  await loadSortedSections()
 }
+
+async function addSkillToModul(editorBlock: EditorBlockType){
+  if(sortedSections.value === null || portfolioFacts.value === null) return;
+
+  const maxSortCount = getMaxSortCount()
+
+  const skill : CreateSkillType = {
+    name: `PLATZHALTER ${crypto.randomUUID()}`,
+    description: "PLATZHALTER TEXT ...",
+    level: 50,
+    sortOrder: maxSortCount + 1,
+  }
+
+  const content = JSON.parse(editorBlock.contentJson) as ModulType
+
+  const res = await skillStore.createSkills(portfolioId, skill)
+  if(res?.id === null || res === null) return;
+
+  const updatedEditorBlock : CreateEditorBlockType = {
+    blockType: "skill",
+    contentJson: {
+      ids: [...content.ids, res!.id]
+    },
+    sortOrder: editorBlock.sortOrder,
+  }
+
+  await editorBlockStore.updateEditorBlock(portfolioId, portfolioFacts.value?.currentVersionId, editorBlock.sectionId, editorBlock.id, updatedEditorBlock)
+
+  await skillStore.getSkills(portfolioId)
+  await loadSortedSections()
+}
+async function addProjectToModul(editorBlock: EditorBlockType){
+  if(sortedSections.value === null || portfolioFacts.value === null) return;
+
+  const maxSortCount = getMaxSortCount()
+
+  const project : CreateProjectType = {
+    title: 'PLATZHALTER',
+    description: 'PLATZHALTER TEXT ...',
+    sortOrder: maxSortCount + 1,
+  }
+
+  const content = JSON.parse(editorBlock.contentJson) as ModulType
+
+  const res = await projectStore.createProject(portfolioId, project)
+  if(res?.id === null || res === null) return;
+
+  const updatedEditorBlock : CreateEditorBlockType = {
+    blockType: "project",
+    contentJson: {
+      ids: [...content.ids, res!.id]
+    },
+    sortOrder: editorBlock.sortOrder,
+  }
+
+  await editorBlockStore.updateEditorBlock(portfolioId, portfolioFacts.value?.currentVersionId, editorBlock.sectionId, editorBlock.id, updatedEditorBlock)
+
+  await projectStore.getProjects(portfolioId)
+  await loadSortedSections()
+}
+async function addEducationToModul(editorBlock: EditorBlockType){
+  if(sortedSections.value === null || portfolioFacts.value === null) return;
+
+  const maxSortCount = getMaxSortCount()
+
+  const education : CreateEducationType = {
+    institutionName: 'PLATZHALTER',
+    degree: 'PLATZHALTER TEXT',
+    sortOrder: maxSortCount + 1,
+  }
+
+  const content = JSON.parse(editorBlock.contentJson) as ModulType
+
+  const res = await educationStore.createEducation(portfolioId, education)
+  if(res?.id === null || res === null) return;
+
+  const updatedEditorBlock : CreateEditorBlockType = {
+    blockType: "education",
+    contentJson: {
+      ids: [...content.ids, res!.id]
+    },
+    sortOrder: editorBlock.sortOrder,
+  }
+
+  await editorBlockStore.updateEditorBlock(portfolioId, portfolioFacts.value?.currentVersionId, editorBlock.sectionId, editorBlock.id, updatedEditorBlock)
+
+  await educationStore.getEducation(portfolioId)
+  await loadSortedSections()
+}
+async function addExperienceToModul(editorBlock: EditorBlockType){
+  if(sortedSections.value === null || portfolioFacts.value === null) return;
+
+  const maxSortCount = getMaxSortCount()
+
+  const experience : CreateExperienceType = {
+    companyName: 'TEMPLATE NAME',
+    position: 'TEMPLATE',
+    sortOrder: maxSortCount + 1,
+  }
+
+  const content = JSON.parse(editorBlock.contentJson) as ModulType
+
+  const res = await experienceStore.createExperience(portfolioId, experience)
+  if(res?.id === null || res === null) return;
+
+  const updatedEditorBlock : CreateEditorBlockType = {
+    blockType: "experience",
+    contentJson: {
+      ids: [...content.ids, res!.id]
+    },
+    sortOrder: editorBlock.sortOrder,
+  }
+
+  await editorBlockStore.updateEditorBlock(portfolioId, portfolioFacts.value?.currentVersionId, editorBlock.sectionId, editorBlock.id, updatedEditorBlock)
+
+  await experienceStore.getExperience(portfolioId)
+  await loadSortedSections()
+}
+async function addSocialLinkToModul(editorBlock: EditorBlockType){
+  if(sortedSections.value === null || portfolioFacts.value === null) return;
+
+  const link : CreateSocialLinkType = {
+    url: 'http://localhost:8080',
+    platform: 'YouTube',
+  }
+
+  const content = JSON.parse(editorBlock.contentJson) as ModulType
+
+  const res = await socialLinkStore.createSocialLink(portfolioId, link)
+  if(res?.id === null || res === null) return;
+
+  const updatedEditorBlock : CreateEditorBlockType = {
+    blockType: "link",
+    contentJson: {
+      ids: [...content.ids, res!.id]
+    },
+    sortOrder: editorBlock.sortOrder,
+  }
+
+  await editorBlockStore.updateEditorBlock(portfolioId, portfolioFacts.value?.currentVersionId, editorBlock.sectionId, editorBlock.id, updatedEditorBlock)
+
+  await socialLinkStore.getSocialLink(portfolioId, link)
+  await loadSortedSections()
+}
+
 async function createEditorBlockFunc(editorBlock: CreateEditorBlockType | CreateTextEditorBlockType){
   if(portfolioFacts.value === null || sectionSelected.value === null) return;
 
   try{
     await editorBlockStore.createEditorBlock(portfolioId, portfolioFacts.value?.currentVersionId, sectionSelected.value, editorBlock)
+    await portfolioSectionStore.getSections(portfolioId, portfolioFacts.value.currentVersionId)
     await loadSortedSections()
   }catch{}
+}
+
+async function deleteEditorBlockFunc(editorBlock: EditorBlockType){
+  if(portfolioFacts.value === null || sectionSelected.value === null) return;
+
+  try{
+    if(editorBlock.blockType === "skill"){
+      for (const skill of editorBlock.skills)
+        await skillStore.deleteSkill(portfolioId, skill.id)
+    }
+
+    if(editorBlock.blockType === "project"){
+      for (const project of editorBlock.project)
+        await projectStore.deleteProject(portfolioId, project.id)
+    }
+
+    if(editorBlock.blockType === "education"){
+      for (const education of editorBlock.education)
+        await educationStore.deleteEducation(portfolioId, education.id)
+    }
+
+    if(editorBlock.blockType === "experience"){
+      for (const experience of editorBlock.experience)
+        await experienceStore.deleteExperience(portfolioId, experience.id)
+    }
+
+    if(editorBlock.blockType === "link"){
+      for (const link of editorBlock.link)
+        await socialLinkStore.deleteSocialLink(portfolioId, link.id)
+    }
+
+    await editorBlockStore.deleteEditorBlock(portfolioId, portfolioFacts.value?.currentVersionId, sectionSelected.value, editorBlock.id)
+    await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionSelected.value)
+    await loadSortedSections()
+  }catch{}
+}
+
+async function updateTextBlockFunc(textBlock: TextBlockContent){
+  console.log('updating...')
+
+  if(portfolioFacts.value === null || sectionSelected.value === null) return;
+
+  const editor = elementSelected.value!
+  const updatedEditor : CreateTextEditorBlockType = {
+    blockType: 'text',
+    sortOrder: editor.sortOrder,
+    contentJson: {
+      text: textBlock.text,
+      fontWeight: textBlock.fontWeight,
+      tag: textBlock.tag,
+      fontSize: textBlock.fontSize,
+      align: textBlock.align,
+      color: textBlock.color,
+      id: textBlock.id,
+    }
+  }
+
+  try{
+    await editorBlockStore.updateEditorBlock(portfolioId, portfolioFacts.value?.currentVersionId, sectionSelected.value, editor.id, updatedEditor)
+    await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionSelected.value)
+    await loadSortedSections()
+  }catch {}
 }
 </script>
 
@@ -489,22 +758,22 @@ async function createEditorBlockFunc(editorBlock: CreateEditorBlockType | Create
           <div class="flex flex-col gap-5 w-full box-content flex-1 min-h-0 overflow-y-scroll no-scrollbar">
             <SectionStruct v-for="section in sortedSections" @selected="sectionSelectedFunction(section.id)" :is-selected="sectionSelected === section.id" @delete="deleteSection(section.id)" :key="section.id" :name="section.sectionType" :title="section.title">
               <div v-for="editor in section.editorBlock" :key="editor.id">
-                <TextModul v-if="editor.blockType === 'text' " :text-content="editor.textBlockContent"></TextModul>
+                <TextModul v-if="editor.blockType === 'text' " @delete="deleteEditorBlockFunc(editor)" @selected="elementSelectedFunction(editor.textBlockContent.id, editor)" :is-active="elementSelectedId === editor.textBlockContent.id" :text-content="editor.textBlockContent"></TextModul>
 
-                <SkillModul v-if="editor.blockType === 'skill' ">
-                  <SkillElement v-for="skill in editor.skills" :key="skill.skillId" :name="skill.name" :level="skill.level"></SkillElement>
+                <SkillModul v-if="editor.blockType === 'skill' " @add="addSkillToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
+                  <SkillElement v-for="skill in editor.skills" @selected="elementSelectedFunction(skill.skillId, editor)" :is-active="elementSelectedId === skill.skillId" :key="skill.skillId" :name="skill.name" :level="skill.level"></SkillElement>
                 </SkillModul>
 
-                <ProjectModul v-if="editor.blockType === 'project' ">
-                  <Project v-for="project in editor.project" :key="project.id" :title="project.title" :description="project.description"></Project>
+                <ProjectModul v-if="editor.blockType === 'project' " @add="addProjectToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
+                  <Project v-for="project in editor.project" @selected="elementSelectedFunction(project.id, editor)" :is-active="elementSelectedId === project.id" :key="project.id" :title="project.title" :description="project.description"></Project>
                 </ProjectModul>
 
-                <EducationModul v-if="editor.blockType === 'education' ">
-                  <EducationElement v-for="education in editor.education" :key="education.id" :name="education.institutionName" :degree="education.degree" :field-of-study="education.fieldOfStudy" :start-date="education.startDate" :end-date="education.endDate"></EducationElement>
+                <EducationModul v-if="editor.blockType === 'education' " @add="addEducationToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
+                  <EducationElement v-for="education in editor.education" @selected="elementSelectedFunction(education.id, editor)" :is-active="elementSelectedId === education.id" :key="education.id" :name="education.institutionName" :degree="education.degree" :field-of-study="education.fieldOfStudy" :start-date="education.startDate" :end-date="education.endDate"></EducationElement>
                 </EducationModul>
 
-                <SocialLinkModul v-if="editor.blockType === 'link' ">
-                  <SocialLinkElement svg="fa-brands fa-github" name="Github" url="/maxmustermann"></SocialLinkElement>
+                <SocialLinkModul v-if="editor.blockType === 'link' " @add="addSocialLinkToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
+                  <SocialLinkElement v-for="link in editor.link" @selected="elementSelectedFunction(link.id, editor)" :is-active="elementSelectedId === link.id" :key="link.id" svg="fa-brands fa-github" :name="link.platform" :url="link.url"></SocialLinkElement>
                 </SocialLinkModul>
               </div>
             </SectionStruct>
@@ -524,25 +793,50 @@ async function createEditorBlockFunc(editorBlock: CreateEditorBlockType | Create
           <div class="flex items-center justify-between w-full">
             <div class="flex items-center justify-center gap-2">
               <div class="mb-2 flex items-center justify-center w-[30px] h-[30px] bg-[var(--primary-color-light)] text-[var(--primary-color)] rounded-md">
-                <i class="fa-solid fa-align-left text-[var(--primary-color)]"></i>
+                <i class="text-[var(--primary-color)]" :class="getSvgToElementType(elementSelected?.blockType ?? '')"></i>
               </div>
-              <span class="sm-subtitle">Text-Block</span>
+              <span v-if="elementSelected !== null" class="sm-subtitle">{{ elementSelected.blockType }}</span>
+              <span v-else class="sm-subtitle">Keine Ausgewählt</span>
             </div>
             <span class="text-xs text-[var(--primary-color)] bg-[var(--primary-color-light)] rounded-full px-2 py-1 font-semibold uppercase">Ausgewählt</span>
           </div>
-          <span class="text-sm text-[var(--text-color-light)]">Section "Einführung" Block 1 von 2</span>
+          <span v-if="sectionSelected !== null && elementSelected !== null" class="text-sm text-[var(--text-color-light)]">Section "{{
+              portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.title
+            }}" Block Nr. {{ elementSelected?.sortOrder }}
+          </span>
+          <span v-else class="text-sm text-[var(--text-color-light)]">
+            Nichts ausgewählt
+          </span>
         </div>
 
         <div class="divider"></div>
 
-        <div class="flex items-center justify-center w-full">
-          <button class="hover:text-gray-500 w-full text-[var(--primary-color)] border-3 border-transparent border-b-[var(--primary-color)] px-2 py-2">Inhalt</button>
-          <button class="hover:text-gray-500 w-full text-[var(--text-color-light)]">Layout</button>
-          <button class="hover:text-gray-500 w-full text-[var(--text-color-light)]">Erweitert</button>
-        </div>
+<!--        <div class="flex items-center justify-center w-full">-->
+<!--          <button class="hover:text-gray-500 w-full text-[var(&#45;&#45;primary-color)] border-3 border-transparent border-b-[var(&#45;&#45;primary-color)] px-2 py-2">Inhalt</button>-->
+<!--          <button class="hover:text-gray-500 w-full text-[var(&#45;&#45;text-color-light)]">Layout</button>-->
+<!--          <button class="hover:text-gray-500 w-full text-[var(&#45;&#45;text-color-light)]">Erweitert</button>-->
+<!--        </div>-->
 
-        <div v-if="true" class="mt-5">
-          <Content title=""></Content>
+        <div class="mt-5">
+          <div v-if="elementSelected?.blockType === 'text' ">
+            <ContentText :text-block="elementSelected.textBlockContent" @update="updateTextBlockFunc"></ContentText>
+          </div>
+
+          <div v-if="elementSelected?.blockType === 'project' ">
+            <ContentProject :project-block="elementSelected.project.find(p => p.id === elementSelectedId)" @update=""></ContentProject>
+          </div>
+
+          <div v-if="elementSelected?.blockType === 'skill' ">
+            <ContentSkill :skill-block="elementSelected.skills.find(s => s.id === elementSelectedId)"></ContentSkill>
+          </div>
+
+          <div v-if="elementSelected?.blockType === 'education' ">
+            <ContentEducation :education-block="elementSelected.education.find(e => e.id === elementSelectedId)"></ContentEducation>
+          </div>
+
+          <div v-if="elementSelected?.blockType === 'link' ">
+            <ContentLink :link-block="elementSelected.link.find(l => l.id === elementSelectedId)"></ContentLink>
+          </div>
         </div>
 
       </aside>
