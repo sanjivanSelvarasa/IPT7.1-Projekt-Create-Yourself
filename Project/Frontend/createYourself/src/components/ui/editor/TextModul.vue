@@ -6,6 +6,7 @@ import ModulStruct from "@/components/ui/editor/ModulStruct.vue";
 
 const props = defineProps<{
   textContent: TextBlockContent,
+  isActive: boolean,
 }>()
 
 const text = ref<string>(props.textContent.text)
@@ -63,17 +64,22 @@ const emit = defineEmits<{
   (e: 'down') : void,
   (e: 'copy') : void,
   (e: 'delete') : void,
+  (e: 'selected') : void,
 }>()
 
 function onDelete(){
   emit('delete')
 }
+
+function onSelected(){
+  emit("selected")
+}
 </script>
 
 <template>
   <ModulStruct @delete="onDelete()" svg="fa-solid fa-align-left" type="Text" :name="tag">
-    <div :class="[tagClass, fontWeightClass]" :style="{fontSize: props.textContent.fontSize ?? 16, color: props.textContent.color, textAlign: props.textContent.align}">
-      <input class="outline-gray-200! rounded-none!" :style="{textAlign: props.textContent.align}" v-model="text" type="text" placeholder="Schreib was rein ..."  />
-    </div>
+    <button class="w-full" @click="onSelected()" :class="[tagClass, fontWeightClass, props.isActive ? 'element-active' : '']" :style="{fontSize: props.textContent.fontSize ?? 16, color: props.textContent.color, textAlign: props.textContent.align}">
+      <textarea class="outline-gray-200! rounded-none! w-full" :style="{textAlign: props.textContent.align}" v-model="text"  placeholder="Schreib was rein ..."  />
+    </button>
   </ModulStruct>
 </template>
