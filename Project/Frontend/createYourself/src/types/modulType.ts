@@ -1,3 +1,3 @@
 export type ModulType = {
-  id: number,
+  ids: number[],
 }
