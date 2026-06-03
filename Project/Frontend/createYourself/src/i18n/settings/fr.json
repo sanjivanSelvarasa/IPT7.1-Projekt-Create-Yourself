@@ -17,6 +17,7 @@
   },
   "Safety-Segment": {
     "Title": "Sécurité",
+    "under-title": "Modifie ton mot de passe et sécurise ton compte.",
     "change-password": {
       "first-title": "Mot de passe",
       "second-title": "Nouveau mot de passe",

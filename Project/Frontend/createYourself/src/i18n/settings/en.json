@@ -17,6 +17,7 @@
   },
   "Safety-Segment": {
     "Title": "Safety",
+    "under-title": "Change your password and secure your account.",
     "change-password": {
       "first-title": "Password",
       "second-title": "New password",
