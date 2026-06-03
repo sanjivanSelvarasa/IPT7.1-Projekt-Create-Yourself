@@ -6,11 +6,20 @@ const props = defineProps<{
   description: string,
   codeUrl?: string,
   demoUrl?: string,
+  isActive: boolean,
 }>()
+
+const emit = defineEmits<{
+  (e: 'selected'): void,
+}>()
+
+function onSelected() {
+  emit('selected')
+}
 </script>
 
 <template>
-  <div class="hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col rounded-xl aspect-square overflow-hidden bg-[var(--surface-color)] border border-gray-200">
+  <button @click="onSelected()" class="hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col rounded-xl aspect-square overflow-hidden bg-[var(--surface-color)] border border-gray-200" :class="props.isActive ? 'element-active' : ''">
     <img class="h-full flex items-center justify-center text-[var(--text-color-white)] w-full bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]" src="../../../assets/" alt="PLACEHOLDER">
 
     <div class="h-fit p-4">
@@ -41,5 +50,5 @@ const props = defineProps<{
         </a>
       </div>
     </div>
-  </div>
+  </button>
 </template>
