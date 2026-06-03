@@ -1,10 +1,35 @@
 <script lang="ts" setup>
-
 import ModulStruct from "@/components/ui/editor/ModulStruct.vue";
-</script>
+import AddButton from "@/components/ui/editor/AddButton.vue";
 
+const emit = defineEmits<{
+  (e: 'add') : void,
+  (e: 'delete'): void,
+  (e: 'up'): void,
+  (e: 'down'): void,
+}>()
+
+function onAdd(){
+  emit('add')
+}
+
+function onDelete(){
+  emit('delete')
+}
+
+function onUp(){
+  emit('up')
+}
+
+function onDown(){
+  emit('down')
+}
+</script>
 <template>
-  <ModulStruct type="Link" name="5 Einträge" svg="fa-solid fa-link">
-    <slot></slot>
+  <ModulStruct @delete="onDelete()" @up="onUp()" @down="onDown()" type="Link" name="5 Einträge" svg="fa-solid fa-link">
+    <div class="grid grid-cols-4 gap-2">
+      <slot></slot>
+      <AddButton @click="onAdd()"></AddButton>
+    </div>
   </ModulStruct>
 </template>
