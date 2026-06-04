@@ -9,6 +9,19 @@ const props = defineProps<{
   linkBlock: SocialLinkType,
 }>()
 
+const emit = defineEmits<{
+  (e: 'update', link: SocialLinkType): void
+}>()
+
+function onUpdate() {
+  const updatedLink : SocialLinkType = {
+    ...props.linkBlock,
+    url: url.value,
+  }
+
+  emit('update', updatedLink)
+}
+
 const inputName = ref<string>(props.linkBlock.platform);
 const url = ref<string>(props.linkBlock.url);
 
@@ -40,7 +53,7 @@ watch(() => props.linkBlock, (newLink) => {
     </InputStruct>
 
     <InputStruct title="URL">
-      <input v-model="url" class="default-input w-full" type="text"/>
+      <input @change="onUpdate()" v-model="url" class="default-input w-full" type="text"/>
       <span class="text-xs text-[var(--text-color-light)]">Öffnet im neuem Tab</span>
     </InputStruct>
 
