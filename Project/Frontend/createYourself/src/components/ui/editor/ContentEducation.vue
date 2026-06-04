@@ -4,16 +4,33 @@
   import InputStruct from "@/components/ui/editor/InputStruct.vue";
   import SvgStruct from "@/components/ui/SvgStruct.vue";
   import {ref, watch} from "vue";
+  import type {SkillType} from "@/types/skillType.ts";
 
   const props = defineProps<{
     educationBlock: EducationType,
   }>()
 
+  const emit = defineEmits<{
+    (e: 'update', education: EducationType): void
+  }>()
+
+  function onUpdate(): void {
+    const updatedEducation : EducationType = {
+      ...props.educationBlock,
+      institutionName: inputInsitution.value,
+      degree: inputDegree.value,
+      startDate: startDate.value,
+      endDate: endDate.value,
+    }
+
+    emit('update', updatedEducation)
+  }
+
   const inputInsitution = ref<string>(props.educationBlock.institutionName)
   const inputDegree = ref<string>(props.educationBlock.degree)
 
-  const startDate = ref<string>(props.educationBlock.startDate)
-  const endDate = ref<string>(props.educationBlock.endDate)
+  const startDate = ref<string>(props.educationBlock.startDate?.slice(0, 10) ?? '')
+  const endDate = ref<string>(props.educationBlock.endDate?.slice(0, 10) ?? '')
 
   watch(() => props.educationBlock, (newEducation) => {
     inputInsitution.value = newEducation.institutionName;
@@ -28,11 +45,11 @@
     <span class="md-subtitle text-[var(--text-color-light)]">Einrichtung</span>
 
     <InputStruct title="Institution">
-      <input v-model="inputInsitution" class="default-input w-full" type="text"/>
+      <input @change="onUpdate()" v-model="inputInsitution" class="default-input w-full" type="text"/>
     </InputStruct>
 
     <InputStruct title="Abschluss / Fach">
-      <input v-model="inputDegree" class="default-input w-full" type="text"/>
+      <input @change="onUpdate()" v-model="inputDegree" class="default-input w-full" type="text"/>
     </InputStruct>
 
     <div class="divider"></div>
@@ -41,11 +58,11 @@
 
     <InputStruct title="Von - Bis">
       <div class="flex gap-2">
-        <input v-model="startDate" class="default-input w-full" type="text"/>
+        <input @change="onUpdate()" v-model="startDate" class="default-input w-full" type="text" placeholder="YYYY-MM-DD"/>
         <SvgStruct>
           <i class="fa-solid fa-angle-right"></i>
         </SvgStruct>
-        <input v-model="endDate" class="default-input w-full" type="text"/>
+        <input @change="onUpdate()" v-model="endDate" class="default-input w-full" type="text" placeholder="YYYY-MM-DD"/>
       </div>
     </InputStruct>
   </ContentStruct>
