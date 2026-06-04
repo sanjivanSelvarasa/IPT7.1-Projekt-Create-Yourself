@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 import Background from "@/components/layout/Background.vue";
 import NavApp from "@/components/layout/NavApp.vue";
 import MainContent from "@/components/layout/MainContent.vue";
@@ -10,12 +9,100 @@ import StatsPreview from "@/components/ui/StatsPreview.vue";
 import StatsCard from "@/components/ui/StatsCard.vue";
 import Subtitle from "@/components/ui/Subtitle.vue";
 import Checklist from "@/components/ui/Checklist.vue";
-import {ref} from "vue";
+import {computed, onMounted, ref} from "vue";
+import {usePortfolioStore} from "@/stores/portfolioStore.ts";
+import {useRoute, useRouter} from "vue-router";
+import type {PortfolioType} from "@/types/portfolioType.ts";
+import router from "@/router";
+import PublishedNotification from "@/components/ui/PublishedNotification.vue";
 
 const isPublic = ref<boolean>(true);
+
+const route = useRoute();
+const portfolioId = Number(route.params.id)
+const portfolioStore = usePortfolioStore();
+
+const portfolio = ref<any | null>(null);
+const portfolioFacts = ref<PortfolioType | null>(null);
+
+const checkTitleAndDescription = computed<boolean>(() => {
+  return (portfolioFacts.value?.description !== null && portfolioFacts.value?.description.length !== 0) &&
+    portfolioFacts.value?.title !== null && portfolioFacts.value?.title.length !== 0;
+})
+
+const checkLeastOneProject = computed<boolean>(() => {
+  if(portfolio?.value === null) return false;
+  return portfolio?.value.projects?.length > 0;
+})
+
+const checkLeastOneLink = computed<boolean>(() => {
+  if(portfolio?.value === null) return false;
+  return portfolio?.value.socialLinks?.length > 0;
+})
+
+const checkDesignIsChoosen = computed<boolean>(() => {
+  if(portfolio?.value === null) return false;
+  return portfolioFacts.value?.currentThemeId !== null
+})
+
+const isReadyToPublish = computed(() => {
+  return checkTitleAndDescription.value && checkLeastOneProject.value && checkLeastOneLink.value && checkDesignIsChoosen.value
+})
+
+onMounted(async () => {
+  portfolio.value = await portfolioStore.getFullPortfolioById(portfolioId) ?? null;
+  portfolioFacts.value = portfolio.value.portfolio
+
+  console.log(portfolioFacts.value)
+})
+
+async function pushToEditor(){
+  await router.push(`/portfolio/${portfolioId}/editor`);
+}
+
+const isPortfolioPublished = ref<boolean>(false);
+const error = ref<string | null>(null);
+async function publishPortfolio(){
+  if(portfolioFacts.value === null) return;
+
+ if(!isPublic.value) {
+   error.value = "Keine öffentliche Sichtbarkeit angegeben.";
+   return
+ }
+  error.value = null
+
+  const publishedPortfolio : PortfolioType = {
+    ...portfolioFacts.value,
+    visibility: 'public',
+  }
+
+  try{
+    await portfolioStore.updatePortfolio(publishedPortfolio)
+    isPortfolioPublished.value = true
+  }catch(err){
+    error.value = err ? err.message : 'Portfolio konnte nicht öffentlich geschaltet werden.';
+  }
+}
+
+const isCopied = ref<boolean>(false);
+async function copySlug(){
+  try{
+    await navigator.clipboard.writeText(portfolioFacts.value?.slug ?? '')
+    isCopied.value = true
+
+    setTimeout(()=>{
+      isCopied.value = false
+    }, 2000)
+  }catch{}
+}
+
 </script>
 
 <template>
+  <div v-if="isPortfolioPublished">
+    <PublishedNotification :slug="portfolioFacts?.slug ?? '' "></PublishedNotification>
+  </div>
+
   <Background>
     <NavApp></NavApp>
 
@@ -23,25 +110,25 @@ const isPublic = ref<boolean>(true);
 
     <MainContent class="mb-5">
       <div class="grid grid-cols-6 gap-8 w-full">
-        <div class="col-span-4 flex flex-col items-start justify-center gap-6">
+        <div class="lg:col-span-4 col-span-6 flex flex-col items-start justify-center gap-6">
           <Interface class="relative flex items-center justify-start gap-5">
-            <div v-if="true" class="absolute top-0 left-0 w-1 h-full bg-green-500"></div>
+            <div v-if="isReadyToPublish" class="absolute top-0 left-0 w-1 h-full bg-green-500"></div>
 
-            <div v-if="false" class="absolute top-0 left-0 w-1 h-full bg-red-500"></div>
+            <div v-if="!isReadyToPublish" class="absolute top-0 left-0 w-1 h-full bg-red-500"></div>
 
-            <SvgStruct v-if="true" class="w-[50px] h-[50px] rounded-2xl bg-green-50 border border-green-400 text-green-400">
+            <SvgStruct v-if="isReadyToPublish" class="min-w-[50px] min-h-[50px] rounded-2xl bg-green-50 border border-green-400 text-green-400">
               <i class="fa-solid fa-check"></i>
             </SvgStruct>
 
-            <SvgStruct v-if="false" class="w-[50px] h-[50px] rounded-2xl bg-red-50 border border-red-400 text-red-400">
+            <SvgStruct v-if="!isReadyToPublish" class="w-[50px] h-[50px] rounded-2xl bg-red-50 border border-red-400 text-red-400">
               <i class="fa-solid fa-x"></i>
             </SvgStruct>
 
             <div class="flex flex-col items-start justify-center gap-2">
               <span class="uppercase text-sm text-[var(--text-color-light)]">Status</span>
-              <h2 v-if="true">Bereit zur Veröffentlichung</h2>
-              <h2 v-if="false">Noch nicht bereit zur Veröffentlichung</h2>
-              <div class="flex items-center justify-start gap-5 text-sm">
+              <h2 v-if="isReadyToPublish">Bereit zur Veröffentlichung</h2>
+              <h2 v-if="!isReadyToPublish">Noch nicht bereit zur Veröffentlichung</h2>
+              <div class="flex flex-col md:flex-row items-start md:items-center justify-start gap-5 text-sm">
                 <div class="flex justify-start items-center gap-2 text-[var(--text-color-light)]">
                   <SvgStruct>
                     <i class="fa-regular fa-clock"></i>
@@ -56,7 +143,7 @@ const isPublic = ref<boolean>(true);
                     </SvgStruct>
                     <span>Aktuell:</span>
                   </div>
-                  <span class="text-xs px-2 py-1 text-gray-400 bg-gray-50 rounded-full font-semibold border border-gray-200">Privat</span>
+                  <span class="text-xs px-2 py-1 text-gray-400 bg-gray-50 rounded-full font-semibold border border-gray-200 uppercase">{{ portfolioFacts?.visibility ?? 'LADE FEHLER' }}</span>
                 </div>
               </div>
             </div>
@@ -68,20 +155,20 @@ const isPublic = ref<boolean>(true);
             </Subtitle>
 
             <div class="grid grid-cols-2 gap-2">
-              <StatsPreview class="col-span-1" title="Portfolio-Titel" value="Max Mustermann - Web Developer"></StatsPreview>
-              <StatsPreview class="col-span-1" title="Hauptsprache" value="Deutsch"></StatsPreview>
-              <StatsPreview class="col-span-2" title="Kurzbeschreibung" value="Junior Web Entwickler mit Fokus auf modernes Frontend, Vue.js und UI-Design."></StatsPreview>
-              <StatsPreview title="Gewähltes Template" value="Minimal"></StatsPreview>
+              <StatsPreview class="col-span-1" title="Portfolio-Titel" :value="portfolioFacts?.title === null || portfolioFacts?.title.length === 0 ? 'Keinen Titel gewählt' : portfolioFacts?.title "></StatsPreview>
+              <StatsPreview class="col-span-1" title="Hauptsprache" :value="portfolioFacts?.languageCode === null || portfolioFacts?.languageCode.length === 0 ? 'Keine Sprache ausgewählt' : portfolioFacts?.languageCode "></StatsPreview>
+              <StatsPreview class="col-span-2" title="Kurzbeschreibung" :value="portfolioFacts?.description === null || portfolioFacts?.description.length === 0 ? 'Keine Beschreibung' : portfolioFacts?.description  "></StatsPreview>
+              <StatsPreview title="Gewähltes Template" :value="portfolioFacts?.currentThemeId ?? 'Keine Ausgewählt' "></StatsPreview>
               <StatsPreview title="Sichtbarkeit" value="Private"></StatsPreview>
             </div>
 
             <div class="divider"></div>
 
-            <div class="grid grid-cols-4 gap-2">
-              <StatsCard title="Projekte" value="6"></StatsCard>
-              <StatsCard title="Skills" value="12"></StatsCard>
-              <StatsCard title="Erfahrungen" value="3"></StatsCard>
-              <StatsCard title="Links" value="4"></StatsCard>
+            <div class="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-2">
+              <StatsCard title="Projekte" :value="portfolio?.projects?.length ?? 0"></StatsCard>
+              <StatsCard title="Skills" :value="portfolio?.skills?.length ?? 0"></StatsCard>
+              <StatsCard title="Erfahrungen" :value="portfolio?.experiences?.length ?? 0"></StatsCard>
+              <StatsCard title="Links" :value="portfolio?.socialLinks?.length ?? 0"></StatsCard>
             </div>
           </Interface>
 
@@ -91,18 +178,19 @@ const isPublic = ref<boolean>(true);
             </Subtitle>
 
             <div class="flex items-center justify-start gap-2 overflow-hidden bg-gray-50 rounded-lg border border-gray-200 mt-5">
-              <SvgStruct class="w-[75px] h-[50px] bg-gray-100 text-[var(--text-color-light)] text-sm border border-transparent border-r-gray-200">
+              <SvgStruct class="min-w-[50px] min-h-[50px] bg-gray-100 text-[var(--text-color-light)] text-sm border border-transparent border-r-gray-200">
                 <i class="fa-solid fa-link"></i>
               </SvgStruct>
-              <div class="w-full font-semibold">
+              <div class="w-full font-semibold text-sm sm:text-base">
                 <span>createyourself/</span>
-                <span class="text-[var(--primary-color)]">max-mustermann</span>
+                <span class="text-[var(--primary-color)]">{{ portfolioFacts?.slug ?? 'Slug fehlgeschlagen' }}</span>
               </div>
-              <button class="hover:bg-gray-50 transition duration-75 border border-transparent border-l-gray-200 px-3 py-3 bg-[var(--surface-color)] flex items-center justify-center gap-2 text-nowrap">
+              <button @click="copySlug()" class="hidden hover:bg-gray-50 transition duration-75 border border-transparent border-l-gray-200 px-3 py-3 bg-[var(--surface-color)] sm:flex items-center justify-center gap-2 text-nowrap">
                 <SvgStruct>
                   <i class="fa-regular fa-clone"></i>
                 </SvgStruct>
-                <span>Link kopieren</span>
+                <span v-if="!isCopied">Link kopieren</span>
+                <span v-else>Link kopiert</span>
               </button>
             </div>
 
@@ -122,10 +210,10 @@ const isPublic = ref<boolean>(true);
             </Subtitle>
 
             <ul class="mt-2">
-              <Checklist title="Titel und Beschreibung vorhanden" :is-done="true"></Checklist>
-              <Checklist title="Mindestens ein Projekt hinzugefügt" :is-done="true"></Checklist>
-              <Checklist title="Kontaktlink vorhanden" :is-done="true"></Checklist>
-              <Checklist title="Design ausgewählt" :is-done="true"></Checklist>
+              <Checklist title="Titel und Beschreibung vorhanden" :is-done="checkTitleAndDescription"></Checklist>
+              <Checklist title="Mindestens ein Projekt hinzugefügt" :is-done="checkLeastOneProject"></Checklist>
+              <Checklist title="Kontaktlink vorhanden" :is-done="checkLeastOneLink"></Checklist>
+              <Checklist title="Design ausgewählt" :is-done="checkDesignIsChoosen"></Checklist>
               <Checklist title="Vorschau geprüft" :is-done="false"></Checklist>
             </ul>
           </Interface>
@@ -135,7 +223,7 @@ const isPublic = ref<boolean>(true);
               <i class="fa-regular fa-eye"></i>
             </Subtitle>
 
-            <div class="grid grid-cols-2 gap-2 mt-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-5">
               <button @click="isPublic = true" :class="isPublic ? 'visibility-active' : '' " class="hover:bg-gray-50 transition duration-75 flex items-start justify-start gap-3 px-4 py-3 border border-gray-200 rounded-xl">
                 <SvgStruct v-if="!isPublic" class="radio text-[var(--text-color-light)] mt-1 text-lg">
                   <i class="fa-regular fa-circle"></i>
@@ -185,23 +273,23 @@ const isPublic = ref<boolean>(true);
 
             <div class="divider"></div>
 
-            <div class="flex items-center justify-between gap-2">
-              <RouterLink to="/editor" class="hover:text-[var(--text-color)] transition duration-75 flex items-center justify-start gap-2 text-[var(--text-color-light)]">
+            <div class="flex flex-col-reverse sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-2 w-full">
+              <button @click="pushToEditor()" class="hover:text-[var(--text-color)] transition duration-75 text-nowrap flex items-center justify-start gap-2 text-[var(--text-color-light)]">
                 <SvgStruct>
                   <i class="fa-solid fa-angle-left"></i>
                 </SvgStruct>
                 <span>Zurück zum Editor</span>
-              </RouterLink>
+              </button>
 
-              <div class="flex items-center justify-center gap-2">
-                <button class="hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] transition duration-75 flex items-center justify-center gap-2 px-3 py-2 border border-gray-200 rounded-lg bg-[var(--surface-color)] text-sm text-[var(--text-color)]">
+              <div class="w-full flex flex-col-reverse sm:flex-row items-center justify-end gap-4 sm:gap-2 text-nowrap">
+                <button class="w-full sm:w-fit hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] transition duration-75 flex items-center justify-center gap-2 sm:px-3 sm:py-2 p-4 border border-gray-200 rounded-lg bg-[var(--surface-color)] text-sm text-[var(--text-color)]">
                   <SvgStruct>
                     <i class="fa-solid fa-eye"></i>
                   </SvgStruct>
                   <span>Zurück zur Vorschau</span>
                 </button>
 
-                <button class="hover:text-[var(--primary-color)] hover:bg-transparent hover:border-[var(--primary-color)] transition duration-75 flex items-center justify-center border border-transparent gap-2 px-3 py-2 rounded-lg bg-[var(--primary-color)] text-sm text-[var(--text-color-white)]">
+                <button @click="publishPortfolio()" class="w-full sm:w-fit text-nowrap hover:text-[var(--primary-color)] hover:bg-transparent hover:border-[var(--primary-color)] transition duration-75 flex items-center justify-center border border-transparent gap-2 sm:px-3 sm:py-2 p-4 rounded-lg bg-[var(--primary-color)] text-sm text-[var(--text-color-white)]">
                   <SvgStruct>
                     <i class="fa-regular fa-paper-plane"></i>
                   </SvgStruct>
@@ -209,10 +297,12 @@ const isPublic = ref<boolean>(true);
                 </button>
               </div>
             </div>
+
+            <span class="text-red-500 mt-3">{{ error }}</span>
           </Interface>
         </div>
 
-        <div class="col-span-2 flex flex-col gap-6">
+        <div class="col-span-2 lg:flex flex-col gap-6 hidden">
           <Interface class="h-fit">
             <div class="flex items-center justify-start text-sm gap-2 border border-transparent">
               <SvgStruct>
@@ -230,12 +320,12 @@ const isPublic = ref<boolean>(true);
             <div class="flex items-center justify-between gap-2 text-sm">
               <div class="flex items-center justify-start gap-2">
                 <span class="text-[var(--text-color-light)]">Template: </span>
-                <span class="font-semibold">Minimal</span>
+                <span class="font-semibold">{{ portfolioFacts?.currentThemeId ?? 'Keine Ausgewählt' }}</span>
               </div>
 
               <div class="flex items-center justify-start gap-2">
                 <span class="text-[var(--text-color-light)]">Sprache: </span>
-                <span class="font-semibold">DE</span>
+                <span class="font-semibold uppercase">{{ portfolioFacts?.languageCode ?? 'Nicht ausgewählt' }}</span>
               </div>
             </div>
           </Interface>
