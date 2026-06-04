@@ -49,7 +49,16 @@ export async function updatePortfolioByIdApi(id: number, portfolio: PortfolioTyp
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`
-    }
+    },
+    body: JSON.stringify({
+      title: portfolio.title,
+      description: portfolio.description,
+      slug: portfolio.slug,
+      visibility: portfolio.visibility,
+      templateId: portfolio.templateId,
+      languageCode: portfolio.languageCode,
+      currentThemeId: portfolio.currentThemeId,
+    })
   })
 }
 
