@@ -45,6 +45,12 @@ import ContentProject from "@/components/ui/editor/ContentProject.vue";
 import ContentSkill from "@/components/ui/editor/ContentSkill.vue";
 import ContentEducation from "@/components/ui/editor/ContentEducation.vue";
 import ContentLink from "@/components/ui/editor/ContentLink.vue";
+import type {ProjectType} from "@/types/projectType.ts";
+import type {SkillType} from "@/types/skillType.ts";
+import type {UpdateSkillType} from "@/types/updateSkillType.ts";
+import type {EducationType} from "@/types/educationType.ts";
+import type {SocialLinkType} from "@/types/SocialLinkType.ts";
+import type {SectionType} from "@/types/sectionType.ts";
 
 const portfolioName = ref<string>('');
 
@@ -188,6 +194,18 @@ async function deleteSection(sectionId: number){
 const sectionSelected = ref<number | null>(null);
 function sectionSelectedFunction(sectionId: number){
   sectionSelected.value = sectionId
+}
+
+async function updateSectionTitle(newTitle: string){
+  if(sectionSelected.value === null || portfolioFacts.value === null) return;
+
+  const currSection = portfolioSectionStore.sections.find(section => section.id === sectionSelected.value);
+  const updatedSection : CreateSectionType = {
+    ...currSection,
+    title: newTitle
+  }
+
+  await portfolioSectionStore.updateSection(portfolioId, portfolioFacts.value?.currentVersionId, sectionSelected.value, updatedSection)
 }
 
 const elementSelectedId = ref<number | null>(null);
@@ -607,8 +625,6 @@ async function deleteEditorBlockFunc(editorBlock: EditorBlockType){
 }
 
 async function updateTextBlockFunc(textBlock: TextBlockContent){
-  console.log('updating...')
-
   if(portfolioFacts.value === null || sectionSelected.value === null) return;
 
   const editor = elementSelected.value!
@@ -628,6 +644,54 @@ async function updateTextBlockFunc(textBlock: TextBlockContent){
 
   try{
     await editorBlockStore.updateEditorBlock(portfolioId, portfolioFacts.value?.currentVersionId, sectionSelected.value, editor.id, updatedEditor)
+    await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionSelected.value)
+    await loadSortedSections()
+  }catch {}
+}
+
+async function updateProjectBlockFunc(projectBlock: ProjectType){
+  if(portfolioFacts.value === null || sectionSelected.value === null) return;
+
+  const updatedProject : CreateProjectType = {
+      ...projectBlock,
+  }
+
+  try{
+    await projectStore.updateProject(portfolioId, projectBlock.id, updatedProject)
+    await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionSelected.value)
+    await loadSortedSections()
+  }catch {}
+}
+
+async function updateSkillBlockFunc(skillBlock: UpdateSkillType){
+  if(portfolioFacts.value === null || sectionSelected.value === null) return;
+
+  try{
+    await skillStore.updateSkill(portfolioId, skillBlock.id, skillBlock)
+    await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionSelected.value)
+    await loadSortedSections()
+  }catch {}
+}
+
+async function updateEducationBlockFunc(educationBlock: EducationType){
+  if(portfolioFacts.value === null || sectionSelected.value === null) return;
+
+  const updatedEducation : CreateEducationType = {
+    ...educationBlock,
+  }
+
+  try{
+    await educationStore.updateEducation(portfolioId, educationBlock.id, updatedEducation)
+    await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionSelected.value)
+    await loadSortedSections()
+  }catch {}
+}
+
+async function updateSocialLinkBlockFunc(linkBlock: SocialLinkType){
+  if(portfolioFacts.value === null || sectionSelected.value === null) return;
+
+  try{
+    await socialLinkStore.updateSocialLink(portfolioId, linkBlock.id, linkBlock.url)
     await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionSelected.value)
     await loadSortedSections()
   }catch {}
@@ -756,7 +820,7 @@ async function updateTextBlockFunc(textBlock: TextBlockContent){
 
         <div class="flex flex-col w-full max-w-[1200px] px-5 2xl:px-0 py-10 flex-1 overflow-y-hidden min-h-0">
           <div class="flex flex-col gap-5 w-full box-content flex-1 min-h-0 overflow-y-scroll no-scrollbar">
-            <SectionStruct v-for="section in sortedSections" @selected="sectionSelectedFunction(section.id)" :is-selected="sectionSelected === section.id" @delete="deleteSection(section.id)" :key="section.id" :name="section.sectionType" :title="section.title">
+            <SectionStruct v-for="section in sortedSections" @update="updateSectionTitle" @selected="sectionSelectedFunction(section.id)" :is-selected="sectionSelected === section.id" @delete="deleteSection(section.id)" :key="section.id" :name="section.sectionType" :title="section.title">
               <div v-for="editor in section.editorBlock" :key="editor.id">
                 <TextModul v-if="editor.blockType === 'text' " @delete="deleteEditorBlockFunc(editor)" @selected="elementSelectedFunction(editor.textBlockContent.id, editor)" :is-active="elementSelectedId === editor.textBlockContent.id" :text-content="editor.textBlockContent"></TextModul>
 
@@ -823,19 +887,19 @@ async function updateTextBlockFunc(textBlock: TextBlockContent){
           </div>
 
           <div v-if="elementSelected?.blockType === 'project' ">
-            <ContentProject :project-block="elementSelected.project.find(p => p.id === elementSelectedId)" @update=""></ContentProject>
+            <ContentProject :project-block="elementSelected.project.find(p => p.id === elementSelectedId)" @update="updateProjectBlockFunc"></ContentProject>
           </div>
 
           <div v-if="elementSelected?.blockType === 'skill' ">
-            <ContentSkill :skill-block="elementSelected.skills.find(s => s.id === elementSelectedId)"></ContentSkill>
+            <ContentSkill :skill-block="elementSelected.skills.find(s => s.id === elementSelectedId)" @change="updateSkillBlockFunc"></ContentSkill>
           </div>
 
           <div v-if="elementSelected?.blockType === 'education' ">
-            <ContentEducation :education-block="elementSelected.education.find(e => e.id === elementSelectedId)"></ContentEducation>
+            <ContentEducation :education-block="elementSelected.education.find(e => e.id === elementSelectedId)" @update="updateEducationBlockFunc"></ContentEducation>
           </div>
 
           <div v-if="elementSelected?.blockType === 'link' ">
-            <ContentLink :link-block="elementSelected.link.find(l => l.id === elementSelectedId)"></ContentLink>
+            <ContentLink :link-block="elementSelected.link.find(l => l.id === elementSelectedId)" @update="updateSocialLinkBlockFunc"></ContentLink>
           </div>
         </div>
 
