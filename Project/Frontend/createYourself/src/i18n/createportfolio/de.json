@@ -12,10 +12,12 @@
     "portfolio-box": "Mein Portfolio",
     "description": "Kurzbeschreibung",
     "description-box": "Eine kurze Beschreibung über dein Portfolio",
-    "Characters": "0 / 180 Zeichen",
+    "Characters": " 180 Zeichen",
     "portfolio-Link" : "Portfolio-Link",
     "portfolio-box-left" : "createyourself/",
-    "portfolio-box-right" : "max mustermann"
+    "portfolio-box-right" : "max mustermann",
+    "available" : "Verfügbar",
+    "unavailable" : "Vergeben"
   },
   "step-two-box" : {
     "step-overview" : "Schritt 2",
@@ -45,6 +47,7 @@
       "third-title" : "Professionell",
       "third-subtitle" : "Strukturiert für Projekte und Erfahrung"
     },
+    "info": "Jegliche Einstellungen kannst du jederzeit nachträglich anpassen.",
     "cancel-button" : "Abbrechen",
     "portfolio-button" : "Portfolio erstellen"
   }
