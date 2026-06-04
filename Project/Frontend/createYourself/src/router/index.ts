@@ -47,7 +47,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/public',
+      path: '/:slug',
       name: 'public',
       component: Public,
       meta: { requiresAuth: false },
@@ -65,7 +65,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/publish',
+      path: '/portfolio/:id/publish',
       name: 'PublishPortfolio',
       component: PublishPortfolio,
       meta: { requiresAuth: true },
