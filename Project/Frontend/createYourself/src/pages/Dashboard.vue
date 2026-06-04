@@ -146,7 +146,7 @@ const tl = (key: string) => t(`dashboard.${key}`);
             <div>
               <i class="fa-solid fa-magnifying-glass"></i>
             </div>
-            <span>Keine Ergebnisse gefunden</span>
+            <span>{{ tl("start.no-results") }}</span>
           </div>
         </div>
 
