@@ -10,6 +10,7 @@
   const emit = defineEmits<{
     (e: 'delete') : void
     (e: 'selected') : void
+    (e: 'update', title: string) : void
   }>()
 
   function onDelete(){
@@ -18,6 +19,10 @@
 
   function onSelected(){
     emit('selected')
+  }
+
+  function onUpdate(){
+    emit('update', title.value)
   }
 
   const title = ref<string>(props.title)
@@ -31,7 +36,7 @@
           <i class="fa-solid fa-grip-vertical"></i>
         </div>
         <span class="select-none text-xs uppercase text-[var(--text-color-light)] px-2 py-1 rounded-md border border-gray-200 font-semibold bg-gray-50">{{ props.name }}</span>
-        <input v-model="title" type="text" class="hover:bg-gray-50 transition duration-100 rounded-sm! px-2 py-1">
+        <input @change="onUpdate()" v-model="title" type="text" class="hover:bg-gray-50 transition duration-100 rounded-sm! px-2 py-1">
       </div>
       <div class="flex items-center justify-center gap-2 text-[var(--text-color-light)]">
 
