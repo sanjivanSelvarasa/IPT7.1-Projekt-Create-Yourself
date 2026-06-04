@@ -33,7 +33,7 @@
     </div>
 
     <div v-if="startDate !== null && endDate !== null" class="flex items-start justify-center text-[var(--text-color-light)] text-sm h-full">
-      <span class="h-full">{{ props.startDate?.getFullYear() }} - {{ props.endDate?.getFullYear() }}</span>
+      <span class="h-full">{{ props.startDate?.toString().slice(0, 7) }} - {{ props.endDate?.toString().slice(0, 7) }}</span>
     </div>
   </button>
 </template>
