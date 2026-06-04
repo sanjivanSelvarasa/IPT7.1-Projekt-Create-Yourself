@@ -9,10 +9,20 @@
 
   const emit = defineEmits<{
     (e: 'edit', id: number): void
+    (e: 'publish', id: number): void
+    (e: 'unpublish'): void
   }>()
 
   function submitEdit(): void{
     emit('edit', props.portfolio.id)
+  }
+
+  function submitPublish(): void{
+    emit('publish', props.portfolio.id)
+  }
+
+  function submitUnpublish(): void{
+    emit('unpublish')
   }
 
   const { t } = useI18n();
@@ -87,14 +97,14 @@
         <span>{{ tl("saved-card.edit-button") }}</span>
       </button>
 
-      <RouterLink to="/publish" v-if="props.portfolio.visibility === 'private'" class="hover:scale-101 hover:bg-green-100 transition duration-100 cursor-pointer mt-3 flex items-center justify-center gap-2 text-[var(--accent-color)] text-sm ml-4 px-3 py-1 bg-green-50 border border-green-200 rounded-lg">
+      <button @click="submitPublish()" v-if="props.portfolio.visibility === 'private'" class="hover:scale-101 hover:bg-green-100 transition duration-100 cursor-pointer mt-3 flex items-center justify-center gap-2 text-[var(--accent-color)] text-sm ml-4 px-3 py-1 bg-green-50 border border-green-200 rounded-lg">
         <div class="flex items-center justify-center">
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
         </div>
         <span>{{ tl("saved-card.publish") }}</span>
-      </RouterLink>
+      </button>
 
-      <button v-if="props.portfolio.visibility === 'public'" class="hover:scale-101 hover:bg-yellow-100 transition duration-100 cursor-pointer mt-3 flex items-center justify-center gap-2 text-yellow-600 text-sm ml-4 px-3 py-1 bg-yellow-50 border border-yellow-400 rounded-lg">
+      <button @click="submitUnpublish()" v-if="props.portfolio.visibility === 'public'" class="hover:scale-101 hover:bg-yellow-100 transition duration-100 cursor-pointer mt-3 flex items-center justify-center gap-2 text-yellow-600 text-sm ml-4 px-3 py-1 bg-yellow-50 border border-yellow-400 rounded-lg">
         <div class="flex items-center justify-center">
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
         </div>
