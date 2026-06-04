@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   const props = defineProps<{
     title: string,
-    value: string,
+    value: number,
   }>()
 </script>
 
