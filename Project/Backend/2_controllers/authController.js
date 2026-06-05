@@ -2,10 +2,11 @@ const authService = require('../3_services/authService')
 const { parseEmail, parsePassword, parseTokenFromRequest } = require('../5_utils/authParsers')
 
 const REFRESH_TOKEN_COOKIE_NAME = 'refreshToken'
+const isProduction = process.env.NODE_ENV === 'production';
 const REFRESH_TOKEN_COOKIE_OPTIONS = {
     httpOnly: true,
-    secure: true,
-    sameSite: 'none'
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax'
 }
 
 async function refreshToken(req, res) {

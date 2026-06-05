@@ -84,6 +84,11 @@ async function loadSortedSections() {
 onMounted(async () => {
   portfolio.value = await portfolioStore.getFullPortfolioById(portfolioId) ?? null
 
+  if (!portfolio.value) {
+    error.value = 'Failed to load portfolio.'
+    return
+  }
+
   portfolioFacts.value = {
     id: portfolio.value.portfolio.id,
     currentThemeId: portfolio.value.portfolio.currentThemeId,

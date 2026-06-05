@@ -20,7 +20,7 @@ function onSelected() {
 
 <template>
   <button @click="onSelected()" class="hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col rounded-xl aspect-square overflow-hidden bg-[var(--surface-color)] border border-gray-200" :class="props.isActive ? 'element-active' : ''">
-    <img class="h-full flex items-center justify-center text-[var(--text-color-white)] w-full bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]" src="../../../assets/" alt="PLACEHOLDER">
+    <div class="h-full w-full bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]"></div>
 
     <div class="h-fit p-4">
       <div class="flex flex-col items-start justify-center">

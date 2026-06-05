@@ -13,7 +13,10 @@ export async function apiFetch<T>(endpoint: string, options?: RequestInit): Prom
     }
   });
 
-  if(res.status === 401 || res.status === 403) {
+  const AUTH_ENDPOINTS = ['/users/login', '/users/register', '/token'];
+  const isAuthEndpoint = AUTH_ENDPOINTS.some(path => endpoint.startsWith(path));
+
+  if(!isAuthEndpoint && (res.status === 401 || res.status === 403)) {
     try{
       await authStore.refreshToken();
 

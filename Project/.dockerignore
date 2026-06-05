@@ -1,0 +1,12 @@
+.git
+.gitignore
+README.md
+Documentation
+**/node_modules
+**/dist
+**/coverage
+**/.vite
+**/.cache
+**/test-results
+**/*.log
+Frontend/createYourself/e2e

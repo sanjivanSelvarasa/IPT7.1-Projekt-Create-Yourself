@@ -77,26 +77,20 @@ const tl = (key: string) => t(`navHome.${key}`);
           <option
             :selected="props.langSelected === 'de' || !props.langSelected"
             value="de"
-            class="flex items-center justify-center gap-2"
           >
-            <div class="flex items-center justify-center">
-              <i class="fa-solid fa-flag"></i>
-            </div>
-            <span>Deutsch</span>
+            Deutsch
           </option>
           <option
             :selected="props.langSelected === 'en'"
             value="en"
-            class="flex items-center justify-center gap-2"
           >
-            <span>English</span>
+            English
           </option>
           <option
             :selected="props.langSelected === 'fr'"
             value="fr"
-            class="flex items-center justify-center gap-2"
           >
-            <span>Français</span>
+            Francais
           </option>
         </select>
       </div>

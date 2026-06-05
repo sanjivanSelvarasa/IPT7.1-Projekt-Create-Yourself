@@ -45,7 +45,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     try{
       const data = await tokenApi()
-      token.value = data
+      token.value = data.accessToken
       localStorage.setItem("token", data.accessToken)
     }catch(err){
       error.value = err ? err.text : 'Getting refresh token failed'

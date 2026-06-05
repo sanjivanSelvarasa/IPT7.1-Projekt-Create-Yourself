@@ -259,9 +259,23 @@ begin
 end
 go
 
+if col_length('dbo.Project', 'img_url') is null
+begin
+	alter table Project
+	add img_url nvarchar(255);
+end
+go
+
 if col_length('dbo.PortfolioSkill', 'img_url') is null
 begin
 	alter table PortfolioSkill
+	add img_url nvarchar(255);
+end
+go
+
+if col_length('dbo.Experience', 'img_url') is null
+begin
+	alter table Experience
 	add img_url nvarchar(255);
 end
 go
