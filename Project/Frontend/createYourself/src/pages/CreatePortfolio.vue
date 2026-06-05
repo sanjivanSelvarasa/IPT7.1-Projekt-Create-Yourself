@@ -81,6 +81,11 @@ async function createPortfolioFunction() {
     error.value = portfolioStore.error ? portfolioStore.error : e;
   }
 }
+
+const activeTemplate = ref<number | null>(null);
+function changeActiveTemplate(id: number) {
+  activeTemplate.value = id;
+}
 </script>
 
 <template>
@@ -123,6 +128,7 @@ async function createPortfolioFunction() {
           <InputApp :name="tl('step-one-box.description') + ' *'" for="description">
             <textarea
               v-model="description"
+              maxlength="180"
               class="default-input w-full min-h-[100px] outline-none"
               name="description"
               :placeholder="tl('step-one-box.description-box')"
@@ -286,8 +292,15 @@ async function createPortfolioFunction() {
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-2">
             <button
+              @click="changeActiveTemplate(1)"
+              :class="activeTemplate === 1 ? 'template-active' : '' "
               class="relative overflow-hidden hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:-translate-y-1 transition-all ease-in-out duration-150 bg-transparent border-2 border-gray-200 rounded-2xl"
             >
+              <div class="svg transition duration-100 hidden absolute top-0 right-0 m-4">
+                <SvgStruct class="rounded-full min-w-[30px] min-h-[30px] text-sm bg-[var(--secondary-color)] text-[var(--text-color-white)]">
+                  <i class="fa-solid fa-check"></i>
+                </SvgStruct>
+              </div>
               <div class="h-[200px] w-full">
                 <svg
                   viewBox="0 0 200 124"
@@ -321,8 +334,15 @@ async function createPortfolioFunction() {
             </button>
 
             <button
+              @click="changeActiveTemplate(2)"
+              :class="activeTemplate === 2 ? 'template-active' : '' "
               class="relative overflow-hidden hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:-translate-y-1 transition-all ease-in-out duration-150 bg-transparent border-2 border-gray-200 rounded-2xl"
             >
+              <div class="svg transition duration-100 hidden absolute top-0 right-0 m-4">
+                <SvgStruct class="rounded-full min-w-[30px] min-h-[30px] text-sm bg-[var(--secondary-color)] text-[var(--text-color-white)]">
+                  <i class="fa-solid fa-check"></i>
+                </SvgStruct>
+              </div>
               <div class="h-[200px]">
                 <svg
                   viewBox="0 0 200 124"
@@ -366,8 +386,15 @@ async function createPortfolioFunction() {
             </button>
 
             <button
+              @click="changeActiveTemplate(3)"
+              :class="activeTemplate === 3 ? 'template-active' : '' "
               class="relative overflow-hidden hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] hover:-translate-y-1 transition-all ease-in-out duration-150 bg-transparent border-2 border-gray-200 rounded-2xl"
             >
+              <div class="svg transition duration-100 hidden absolute top-0 right-0 m-4">
+                <SvgStruct class="rounded-full min-w-[30px] min-h-[30px] text-sm bg-[var(--secondary-color)] text-[var(--text-color-white)]">
+                  <i class="fa-solid fa-check"></i>
+                </SvgStruct>
+              </div>
               <div class="h-[200px]">
                 <svg
                   viewBox="0 0 200 124"
@@ -495,6 +522,15 @@ async function createPortfolioFunction() {
 }
 
 .info:hover span {
+  display: block;
+}
+
+.template-active{
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.template-active .svg{
   display: block;
 }
 </style>
