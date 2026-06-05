@@ -11,6 +11,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update', project : ProjectType): void
+  (e: 'setImage', file: File): void
 }>()
 
 function onUpdate(){
@@ -29,6 +30,7 @@ const inputTitle = ref<string>(props.projectBlock.title);
 const inputDescription = ref<string>(props.projectBlock.description);
 const inputGithubLink = ref<string>(props.projectBlock.githubUrl);
 const inputDemoLink = ref<string>(props.projectBlock.projectUrl);
+const imageUrl = ref<string>(props.projectBlock.imageUrl ?? '');
 
 watch(props.projectBlock, (newProject) => {
   inputTitle.value = newProject.title;
@@ -36,6 +38,15 @@ watch(props.projectBlock, (newProject) => {
   inputGithubLink.value = newProject.githubUrl;
   inputDemoLink.value = newProject.projectUrl;
 })
+
+function onSetImage(event: Event){
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0]
+
+  if(!file) return
+
+  emit("setImage", file)
+}
 </script>
 
 <template>
@@ -51,7 +62,7 @@ watch(props.projectBlock, (newProject) => {
     </InputStruct>
 
     <InputStruct title="Projektbild">
-        <input type="file" accept="image/*" class="default-input w-full cursor-pointer" @change="onUpdate()" />
+        <input type="file" accept="image/*" class="default-input w-full cursor-pointer" @change="onSetImage" />
     </InputStruct>
 
     <div class="divider"></div>
