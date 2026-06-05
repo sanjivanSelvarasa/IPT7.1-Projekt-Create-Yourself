@@ -3,12 +3,13 @@ import { useAuthStore } from "@/stores/authStore.ts";
 
 export async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const authStore = useAuthStore();
+  const isFormData = options?.body instanceof FormData;
 
   let res = await fetch(`${API_URL}${endpoint}`, {
     ...options,
     credentials: "include",
     headers: {
-      "Content-Type": "application/json",
+      ...(!isFormData ? {"Content-Type": "application/json"} : {}),
       ...(options?.headers || {}),
     }
   });
@@ -24,7 +25,7 @@ export async function apiFetch<T>(endpoint: string, options?: RequestInit): Prom
         ...options,
         credentials: "include",
         headers: {
-          "Content-Type": "application/json",
+          ...(!isFormData ? {"Content-Type": "application/json"} : {}),
           ...(options?.headers || {}),
           ...(authStore.token ? { Authorization: `BEARER ${authStore.token}` } : {}),
         }
