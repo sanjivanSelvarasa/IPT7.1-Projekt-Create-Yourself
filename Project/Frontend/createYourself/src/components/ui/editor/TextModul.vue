@@ -74,10 +74,18 @@ function onDelete(){
 function onSelected(){
   emit("selected")
 }
+
+function onUp(){
+  emit("up")
+}
+
+function onDown(){
+  emit("down")
+}
 </script>
 
 <template>
-  <ModulStruct @delete="onDelete()" svg="fa-solid fa-align-left" type="Text" :name="tag">
+  <ModulStruct @up="onUp()" @down="onDown()" @delete="onDelete()" svg="fa-solid fa-align-left" type="Text" :name="tag">
     <button class="w-full" @click="onSelected()" :class="[tagClass, fontWeightClass, props.isActive ? 'element-active' : '']" :style="{fontSize: props.textContent.fontSize ?? 16, color: props.textContent.color, textAlign: props.textContent.align}">
       <textarea class="outline-gray-200! rounded-none! w-full" :style="{textAlign: props.textContent.align}" v-model="text"  placeholder="Schreib was rein ..."  />
     </button>
