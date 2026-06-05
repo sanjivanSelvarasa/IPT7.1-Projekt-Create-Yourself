@@ -5,7 +5,7 @@ import Sections from "@/components/ui/editor/Sections.vue";
 import ScreenButton from "@/components/ui/editor/ScreenButton.vue";
 import ContentText from "@/components/ui/editor/ContentText.vue";
 import SectionStruct from "@/components/ui/editor/SectionStruct.vue";
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
 import {usePortfolioStore} from "@/stores/portfolioStore.ts";
 import type {PortfolioType} from "@/types/portfolioType.ts";
 import {useRoute} from "vue-router";
@@ -51,6 +51,7 @@ import type {UpdateSkillType} from "@/types/updateSkillType.ts";
 import type {EducationType} from "@/types/educationType.ts";
 import type {SocialLinkType} from "@/types/SocialLinkType.ts";
 import type {SectionType} from "@/types/sectionType.ts";
+import router from "@/router";
 
 const portfolioName = ref<string>('');
 
@@ -82,6 +83,14 @@ async function loadSortedSections() {
 }
 
 onMounted(async () => {
+  if(editorRef.value){
+    observer = new ResizeObserver(() => {
+      editorWidth.value = editorRef.value?.offsetWidth ?? 0
+    })
+
+    observer.observe(editorRef.value)
+  }
+
   portfolio.value = await portfolioStore.getFullPortfolioById(portfolioId) ?? null
 
   if (!portfolio.value) {
@@ -116,48 +125,100 @@ onMounted(async () => {
   await loadSortedSections()
 })
 
+onBeforeUnmount(() => {
+  observer?.disconnect();
+})
+
 const addSectionVisible = ref<boolean>(false);
+const addSectionAfterId = ref<number | null>(null)
 const error = ref<string | null>(null);
+
+function openAddSectionAfter(sectionId: number) {
+  addSectionAfterId.value = sectionId
+  addSectionVisible.value = true
+}
+
 async function submitSection(sectionHeader: string) {
-  if(portfolioFacts.value === null) return;
+  if (portfolioFacts.value === null) return
 
   error.value = null
 
-  const section : CreateSectionType = {
+  const sections = [...portfolioSectionStore.sections].sort((a, b) => a.sortOrder - b.sortOrder)
+
+  let newSortOrder = sections.length + 1
+
+  if (addSectionAfterId.value !== null) {
+    const targetSection = sections.find(s => s.id === addSectionAfterId.value)
+    if (!targetSection) return
+
+    newSortOrder = targetSection.sortOrder + 1
+
+    const sectionsAfter = sections.filter(s => s.sortOrder >= newSortOrder)
+
+    for (const section of sectionsAfter) {
+      const updatedSection: CreateSectionType = {
+        sectionType: section.sectionType,
+        title: section.title,
+        sortOrder: section.sortOrder + 1,
+        isVisible: section.isVisible,
+      }
+
+      await portfolioSectionStore.updateSection(
+        portfolioId,
+        portfolioFacts.value.currentVersionId,
+        section.id,
+        updatedSection
+      )
+    }
+  }
+
+  const section: CreateSectionType = {
     sectionType: sectionHeader,
     title: 'PLATZHALTER TITEL',
-    sortOrder: Math.max(...portfolioSectionStore.sections?.map(section => section.sortOrder) ?? []) + 1,
+    sortOrder: newSortOrder,
     isVisible: true,
   }
 
-  try{
-    const newSection = await portfolioSectionStore.createSection(portfolioFacts.value.id, portfolioFacts.value.currentVersionId, section)
-    sectionSelected.value = newSection.id
-    await portfolioSectionStore.getSections(portfolioId, portfolioFacts.value.currentVersionId)
+  try {
+    const newSection = await portfolioSectionStore.createSection(
+      portfolioFacts.value.id,
+      portfolioFacts.value.currentVersionId,
+      section
+    )
 
-    if(sectionHeader === 'Hero Section'){
-      await createTextModul()
+    sectionSelected.value = newSection.id
+
+    if (sectionHeader === 'Hero Section') {
+      await createHeroSection(newSection.id)
     }
-    if(sectionHeader === 'Projekte'){
+
+    if (sectionHeader === 'Projekte') {
       await createProjectModul()
     }
-    if(sectionHeader === 'Skills'){
+
+    if (sectionHeader === 'Skills') {
       await createSkillModul()
     }
-    if(sectionHeader === 'Erfahrung'){
+
+    if (sectionHeader === 'Erfahrung') {
       await createExperienceModul()
     }
-    if(sectionHeader === 'Ausbildung'){
+
+    if (sectionHeader === 'Ausbildung') {
       await createEducationModul()
     }
-    if(sectionHeader === 'Kontakt & Social'){
+
+    if (sectionHeader === 'Kontakt & Social') {
       await createSocialLinkModul()
     }
 
+    await portfolioSectionStore.getSections(portfolioId, portfolioFacts.value.currentVersionId)
     await loadSortedSections()
+
     addSectionVisible.value = false
-  }catch(err: any){
-    error.value = err ? err.message : 'Failed to create section.';
+    addSectionAfterId.value = null
+  } catch (err: any) {
+    error.value = err ? err.message : 'Failed to create section.'
   }
 }
 
@@ -184,16 +245,78 @@ function getSvgToElementType(type: string) : string{
     return "fa-solid fa-header";
 }
 
-async function deleteSection(sectionId: number){
+async function deleteSection(sectionId: number) {
   error.value = null
-  try{
-    if(portfolioFacts.value === null) return;
-    await portfolioSectionStore.deleteSection(portfolioFacts.value.id, portfolioFacts.value.currentVersionId, sectionId);
+
+  try {
+    if (portfolioFacts.value === null) return
+
+    const section = sortedSections.value?.find(s => s.id === sectionId)
+
+    if (section?.editorBlock) {
+      for (const editorBlock of section.editorBlock) {
+        await deleteEditorBlockWithSectionId(editorBlock, sectionId)
+      }
+    }
+
+    await portfolioSectionStore.deleteSection(
+      portfolioFacts.value.id,
+      portfolioFacts.value.currentVersionId,
+      sectionId
+    )
+
+    if (sectionSelected.value === sectionId) {
+      sectionSelected.value = null
+      elementSelected.value = null
+      elementSelectedId.value = null
+    }
+
     await portfolioSectionStore.getSections(portfolioId, portfolioFacts.value.currentVersionId)
     await loadSortedSections()
-  }catch(err){
-    error.value = err ? err.message : portfolioSectionStore.error;
+  } catch (err: any) {
+    error.value = err ? err.message : portfolioSectionStore.error
   }
+}
+
+async function deleteEditorBlockWithSectionId(editorBlock: any, sectionId: number) {
+  if (portfolioFacts.value === null) return
+
+  if (editorBlock.blockType === "skill") {
+    for (const skill of editorBlock.skills ?? []) {
+      await skillStore.deleteSkill(portfolioId, skill.id)
+    }
+  }
+
+  if (editorBlock.blockType === "project") {
+    for (const project of editorBlock.project ?? []) {
+      await projectStore.deleteProject(portfolioId, project.id)
+    }
+  }
+
+  if (editorBlock.blockType === "education") {
+    for (const education of editorBlock.education ?? []) {
+      await educationStore.deleteEducation(portfolioId, education.id)
+    }
+  }
+
+  if (editorBlock.blockType === "experience") {
+    for (const experience of editorBlock.experience ?? []) {
+      await experienceStore.deleteExperience(portfolioId, experience.id)
+    }
+  }
+
+  if (editorBlock.blockType === "link") {
+    for (const link of editorBlock.link ?? []) {
+      await socialLinkStore.deleteSocialLink(portfolioId, link.id)
+    }
+  }
+
+  await editorBlockStore.deleteEditorBlock(
+    portfolioId,
+    portfolioFacts.value.currentVersionId,
+    sectionId,
+    editorBlock.id
+  )
 }
 
 const sectionSelected = ref<number | null>(null);
@@ -283,6 +406,117 @@ function getMaxSortCount() : number {
   return Math.max(...(section.editorBlock).map(s => s.sortOrder))
 }
 
+async function createHeroSection(sectionId: number) {
+  if (portfolioFacts.value === null) return
+
+  const textBlocks: CreateTextEditorBlockType[] = [
+    {
+      blockType: "text",
+      contentJson: {
+        id: Date.now() + 1,
+        text: "Hallo, ich bin",
+        align: "left",
+        tag: "h1",
+        fontSize: 48,
+        fontWeight: "bold",
+        color: "#2563EB",
+      },
+      sortOrder: 1,
+    },
+    {
+      blockType: "text",
+      contentJson: {
+        id: Date.now() + 2,
+        text: "DEIN NAME",
+        align: "left",
+        tag: "h1",
+        fontSize: 48,
+        fontWeight: "bold",
+        color: "#0F172A",
+      },
+      sortOrder: 2,
+    },
+    {
+      blockType: "text",
+      contentJson: {
+        id: Date.now() + 3,
+        text: "Frontend Developer & UI Designer",
+        align: "left",
+        tag: "h2",
+        fontSize: 28,
+        fontWeight: "semibold",
+        color: "#334155",
+      },
+      sortOrder: 3,
+    },
+    {
+      blockType: "text",
+      contentJson: {
+        id: Date.now() + 4,
+        text: "Ich entwickle moderne, benutzerfreundliche Webseiten und digitale Applikationen mit Fokus auf sauberes Design und durchdachte Nutzererlebnisse.",
+        align: "left",
+        tag: "p",
+        fontSize: 16,
+        fontWeight: "normal",
+        color: "#64748B",
+      },
+      sortOrder: 4,
+    },
+  ]
+
+  for (const block of textBlocks) {
+    await editorBlockStore.createEditorBlock(
+      portfolioId,
+      portfolioFacts.value.currentVersionId,
+      sectionId,
+      block
+    )
+  }
+
+  const links: CreateSocialLinkType[] = [
+    {
+      platform: "GitHub",
+      url: "https://github.com",
+    },
+    {
+      platform: "LinkedIn",
+      url: "https://linkedin.com",
+    },
+    {
+      platform: "Email",
+      url: "mailto:mail@example.com",
+    },
+  ]
+
+  const createdLinks = []
+
+  for (const link of links) {
+    const res = await socialLinkStore.createSocialLink(portfolioId, link)
+
+    if (res === null || res?.id === null) return
+
+    createdLinks.push(res)
+  }
+
+  const linkEditorBlock: CreateEditorBlockType = {
+    blockType: "link",
+    contentJson: {
+      ids: createdLinks.map(l => l.id),
+    },
+    sortOrder: 5,
+  }
+
+  await editorBlockStore.createEditorBlock(
+    portfolioId,
+    portfolioFacts.value.currentVersionId,
+    sectionId,
+    linkEditorBlock
+  )
+
+  await socialLinkStore.getSocialLink(portfolioId)
+  await loadSortedSections()
+}
+
 async function createTextModul(){
   if(sortedSections.value === null) return;
 
@@ -337,19 +571,37 @@ async function createProjectModul(){
 
   const maxSortCount = getMaxSortCount()
 
-  const project : CreateProjectType = {
-    title: 'PLATZHALTER',
-    description: 'PLATZHALTER TEXT ...',
-    sortOrder: maxSortCount + 1,
-  }
+  const projects: CreateProjectType[] = [
+    {
+      title: 'Projekt 1',
+      description: 'PLATZHALTER TEXT ...',
+      sortOrder: 1,
+    },
+    {
+      title: 'Projekt 2',
+      description: 'PLATZHALTER TEXT ...',
+      sortOrder: 2,
+    },
+    {
+      title: 'Projekt 3',
+      description: 'PLATZHALTER TEXT ...',
+      sortOrder: 3,
+    },
+  ]
 
-  const res = await projectStore.createProject(portfolioId, project)
-  if(res?.id === null || res === null) return;
+  const createdProjects = []
+  for (const project of projects) {
+    const res = await projectStore.createProject(portfolioId, project)
+
+    if (res === null || res?.id === null) return
+
+    createdProjects.push(res)
+  }
 
   const editorText : CreateEditorBlockType = {
     blockType: "project",
     contentJson: {
-      ids: [res!.id],
+      ids: createdProjects.map(p => p.id),
     },
     sortOrder: maxSortCount + 1,
   }
@@ -364,19 +616,38 @@ async function createEducationModul(){
 
   const maxSortCount = getMaxSortCount()
 
-  const education : CreateEducationType = {
-    institutionName: 'PLATZHALTER',
-    degree: 'PLATZHALTER TEXT',
-    sortOrder: maxSortCount + 1,
-  }
+  const educations: CreateEducationType[] = [
+    {
+      institutionName: 'Schule 1',
+      degree: 'PLATZHALTER TEXT',
+      sortOrder: 1,
+    },
+    {
+      institutionName: 'Schule 2',
+      degree: 'PLATZHALTER TEXT',
+      sortOrder: 2,
+    },
+    {
+      institutionName: 'Schule 3',
+      degree: 'PLATZHALTER TEXT',
+      sortOrder: 3,
+    },
+  ]
 
-  const res = await educationStore.createEducation(portfolioId, education)
-  if(res?.id === null || res === null) return;
+  const createdEducations = []
+
+  for (const education of educations) {
+    const res = await educationStore.createEducation(portfolioId, education)
+
+    if (res === null || res?.id === null) return
+
+    createdEducations.push(res)
+  }
 
   const editorText : CreateEditorBlockType = {
     blockType: "education",
     contentJson: {
-      ids: [res!.id],
+      ids: createdEducations.map(e => e.id),
     },
     sortOrder: maxSortCount + 1,
   }
@@ -418,18 +689,35 @@ async function createSocialLinkModul(){
 
   const maxSortCount = getMaxSortCount()
 
-  const link : CreateSocialLinkType = {
-    url: 'http://localhost:8080',
-    platform: 'YouTube',
-  }
+  const links: CreateSocialLinkType[] = [
+    {
+      url: 'https://github.com',
+      platform: 'GitHub',
+    },
+    {
+      url: 'https://linkedin.com',
+      platform: 'LinkedIn',
+    },
+    {
+      url: 'mailto:mail@example.com',
+      platform: 'Email',
+    },
+  ]
 
-  const res = await socialLinkStore.createSocialLink(portfolioId, link)
-  if(res?.id === null || res === null) return;
+  const createdLinks = []
+
+  for (const link of links) {
+    const res = await socialLinkStore.createSocialLink(portfolioId, link)
+
+    if (res === null || res?.id === null) return
+
+    createdLinks.push(res)
+  }
 
   const editorText : CreateEditorBlockType = {
     blockType: "link",
     contentJson: {
-      ids: [res!.id],
+      ids: createdLinks.map(l => l.id),
     },
     sortOrder: maxSortCount + 1,
   }
@@ -701,11 +989,141 @@ async function updateSocialLinkBlockFunc(linkBlock: SocialLinkType){
     await loadSortedSections()
   }catch {}
 }
+
+async function pushToPublish(){
+  await router.push(`/portfolio/${portfolioId}/publish`)
+}
+
+const screenSize = ref<number>(1)
+function changeScreenSizeOption(id: number){
+  screenSize.value = id
+}
+
+const getMaxWidth = computed(() => {
+  if(screenSize.value === 1)
+    return 1200
+  else if(screenSize.value === 2)
+    return 800
+  else
+    return 500
+})
+
+const editorRef = ref<HTMLElement | null>(null)
+const editorWidth = ref<number>(0)
+
+let observer: ResizeObserver | null = null
+
+async function moveSection(sectionId: number, direction: "up" | "down") {
+  if (portfolioFacts.value === null || sortedSections.value === null) return
+
+  const sections = [...sortedSections.value].sort((a, b) => a.sortOrder - b.sortOrder)
+
+  const currentIndex = sections.findIndex(s => s.id === sectionId)
+  if (currentIndex === -1) return
+
+  const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1
+  if (targetIndex < 0 || targetIndex >= sections.length) return
+
+  const currentSection = sections[currentIndex]
+  const targetSection = sections[targetIndex]
+
+  const currentSortOrder = currentSection.sortOrder
+  const targetSortOrder = targetSection.sortOrder
+
+  const updatedCurrent: CreateSectionType = {
+    sectionType: currentSection.sectionType,
+    title: currentSection.title,
+    sortOrder: targetSortOrder,
+    isVisible: currentSection.isVisible,
+  }
+
+  const updatedTarget: CreateSectionType = {
+    sectionType: targetSection.sectionType,
+    title: targetSection.title,
+    sortOrder: currentSortOrder,
+    isVisible: targetSection.isVisible,
+  }
+
+  await portfolioSectionStore.updateSection(
+    portfolioId,
+    portfolioFacts.value.currentVersionId,
+    currentSection.id,
+    updatedCurrent
+  )
+
+  await portfolioSectionStore.updateSection(
+    portfolioId,
+    portfolioFacts.value.currentVersionId,
+    targetSection.id,
+    updatedTarget
+  )
+
+  await portfolioSectionStore.getSections(portfolioId, portfolioFacts.value.currentVersionId)
+  await loadSortedSections()
+}
+
+async function uploadProjectImage(file: File){
+  if(elementSelectedId.value === null) return
+  try{
+    await projectStore.createProjectImage(portfolioId, elementSelectedId.value, file)
+  }catch{}
+}
+
+async function moveEditorBlock(editorBlock: EditorBlockType, direction: "up" | "down") {
+  if (portfolioFacts.value === null || sortedSections.value === null) return
+
+  const section = sortedSections.value.find(s => s.id === editorBlock.sectionId)
+  if (!section || !section.editorBlock) return
+
+  const blocks = [...section.editorBlock].sort((a, b) => a.sortOrder - b.sortOrder)
+
+  const currentIndex = blocks.findIndex(b => b.id === editorBlock.id)
+  if (currentIndex === -1) return
+
+  const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1
+  if (targetIndex < 0 || targetIndex >= blocks.length) return
+
+  const currentBlock = blocks[currentIndex]
+  const targetBlock = blocks[targetIndex]
+
+  const currentSortOrder = currentBlock.sortOrder
+  const targetSortOrder = targetBlock.sortOrder
+
+  const updatedCurrent: CreateEditorBlockType = {
+    blockType: currentBlock.blockType,
+    contentJson: JSON.parse(currentBlock.contentJson),
+    sortOrder: targetSortOrder,
+  }
+
+  const updatedTarget: CreateEditorBlockType = {
+    blockType: targetBlock.blockType,
+    contentJson: JSON.parse(targetBlock.contentJson),
+    sortOrder: currentSortOrder,
+  }
+
+  await editorBlockStore.updateEditorBlock(
+    portfolioId,
+    portfolioFacts.value.currentVersionId,
+    currentBlock.sectionId,
+    currentBlock.id,
+    updatedCurrent
+  )
+
+  await editorBlockStore.updateEditorBlock(
+    portfolioId,
+    portfolioFacts.value.currentVersionId,
+    targetBlock.sectionId,
+    targetBlock.id,
+    updatedTarget
+  )
+
+  await loadSortedSections()
+}
 </script>
 
 <template>
   <div v-if="addSectionVisible">
-    <AddSection @submit="submitSection" @cancel="addSectionVisible = !addSectionVisible" :error="error ?? '' "></AddSection>
+    <AddSection @submit="submitSection" @cancel="addSectionVisible = !addSectionVisible; addSectionAfterId = null" :error="error ?? '' "></AddSection>
   </div>
 
   <div class="flex flex-col bg-[var(--background-color)] w-full h-[100vh] overflow-y-hidden">
@@ -756,12 +1174,12 @@ async function updateSocialLinkBlockFunc(linkBlock: SocialLinkType){
           <span>Speichern</span>
         </div>
 
-        <div class="hover:bg-transparent hover:text-[var(--primary-color)] transition duration-75 flex items-center justify-center gap-2 px-3 py-2 border bg-[var(--primary-color)] text-[var(--text-color-white)] rounded-lg select-none cursor-pointer">
+        <button @click="pushToPublish()" class="hover:bg-transparent hover:text-[var(--primary-color)] transition duration-75 flex items-center justify-center gap-2 px-3 py-2 border bg-[var(--primary-color)] text-[var(--text-color-white)] rounded-lg select-none cursor-pointer">
           <div class="flex items-center justify-center">
             <i class="fa-solid fa-arrow-up-from-bracket"></i>
           </div>
           <span>Veröffentlichen</span>
-        </div>
+        </button>
       </div>
     </nav>
 
@@ -812,36 +1230,36 @@ async function updateSocialLinkBlockFunc(linkBlock: SocialLinkType){
         <div class="w-full flex justify-center">
           <div class="px-5 py-3 max-w-[600px] xl:max-w-[900px] 2xl:max-w-[1200px] w-full h-fit border border-transparent border-b-gray-200 flex justify-between items-center">
             <div class="bg-[var(--surface-color)] border border-gray-200 rounded-lg flex justify-center items-center text-sm text-[var(--text-color-light)]">
-              <ScreenButton :active="true" title="Desktop" svg="fa-solid fa-desktop"></ScreenButton>
-              <ScreenButton :active="false"  title="Tablet" svg="fa-solid fa-tablet-screen-button"></ScreenButton>
-              <ScreenButton :active="false"  title="Mobil" svg="fa-solid fa-mobile-screen"></ScreenButton>
+              <ScreenButton @clicked="changeScreenSizeOption(1)" :active="screenSize === 1" title="Desktop" svg="fa-solid fa-desktop"></ScreenButton>
+              <ScreenButton @clicked="changeScreenSizeOption(2)" :active="screenSize === 2"  title="Tablet" svg="fa-solid fa-tablet-screen-button"></ScreenButton>
+              <ScreenButton @clicked="changeScreenSizeOption(3)" :active="screenSize === 3"  title="Mobil" svg="fa-solid fa-mobile-screen"></ScreenButton>
             </div>
 
             <div class="text-[var(--text-color-light)] text-sm">
-              <span>920 x auto - 100%</span>
+              <span>{{ editorWidth }}px x auto - 100%</span>
             </div>
           </div>
         </div>
 
-        <div class="flex flex-col w-full max-w-[1200px] px-5 2xl:px-0 py-10 flex-1 overflow-y-hidden min-h-0">
+        <div ref="editorRef" class="flex flex-col w-full px-5 2xl:px-0 py-10 flex-1 overflow-y-hidden min-h-0" :style="{ maxWidth: `${getMaxWidth}px`}">
           <div class="flex flex-col gap-5 w-full box-content flex-1 min-h-0 overflow-y-scroll no-scrollbar">
-            <SectionStruct v-for="section in sortedSections" @update="updateSectionTitle" @selected="sectionSelectedFunction(section.id)" :is-selected="sectionSelected === section.id" @delete="deleteSection(section.id)" :key="section.id" :name="section.sectionType" :title="section.title">
+            <SectionStruct v-for="section in sortedSections" @add="openAddSectionAfter(section.id)" @up="moveSection(section.id, 'up')" @down="moveSection(section.id, 'down')" @update="updateSectionTitle" @selected="sectionSelectedFunction(section.id)" :is-selected="sectionSelected === section.id" @delete="deleteSection(section.id)" :key="section.id" :name="section.sectionType" :title="section.title">
               <div v-for="editor in section.editorBlock" :key="editor.id">
-                <TextModul v-if="editor.blockType === 'text' " @delete="deleteEditorBlockFunc(editor)" @selected="elementSelectedFunction(editor.textBlockContent.id, editor)" :is-active="elementSelectedId === editor.textBlockContent.id" :text-content="editor.textBlockContent"></TextModul>
+                <TextModul v-if="editor.blockType === 'text' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @delete="deleteEditorBlockFunc(editor)" @selected="elementSelectedFunction(editor.textBlockContent.id, editor)" :is-active="elementSelectedId === editor.textBlockContent.id" :text-content="editor.textBlockContent"></TextModul>
 
-                <SkillModul v-if="editor.blockType === 'skill' " @add="addSkillToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
+                <SkillModul v-if="editor.blockType === 'skill' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @add="addSkillToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
                   <SkillElement v-for="skill in editor.skills" @selected="elementSelectedFunction(skill.skillId, editor)" :is-active="elementSelectedId === skill.skillId" :key="skill.skillId" :name="skill.name" :level="skill.level"></SkillElement>
                 </SkillModul>
 
-                <ProjectModul v-if="editor.blockType === 'project' " @add="addProjectToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
-                  <Project v-for="project in editor.project" @selected="elementSelectedFunction(project.id, editor)" :is-active="elementSelectedId === project.id" :key="project.id" :title="project.title" :description="project.description"></Project>
+                <ProjectModul v-if="editor.blockType === 'project' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @add="addProjectToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
+                  <Project v-for="project in editor.project" @selected="elementSelectedFunction(project.id, editor)" :is-active="elementSelectedId === project.id" :key="project.id" :image-url="project.imageUrl" :title="project.title" :description="project.description"></Project>
                 </ProjectModul>
 
-                <EducationModul v-if="editor.blockType === 'education' " @add="addEducationToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
+                <EducationModul v-if="editor.blockType === 'education' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @add="addEducationToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
                   <EducationElement v-for="education in editor.education" @selected="elementSelectedFunction(education.id, editor)" :is-active="elementSelectedId === education.id" :key="education.id" :name="education.institutionName" :degree="education.degree" :field-of-study="education.fieldOfStudy" :start-date="education.startDate" :end-date="education.endDate"></EducationElement>
                 </EducationModul>
 
-                <SocialLinkModul v-if="editor.blockType === 'link' " @add="addSocialLinkToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
+                <SocialLinkModul v-if="editor.blockType === 'link' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @add="addSocialLinkToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
                   <SocialLinkElement v-for="link in editor.link" @selected="elementSelectedFunction(link.id, editor)" :is-active="elementSelectedId === link.id" :key="link.id" svg="fa-brands fa-github" :name="link.platform" :url="link.url"></SocialLinkElement>
                 </SocialLinkModul>
               </div>
@@ -892,7 +1310,7 @@ async function updateSocialLinkBlockFunc(linkBlock: SocialLinkType){
           </div>
 
           <div v-if="elementSelected?.blockType === 'project' ">
-            <ContentProject :project-block="elementSelected.project.find(p => p.id === elementSelectedId)" @update="updateProjectBlockFunc"></ContentProject>
+            <ContentProject @setImage="uploadProjectImage" :project-block="elementSelected.project.find(p => p.id === elementSelectedId)" @update="updateProjectBlockFunc"></ContentProject>
           </div>
 
           <div v-if="elementSelected?.blockType === 'skill' ">
