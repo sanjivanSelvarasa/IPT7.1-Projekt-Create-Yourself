@@ -4,10 +4,18 @@
     title: string,
     active: boolean,
   }>()
+
+  const emit = defineEmits<{
+    (e: 'clicked') : void,
+  }>()
+
+  function onClick(){
+    emit('clicked')
+  }
 </script>
 
 <template>
-  <button :class="props.active ? 'active' : '' " class="hover:bg-gray-50 flex justify-center items-center gap-2 px-2 py-1 rounded-md m-1">
+  <button @click="onClick()" :class="props.active ? 'active' : '' " class="hover:bg-gray-50 flex justify-center items-center gap-2 px-2 py-1 rounded-md m-1">
     <div class="flex justify-center items-center">
       <i :class="props.svg"></i>
     </div>
