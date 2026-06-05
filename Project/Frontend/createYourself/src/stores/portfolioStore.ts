@@ -2,8 +2,8 @@ import {defineStore} from "pinia";
 import {ref} from "vue";
 import type {PortfolioType} from "@/types/portfolioType.ts";
 import {
-  createPortfolioApi, deletePortfolioApi, getFullPortfolioByIdApi,
-  getPortfolioByIdApi,
+  createPortfolioApi, deletePortfolioApi, getFullPortfolioByIdApi, getFullPortfolioBySlugApi,
+  getPortfolioByIdApi, getPortfolioBySlugApi,
   getPortoliosApi, slugAvailableApi,
   updatePortfolioByIdApi
 } from "@/api/portfolio.api.ts";
@@ -24,7 +24,7 @@ export const usePortfolioStore = defineStore('portfolio', () => {
       portfolios.value = await getPortoliosApi()
       loading.value = false
     }catch(err){
-      error.value = err ? err.message : 'Getting Portfolios failed.'
+      error.value = err ? err.message : 'Getting portfolios failed.'
     }
   }
 
@@ -34,7 +34,7 @@ export const usePortfolioStore = defineStore('portfolio', () => {
     try{
       return await getPortfolioByIdApi(id)
     }catch(err){
-      error.value = err ? err.message : 'Getting Portfolio by id failed.'
+      error.value = err ? err.message : 'Getting portfolio by id failed.'
     }
   }
 
@@ -44,7 +44,27 @@ export const usePortfolioStore = defineStore('portfolio', () => {
     try{
       return await getFullPortfolioByIdApi(id)
     }catch(err){
-      error.value = err ? err.message : 'Getting Portfolio by id failed.'
+      error.value = err ? err.message : 'Getting portfolio by id failed.'
+    }
+  }
+
+  async function getPortfolioBySlug(slug: string){
+    error.value = null
+
+    try{
+      return await getPortfolioBySlugApi(slug)
+    }catch (err){
+      error.value = err ? err.message : 'Getting portfolio by slug failed.'
+    }
+  }
+
+  async function getFullPortfolioBySlug(slug: string){
+    error.value = null
+
+    try{
+      return await getFullPortfolioBySlugApi(slug)
+    }catch(err){
+      error.value = err ? err.message : 'Getting full portfolio by slug failed.'
     }
   }
 
@@ -53,7 +73,7 @@ export const usePortfolioStore = defineStore('portfolio', () => {
     try{
       return await createPortfolioApi(portfolio)
     }catch(err){
-      error.value = err ? err.message : 'Create Portfolio failed.'
+      error.value = err ? err.message : 'Create portfolio failed.'
     }
   }
 
@@ -63,7 +83,7 @@ export const usePortfolioStore = defineStore('portfolio', () => {
     try{
       await updatePortfolioByIdApi(portfolio.id, portfolio)
     }catch(err){
-      error.value = err ? err.message : 'Update Portfolio failed.'
+      error.value = err ? err.message : 'Update portfolio failed.'
     }
   }
 
@@ -73,7 +93,7 @@ export const usePortfolioStore = defineStore('portfolio', () => {
     try{
       await deletePortfolioApi(id)
     }catch (err){
-      error.value = err ? err.message : 'Delete Portfolio failed.'
+      error.value = err ? err.message : 'Delete portfolio failed.'
     }
   }
 
@@ -87,5 +107,5 @@ export const usePortfolioStore = defineStore('portfolio', () => {
     }
   }
 
-  return {loading, error, portfolios, getFullPortfolioById, getPortfolio, getPortfolioById, createPortfolio, updatePortfolio, deletePortfolio, slugAvailable}
+  return {loading, error, portfolios, getFullPortfolioBySlug, getPortfolioBySlug, getFullPortfolioById, getPortfolio, getPortfolioById, createPortfolio, updatePortfolio, deletePortfolio, slugAvailable}
 })
