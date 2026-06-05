@@ -6,6 +6,7 @@ const props = defineProps<{
   description: string,
   codeUrl?: string,
   demoUrl?: string,
+  imageUrl?: string,
   isActive: boolean,
 }>()
 
@@ -20,12 +21,12 @@ function onSelected() {
 
 <template>
   <button @click="onSelected()" class="hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col rounded-xl aspect-square overflow-hidden bg-[var(--surface-color)] border border-gray-200" :class="props.isActive ? 'element-active' : ''">
-    <div class="h-full w-full bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]"></div>
+    <img :src="`http://localhost:3000${props.imageUrl}`" class="object-cover h-full w-full bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]"></img>
 
     <div class="h-fit p-4">
       <div class="flex flex-col items-start justify-center">
         <h3 class="font-bold py-1">{{ props.title }}</h3>
-        <p class="text-sm text-[var(--text-color-light)]">{{ props.description }}</p>
+        <p class="text-sm text-[var(--text-color-light)] text-left">{{ props.description.length > 180 ? props.description.slice(0, 180) + '...' : props.description }}</p>
       </div>
 
       <div class="divider"></div>
