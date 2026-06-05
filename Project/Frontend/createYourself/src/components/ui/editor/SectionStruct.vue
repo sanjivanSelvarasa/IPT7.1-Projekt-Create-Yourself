@@ -11,6 +11,9 @@
     (e: 'delete') : void
     (e: 'selected') : void
     (e: 'update', title: string) : void
+    (e: 'up') : void
+    (e: 'down') : void
+    (e: 'add') : void
   }>()
 
   function onDelete(){
@@ -23,6 +26,18 @@
 
   function onUpdate(){
     emit('update', title.value)
+  }
+
+  function onUp(){
+    emit('up')
+  }
+
+  function onDown(){
+    emit('down')
+  }
+
+  function onAdd(){
+    emit('add')
   }
 
   const title = ref<string>(props.title)
@@ -41,18 +56,18 @@
       <div class="flex items-center justify-center gap-2 text-[var(--text-color-light)]">
 
         <div class="bg-gray-50 flex justify-center items-center gap-1 rounded-md">
-          <button class="hover:text-gray-500 hover:bg-gray-100 transition duration-100 flex items-center justify-center w-[27px] h-[27px] rounded-md">
+          <button @click="onUp()" class="hover:text-gray-500 hover:bg-gray-100 transition duration-100 flex items-center justify-center w-[27px] h-[27px] rounded-md">
             <i class="fa-solid fa-angle-up"></i>
           </button>
 
           <div class="divider-vertical mx-0! h-[20px]!"></div>
 
-          <button class="hover:text-gray-500 hover:bg-gray-100 transition duration-100 flex items-center justify-center w-[27px] h-[27px] rounded-md">
+          <button @click="onDown()" class="hover:text-gray-500 hover:bg-gray-100 transition duration-100 flex items-center justify-center w-[27px] h-[27px] rounded-md">
             <i class="fa-solid fa-angle-down"></i>
           </button>
         </div>
 
-        <button class="hover:text-gray-500 hover:bg-gray-100 transition duration-100 flex items-center justify-center w-[27px] h-[27px] rounded-md">
+        <button @click="onAdd()" class="hover:text-gray-500 hover:bg-gray-100 transition duration-100 flex items-center justify-center w-[27px] h-[27px] rounded-md">
           <i class="fa-solid fa-plus"></i>
         </button>
 
