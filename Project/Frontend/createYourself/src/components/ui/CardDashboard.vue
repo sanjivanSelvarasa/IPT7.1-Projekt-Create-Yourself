@@ -11,6 +11,7 @@
     (e: 'edit', id: number): void
     (e: 'publish', id: number): void
     (e: 'unpublish'): void
+    (e: 'delete', id: number): void
   }>()
 
   function submitEdit(): void{
@@ -23,6 +24,10 @@
 
   function submitUnpublish(): void{
     emit('unpublish')
+  }
+
+  function submitDelete(): void{
+    emit('delete', props.portfolio.id)
   }
 
   const { t } = useI18n();
@@ -53,8 +58,8 @@
       </div>
 
       <div class="dropdown-menu hidden mt-5 p-3 flex-col items-start justify-start text-sm font-semibold bg-[var(--surface-color)] rounded-lg border border-gray-200">
-        <span class="hover:bg-[var(--background-color)] w-full transition duration-150 cursor-pointer rounded-lg px-2 py-1">{{ tl("saved-card.top-left-choice-menu-rename") }}</span>
-        <span class="hover:bg-red-50 hover:text-red-500 hover:border-red-500 border border-transparent w-full transition duration-150 cursor-pointer rounded-lg px-2 py-1">{{ tl("saved-card.top-left-choice-menu-delete") }}</span>
+        <button class="hover:bg-[var(--background-color)] w-full transition duration-150 cursor-pointer rounded-lg px-2 py-1">{{ tl("saved-card.top-left-choice-menu-rename") }}</button>
+        <button @click="submitDelete()" class="hover:bg-red-50 hover:text-red-500 hover:border-red-500 border border-transparent w-full transition duration-150 cursor-pointer rounded-lg px-2 py-1">{{ tl("saved-card.top-left-choice-menu-delete") }}</button>
       </div>
     </div>
 
@@ -83,9 +88,9 @@
 
       <div class="flex items-center justify-start gap-2 text-[var(--text-color-light)]">
         <div class="flex items-center justify-center">
-          <i class="fa-regular fa-eye"></i>
+          <i class="fa-regular fa-star"></i>
         </div>
-        <span>845 {{ tl("saved-card.view-number") }}</span>
+        <span>{{ tl("saved-card.view-number") }}: {{ portfolio.languageCode.toUpperCase() }}</span>
       </div>
     </div>
 
