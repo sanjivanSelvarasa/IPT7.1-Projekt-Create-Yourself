@@ -12,6 +12,15 @@ export default defineConfig({
     vueDevTools(),
     tailwindcss(),
   ],
+
+  server: {
+    host: '0.0.0.0',
+    allowedHosts: [
+      'create-yourself.gian.ink',
+    ],
+  },
+
+
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
