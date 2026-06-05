@@ -29,6 +29,24 @@ export async function getFullPortfolioByIdApi(id: number) : Promise<PortfolioTyp
   })
 }
 
+export async function getPortfolioBySlugApi(slug: string) : Promise<PortfolioType>{
+  return await apiFetch(`/p/${slug}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  })
+}
+
+export async function getFullPortfolioBySlugApi(slug: string) : Promise<PortfolioType>{
+  return await apiFetch(`/p/${slug}/full`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  })
+}
+
 export async function createPortfolioApi(portfolio: CreatePortfolioType){
   return await apiFetch(`/portfolio`, {
     method: 'POST',
