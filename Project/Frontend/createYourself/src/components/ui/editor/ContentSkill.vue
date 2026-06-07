@@ -7,11 +7,17 @@ import type {UpdateSkillType} from "@/types/updateSkillType.ts";
 
 const props = defineProps<{
   skillBlock: SkillType,
+  sectionVisible: boolean,
 }>()
 
 const emit = defineEmits<{
   (e: 'update', skill: UpdateSkillType): void
+  (e: 'sectionVisible', sectionVisible: boolean): void
 }>()
+
+function onSectionVisible(){
+  emit('sectionVisible', !props.sectionVisible)
+}
 
 function onUpdate() {
   const updatedSkill : UpdateSkillType = {
@@ -36,7 +42,7 @@ watch(() => props.skillBlock, (newSkill) => {
 </script>
 
 <template>
-  <ContentStruct>
+  <ContentStruct @sectionVisible="onSectionVisible" :section-visible="props.sectionVisible">
     <span class="md-subtitle text-[var(--text-color-light)]">Skill</span>
 
     <InputStruct title="Name">

@@ -7,11 +7,17 @@ import {parse} from "vite";
 
   const props = defineProps<{
     textBlock: TextBlockContent,
+    sectionVisible: boolean,
   }>()
 
   const emit = defineEmits<{
     (e: 'update', updated: TextBlockContent) : void,
+    (e: 'sectionVisible', sectionVisible: boolean): void
   }>()
+
+  function onSectionVisible(sectionVisible: boolean){
+    emit('sectionVisible', sectionVisible)
+  }
 
   function onUpdate() {
     const updatedTextBlock : TextBlockContent = {
@@ -21,12 +27,14 @@ import {parse} from "vite";
       align: inputAlign.value,
       fontSize: inputSize.value,
       fontWeight: inputWeight.value,
+      color: inputColor.value,
     }
 
     emit('update', updatedTextBlock)
   }
 
   const inputText = ref<string>(props.textBlock.text)
+  const inputColor = ref<string>(props.textBlock.color ?? '')
   const inputTag = ref<NonNullable<TextBlockContent['tag']>>(props.textBlock.tag ?? 'p')
   const inputAlign = ref<NonNullable<TextBlockContent['align']>>(props.textBlock.align ?? 'left')
   const inputSize = ref<number>(props.textBlock.fontSize ?? 12)
@@ -38,6 +46,7 @@ import {parse} from "vite";
     inputAlign.value = newTextBlock.align ?? 'left';
     inputSize.value = newTextBlock.fontSize ?? 12;
     inputWeight.value = newTextBlock.fontWeight ?? 'normal';
+    inputColor.value = newTextBlock.color ?? ''
   })
   const sizes = [
     9,
@@ -56,7 +65,7 @@ import {parse} from "vite";
 </script>
 
 <template>
-  <ContentStruct>
+  <ContentStruct :section-visible="props.sectionVisible" @sectionVisible="onSectionVisible">
     <span class="md-subtitle text-[var(--text-color-light)]">Inhalt</span>
 
     <div>
@@ -73,6 +82,10 @@ import {parse} from "vite";
         <option value="h2">Untertitel</option>
         <option value="h3">Überschrift</option>
       </select>
+    </InputStruct>
+
+    <InputStruct title="Farbe">
+      <input @change="onUpdate()" v-model="inputColor" type="color" class="w-full outline-none">
     </InputStruct>
 
     <InputStruct title="Grösse">

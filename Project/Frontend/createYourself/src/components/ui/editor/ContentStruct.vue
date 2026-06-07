@@ -1,4 +1,15 @@
 <script lang="ts" setup>
+  const props = defineProps<{
+    sectionVisible: boolean,
+  }>()
+
+  const emit = defineEmits<{
+    (e: 'sectionVisible', sectionVisible: boolean): void
+  }>()
+
+  function onSectionVisible(){
+    emit('sectionVisible', !props.sectionVisible)
+  }
 </script>
 
 <template>
@@ -37,9 +48,9 @@
     <span class="md-subtitle text-[var(--text-color-light)]">Sichtbarkeit</span>
 
     <div class="flex items-center justify-between w-full">
-      <span class="font-semibold">Block sichtbar</span>
+      <span class="font-semibold">Section sichtbar</span>
       <label class="switch">
-        <input type="checkbox" checked>
+        <input @click="onSectionVisible()" type="checkbox" :checked="props.sectionVisible" />
         <span class="slider round"></span>
       </label>
     </div>

@@ -7,11 +7,17 @@ import {ref, watch} from "vue";
 
 const props = defineProps<{
   linkBlock: SocialLinkType,
+  sectionVisible: boolean,
 }>()
 
 const emit = defineEmits<{
   (e: 'update', link: SocialLinkType): void
+  (e: 'sectionVisible', sectionVisible: boolean): void
 }>()
+
+function onSectionVisible(){
+  emit('sectionVisible', !props.sectionVisible);
+}
 
 function onUpdate() {
   const updatedLink : SocialLinkType = {
@@ -35,7 +41,7 @@ watch(() => props.linkBlock, (newLink) => {
 </script>
 
 <template>
-  <ContentStruct>
+  <ContentStruct @sectionVisible="onSectionVisible" :sectionVisible="props.sectionVisible">
     <span class="md-subtitle text-[var(--text-color-light)]">Details</span>
 
     <InputStruct title="Anzeige-Name">

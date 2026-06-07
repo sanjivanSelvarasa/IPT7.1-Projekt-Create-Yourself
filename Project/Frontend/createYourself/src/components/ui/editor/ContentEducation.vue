@@ -8,11 +8,17 @@
 
   const props = defineProps<{
     educationBlock: EducationType,
+    sectionVisible: boolean,
   }>()
 
   const emit = defineEmits<{
     (e: 'update', education: EducationType): void
+    (e: 'sectionVisible', sectionVisible: boolean): void
   }>()
+
+  function onSectionVisible(): void {
+    emit('sectionVisible', !props.sectionVisible)
+  }
 
   function onUpdate(): void {
     const updatedEducation : EducationType = {
@@ -41,7 +47,7 @@
 </script>
 
 <template>
-  <ContentStruct>
+  <ContentStruct @sectionVisible="onSectionVisible" :sectionVisible="props.sectionVisible">
     <span class="md-subtitle text-[var(--text-color-light)]">Einrichtung</span>
 
     <InputStruct title="Institution">

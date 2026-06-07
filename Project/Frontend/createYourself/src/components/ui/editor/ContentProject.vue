@@ -7,12 +7,18 @@ import type {ProjectType} from "@/types/projectType.ts";
 
 const props = defineProps<{
   projectBlock: ProjectType,
+  sectionVisible: boolean,
 }>()
 
 const emit = defineEmits<{
   (e: 'update', project : ProjectType): void
   (e: 'setImage', file: File): void
+  (e: 'sectionVisible', sectionVisible: boolean): void
 }>()
+
+function onsectionVisible(){
+  emit('sectionVisible', !props.sectionVisible);
+}
 
 function onUpdate(){
   const updatedProjectBlock : ProjectType = {
@@ -50,7 +56,7 @@ function onSetImage(event: Event){
 </script>
 
 <template>
-  <ContentStruct>
+  <ContentStruct @sectionVisible="onsectionVisible" :section-visible="props.sectionVisible">
     <span class="md-subtitle text-[var(--text-color-light)]">Projektdaten</span>
 
     <InputStruct title="Titel">
