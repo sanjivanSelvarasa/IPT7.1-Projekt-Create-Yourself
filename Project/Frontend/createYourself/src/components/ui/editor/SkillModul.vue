@@ -28,8 +28,8 @@
 
 <template>
   <ModulStruct @delete="onDelete()" @up="up()" @down="down()" type="Skills" name="Design" svg="fa-regular fa-star">
-    <div class="grid grid-cols-2 gap-x-10 gap-y-2">
-      <slot class="grid-cols-1"></slot>
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(380px,1fr))] gap-x-10 gap-y-2">
+      <slot></slot>
       <AddButton @click="onAdd()"></AddButton>
     </div>
   </ModulStruct>
