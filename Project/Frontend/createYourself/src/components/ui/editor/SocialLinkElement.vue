@@ -23,6 +23,6 @@
       <i :class="props.svg"></i>
     </SvgStruct>
     <span class="font-semibold">{{ props.name }}</span>
-    <span class="text-[var(--text-color-light)] text-sm">{{ props.url }}</span>
+    <span class="text-[var(--text-color-light)] text-sm">{{ props.url.length > 35 ? props.url.slice(0, 35) + '...' : props.url }}</span>
   </button>
 </template>
