@@ -29,7 +29,7 @@ function onDown(){
 
 <template>
   <ModulStruct @delete="onDelete()" @up="onUp()" @down="onDown()" type="Projekt" name="4 Einträge" svg="fa-solid fa-briefcase">
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(380px,1fr))] gap-4">
       <slot></slot>
       <AddButton class="aspect-square" @click="onAdd()" ></AddButton>
     </div>
