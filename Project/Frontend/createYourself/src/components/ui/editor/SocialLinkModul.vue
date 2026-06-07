@@ -27,7 +27,7 @@ function onDown(){
 </script>
 <template>
   <ModulStruct @delete="onDelete()" @up="onUp()" @down="onDown()" type="Link" name="5 Einträge" svg="fa-solid fa-link">
-    <div class="grid grid-cols-4 gap-2">
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-2">
       <slot></slot>
       <AddButton @click="onAdd()"></AddButton>
     </div>
