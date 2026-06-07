@@ -50,12 +50,12 @@ import {onMounted, ref} from "vue";
         </ul>
       </div>
 
-      <button class="select-none hover:bg-[var(--surface-color)] hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-75 border border-transparent flex justify-center items-center gap-2 px-4 py-3 rounded-xl bg-[var(--primary-color)] text-[var(--text-color-white)] shadow-sm text-sm font-semibold">
+      <a :href="`#${props.tabs?.find(s => s.sectionType === 'Kontakt & Social')?.id ?? null}`" class="select-none hover:bg-[var(--surface-color)] hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-75 border border-transparent flex justify-center items-center gap-2 px-4 py-3 rounded-xl bg-[var(--primary-color)] text-[var(--text-color-white)] shadow-sm text-sm font-semibold">
         <span>Kontakt aufnehmen</span>
         <SvgStruct>
           <i class="fa-solid fa-arrow-right"></i>
         </SvgStruct>
-      </button>
+      </a>
     </div>
   </div>
 </template>
