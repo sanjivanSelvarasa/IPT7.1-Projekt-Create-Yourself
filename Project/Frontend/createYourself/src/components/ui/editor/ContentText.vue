@@ -61,9 +61,9 @@ import {parse} from "vite";
 
     <div>
       <InputStruct title="Text">
-        <textarea @change="onUpdate()" v-model="inputText" class="default-input w-full"/>
+        <textarea maxlength="500" @change="onUpdate()" v-model="inputText" class="default-input w-full"/>
       </InputStruct>
-      <span class="text-[var(--text-color-light)] text-sm font-light">108 / 500 Zeichen</span>
+      <span class="text-[var(--text-color-light)] text-sm font-light">{{ inputText.length }} / 500 Zeichen</span>
     </div>
 
     <InputStruct title="Tag">
