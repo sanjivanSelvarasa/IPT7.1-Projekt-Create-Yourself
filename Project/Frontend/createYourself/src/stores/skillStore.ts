@@ -33,7 +33,7 @@ export const useSkillStore = defineStore('skill', () => {
     }
   }
 
-  async function updateSkill(portfolioId: number, educationId: number, skill: UpdateSkillType) {
+  async function updateSkill(portfolioId: number, skill: UpdateSkillType) {
     error.value = null
 
     try{
