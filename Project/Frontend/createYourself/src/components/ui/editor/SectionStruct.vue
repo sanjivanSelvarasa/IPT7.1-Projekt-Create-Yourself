@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-  import {ref} from "vue";
+import {ref} from "vue";
 
   const props = defineProps<{
     title: string,
     name: string,
     isSelected: boolean,
+    isVisible: boolean,
   }>()
 
   const emit = defineEmits<{
@@ -44,7 +45,7 @@
 </script>
 
 <template>
-  <div @click="onSelected" :class="isSelected ? 'active' : '' " class="section-card transition duration-75 w-full min-h-fit rounded-2xl bg-[var(--surface-color)] border border-gray-200">
+  <div @click="onSelected" :class="{ active: isSelected, notVisible: !isVisible }" class="section-card transition duration-75 w-full min-h-fit rounded-2xl bg-[var(--surface-color)] border border-gray-200">
     <div class="p-4 flex items-center justify-between">
       <div class="flex items-center justify-center gap-3">
         <div class="cursor-grab flex items-center justify-center text-[var(--text-color-light)] text-xs">
@@ -92,6 +93,12 @@
 <style scoped>
   .active{
     border-color: var(--primary-color);
+  }
+
+  .notVisible{
+    opacity: 0.8;
+    background-size: 30px 30px;
+    background-image: repeating-linear-gradient(45deg, var(--color-gray-300) 0, var(--color-gray-300) .5px, var(--surface-color) 0px, var(--surface-color) 50%);
   }
 
   .section-card {
