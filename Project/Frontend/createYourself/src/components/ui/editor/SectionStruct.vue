@@ -44,14 +44,14 @@
 </script>
 
 <template>
-  <div @click="onSelected" :class="isSelected ? 'active' : '' " class="transition duration-75 w-full min-h-fit rounded-2xl bg-[var(--surface-color)] border border-gray-200">
+  <div @click="onSelected" :class="isSelected ? 'active' : '' " class="section-card transition duration-75 w-full min-h-fit rounded-2xl bg-[var(--surface-color)] border border-gray-200">
     <div class="p-4 flex items-center justify-between">
       <div class="flex items-center justify-center gap-3">
         <div class="cursor-grab flex items-center justify-center text-[var(--text-color-light)] text-xs">
           <i class="fa-solid fa-grip-vertical"></i>
         </div>
-        <span class="select-none text-xs uppercase text-[var(--text-color-light)] px-2 py-1 rounded-md border border-gray-200 font-semibold bg-gray-50">{{ props.name }}</span>
-        <input @change="onUpdate()" v-model="title" type="text" class="hover:bg-gray-50 transition duration-100 rounded-sm! px-2 py-1">
+        <span class="select-none text-xs uppercase text-[var(--text-color-light)] px-2 py-1 rounded-md border border-gray-200 font-semibold bg-gray-50 text-nowrap">{{ props.name }}</span>
+        <input @change="onUpdate()" v-model="title" type="text" class="section-title-input hover:bg-gray-50 transition duration-100 rounded-sm! px-2 py-1">
       </div>
       <div class="flex items-center justify-center gap-2 text-[var(--text-color-light)]">
 
@@ -92,5 +92,15 @@
 <style scoped>
   .active{
     border-color: var(--primary-color);
+  }
+
+  .section-card {
+    container-type: inline-size;
+  }
+
+  @container (max-width: 500px) {
+    .section-title-input {
+      display: none;
+    }
   }
 </style>
