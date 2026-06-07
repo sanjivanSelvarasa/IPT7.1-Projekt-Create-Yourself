@@ -16,6 +16,7 @@ const emit = defineEmits<{
 function onUpdate() {
   const updatedSkill : UpdateSkillType = {
     id: props.skillBlock.id,
+    name: inputName.value,
     level: inputLevel.value,
     sortOrder: props.skillBlock.sortOrder,
   }

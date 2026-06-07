@@ -36,6 +36,7 @@ export async function updateSkillApi(portfolioId: number, skill: UpdateSkillType
     body: JSON.stringify({
       level: skill.level,
       sortOrder: skill.sortOrder,
+      name: skill.name,
     })
   })
 }
