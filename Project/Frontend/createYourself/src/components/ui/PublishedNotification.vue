@@ -8,7 +8,7 @@
   }>()
 
   function pushToPublic(){
-    router.push(`/${props.slug}`);
+    window.open(`/${props.slug}`, '_blank');
   }
 
   const isCopied = ref<boolean>(false);
