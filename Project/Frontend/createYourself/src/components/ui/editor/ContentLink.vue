@@ -36,16 +36,6 @@ watch(() => props.linkBlock, (newLink) => {
 
 <template>
   <ContentStruct>
-    <span class="md-subtitle text-[var(--text-color-light)]">Platform</span>
-
-    <div class="grid grid-cols-6 w-full h-fit bg-gray-50 border border-gray-300 rounded-lg">
-      <SvgStruct v-for="i in 10" class="min-h-[50px] text-[var(--text-color-light)]">
-        <i class="fa-brands fa-github"></i>
-      </SvgStruct>
-    </div>
-
-    <div class="divider"></div>
-
     <span class="md-subtitle text-[var(--text-color-light)]">Details</span>
 
     <InputStruct title="Anzeige-Name">
