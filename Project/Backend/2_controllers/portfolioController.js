@@ -313,6 +313,19 @@ async function deleteBlock(req, res) {
     res.sendStatus(204)
 }
 
+async function uploadBlockImage(req, res) {
+    const block = await blockService.uploadBlockImage(
+        req.user.email,
+        req.params.id,
+        req.params.versionId,
+        req.params.sectionId,
+        req.params.blockId,
+        req.file
+    )
+
+    res.status(201).json(block)
+}
+
 module.exports = {
     getPortfolios,
     createPortfolio,
@@ -369,5 +382,6 @@ module.exports = {
     listBlocks,
     createBlock,
     updateBlock,
-    deleteBlock
+    deleteBlock,
+    uploadBlockImage
 }

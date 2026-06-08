@@ -95,6 +95,7 @@ router.get('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks', auth
 router.post('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks', authenticateToken, asyncHandler(portfolioController.createBlock))
 router.put('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId', authenticateToken, asyncHandler(portfolioController.updateBlock))
 router.delete('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId', authenticateToken, asyncHandler(portfolioController.deleteBlock))
+router.post('/portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId/image', authenticateToken, uploadModuleImage.single('image'), asyncHandler(portfolioController.uploadBlockImage))
 
 // Verfügbare Templates abrufen
 router.get('/templates', asyncHandler(portfolioController.listTemplates))

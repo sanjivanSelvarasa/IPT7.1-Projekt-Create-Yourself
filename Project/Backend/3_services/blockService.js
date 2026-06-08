@@ -9,6 +9,18 @@ const { getOwnedPortfolio } = require('./helpers/portfolioAccess')
 const portfolioModel = require('../4_models/portfolioModel')
 const sectionModel = require('../4_models/sectionModel')
 const blockModel = require('../4_models/blockModel')
+const { deleteUploadedFile } = require('../5_utils/fileHelpers')
+
+function parseBlockContentJson(contentJson) {
+    if (!contentJson) return {}
+
+    try {
+        const parsed = JSON.parse(contentJson)
+        return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {}
+    } catch {
+        return {}
+    }
+}
 
 async function getOwnedSection(email, rawPortfolioId, rawVersionId, rawSectionId) {
     const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
@@ -106,9 +118,43 @@ async function deleteBlock(email, rawPortfolioId, rawVersionId, rawSectionId, ra
     await blockModel.deleteBlockById(blockId)
 }
 
+async function uploadBlockImage(email, rawPortfolioId, rawVersionId, rawSectionId, rawBlockId, file) {
+    const { section } = await getOwnedSection(email, rawPortfolioId, rawVersionId, rawSectionId)
+    const blockId = parseId(rawBlockId, 'Block-ID')
+
+    const existing = await blockModel.getBlockById(blockId)
+    if (!existing || existing.sectionId !== section.id) {
+        throw new ApiError(404, 'Block nicht gefunden.')
+    }
+
+    if (!file || typeof file.filename !== 'string' || file.filename.trim() === '') {
+        throw new ApiError(400, 'Es wurde keine Bilddatei hochgeladen.')
+    }
+
+    const content = parseBlockContentJson(existing.contentJson)
+    const oldImageUrl = typeof content.imageUrl === 'string' ? content.imageUrl : null
+    content.imageUrl = `/uploads/modules/${file.filename}`
+
+    const updated = await blockModel.updateBlock(blockId, {
+        blockType: existing.blockType,
+        contentJson: JSON.stringify(content),
+        sortOrder: existing.sortOrder
+    })
+
+    deleteUploadedFile(oldImageUrl)
+
+    return {
+        id: updated.id,
+        sectionId: updated.sectionId,
+        imageUrl: content.imageUrl,
+        updatedAt: updated.updatedAt
+    }
+}
+
 module.exports = {
     listBlocks,
     createBlock,
     updateBlock,
-    deleteBlock
+    deleteBlock,
+    uploadBlockImage
 }

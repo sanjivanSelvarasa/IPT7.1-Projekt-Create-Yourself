@@ -69,7 +69,7 @@ activateVersion()
 **Rückgabe:** Angelegte Übersetzung.
 
 ### createVersion()
-**Beschreibung:** Erstellt eine neue Portfolio-Version mit der nächsten fortlaufenden Versionsnummer.
+**Beschreibung:** Erstellt eine neue Portfolio-Version mit der nächsten fortlaufenden Versionsnummer, kopiert alle Sections und Editor-Blöcke aus der aktuell aktiven Version und setzt die neue Version direkt als aktiv.
 **Parameter:** `email`, `portfolioId`
 **Rückgabe:** Angelegte Version.
 
@@ -186,6 +186,21 @@ createEducation()
 updateEducation()
 deleteEducation()
 ```
+
+## EditorBlock-Modul
+
+```
+listBlocks()
+createBlock()
+updateBlock()
+deleteBlock()
+uploadBlockImage()
+```
+
+### uploadBlockImage()
+**Beschreibung:** Speichert ein hochgeladenes Bild fuer einen einzelnen Editor-Block unter `/uploads/modules/` und aktualisiert `contentJson.imageUrl` des Blocks. Ein zuvor gesetztes Block-Bild wird von Disk geloescht.
+**Parameter:** `email`, `portfolioId`, `versionId`, `sectionId`, `blockId`, `file`
+**Rückgabe:** `{ id, sectionId, imageUrl, updatedAt }`
 
 ## Gemeinsame Helper/Utility-Funktionen
 

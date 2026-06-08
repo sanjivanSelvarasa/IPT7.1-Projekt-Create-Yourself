@@ -17,6 +17,8 @@ const socialLinkModel = require('../4_models/socialLinkModel')
 const experienceModel = require('../4_models/experienceModel')
 const educationModel = require('../4_models/educationModel')
 const themeModel = require('../4_models/themeModel')
+const sectionModel = require('../4_models/sectionModel')
+const blockModel = require('../4_models/blockModel')
 
 function generateSlug(base) {
     return `${base}-${Date.now()}`
@@ -277,10 +279,44 @@ async function listVersions(email, rawPortfolioId) {
 async function createVersion(email, rawPortfolioId) {
     const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
 
-    return portfolioModel.createVersionForPortfolio(portfolio.id, {
+    const sourceVersionId = portfolio.currentVersionId
+    let sourceSections = []
+    if (sourceVersionId) {
+        const sourceVersion = await portfolioModel.getVersionById(sourceVersionId)
+        if (sourceVersion && sourceVersion.portfolioId === portfolio.id) {
+            sourceSections = await sectionModel.getSectionsByVersionId(sourceVersionId)
+        }
+    }
+
+    const createdVersion = await portfolioModel.createVersionForPortfolio(portfolio.id, {
         titleSnapshot: portfolio.title,
         isPublished: false
     })
+
+    for (const sourceSection of sourceSections) {
+        const createdSection = await sectionModel.createSectionForVersion(createdVersion.id, {
+            sectionType: sourceSection.sectionType,
+            title: sourceSection.title,
+            sortOrder: sourceSection.sortOrder,
+            isVisible: sourceSection.isVisible
+        })
+
+        const sourceBlocks = await blockModel.getBlocksBySectionId(sourceSection.id)
+        for (const sourceBlock of sourceBlocks) {
+            await blockModel.createBlockForSection(createdSection.id, {
+                blockType: sourceBlock.blockType,
+                contentJson: sourceBlock.contentJson,
+                sortOrder: sourceBlock.sortOrder
+            })
+        }
+    }
+
+    await portfolioModel.setCurrentVersionForPortfolio(portfolio.id, createdVersion.id)
+
+    return {
+        ...createdVersion,
+        isActive: true
+    }
 }
 
 async function getVersionById(email, rawPortfolioId, rawVersionId) {

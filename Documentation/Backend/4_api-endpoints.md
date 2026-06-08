@@ -551,7 +551,10 @@ Statuscodes:
 **Beschreibung:** Alle Versionen eines Portfolios laden.
 
 ### [POST] /portfolio/:id/versions
-**Beschreibung:** Neue Version aus dem aktuellen Portfoliozustand erstellen.
+**Beschreibung:** Neue Version erstellen. Dabei wird die aktuell aktive Version geklont:
+- Alle Sections der aktuellen Version werden kopiert.
+- Alle Editor-Blöcke dieser Sections werden kopiert.
+- Die neu erstellte Version wird automatisch als aktive Version gesetzt.
 
 **Response (201):**
 ```json
@@ -561,7 +564,8 @@ Statuscodes:
   "versionNumber": 2,
   "titleSnapshot": "Mein Portfolio",
   "isPublished": false,
-  "createdAt": "2026-04-30T12:00:00.000Z"
+  "createdAt": "2026-04-30T12:00:00.000Z",
+  "isActive": true
 }
 ```
 
@@ -671,6 +675,23 @@ Statuscodes:
 
 ### [DELETE] /portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId
 **Beschreibung:** Editor-Block löschen.
+
+### [POST] /portfolio/:id/versions/:versionId/sections/:sectionId/blocks/:blockId/image
+**Beschreibung:** Bild für einen einzelnen Editor-Block hochladen (multipart/form-data, Feld `image`).
+
+Hinweis:
+- Die Datei wird unter `/uploads/modules/...` gespeichert.
+- Die Bild-URL wird in `contentJson.imageUrl` des Blocks gesetzt.
+
+**Response (201):**
+```json
+{
+  "id": 77,
+  "sectionId": 33,
+  "imageUrl": "/uploads/modules/block-...png",
+  "updatedAt": "2026-06-08T10:30:00.000Z"
+}
+```
 
 Statuscodes:
 - `200`, `201`, `204`
