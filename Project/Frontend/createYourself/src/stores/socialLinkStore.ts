@@ -35,11 +35,11 @@ export const useSocialLinkStore = defineStore('socialLink', () => {
     }
   }
 
-  async function updateSocialLink(portfolioId: number, linkId: number, url: string){
+  async function updateSocialLink(portfolioId: number, socialLink: SocialLinkType){
     error.value = null
 
     try{
-      return await updateSocialLinkApi(portfolioId, linkId, url)
+      return await updateSocialLinkApi(portfolioId, socialLink.id, socialLink)
     }catch (err){
       error.value = err ? err.message : 'Failed to update social link'
     }
