@@ -37,7 +37,16 @@ export const useSkillStore = defineStore('skill', () => {
     error.value = null
 
     try{
-      await updateSkillApi(portfolioId, skill)
+      const updatedSkill = await updateSkillApi(portfolioId, skill)
+
+      if (skills.value) {
+        const index = skills.value.findIndex(existingSkill => existingSkill.id === updatedSkill.id)
+        if (index !== -1) {
+          skills.value[index] = updatedSkill
+        }
+      }
+
+      return updatedSkill
     }catch (err){
       error.value = err ? err.message : 'Failed to update education'
     }

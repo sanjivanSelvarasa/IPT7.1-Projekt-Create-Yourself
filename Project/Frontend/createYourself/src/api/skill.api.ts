@@ -37,6 +37,7 @@ export async function updateSkillApi(portfolioId: number, skill: UpdateSkillType
       level: skill.level,
       sortOrder: skill.sortOrder,
       name: skill.name,
+      description: skill.description,
     })
   })
 }

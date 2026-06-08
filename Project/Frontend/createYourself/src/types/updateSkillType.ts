@@ -3,4 +3,5 @@ export type UpdateSkillType = {
   level: number,
   sortOrder: number,
   name: string,
+  description?: string,
 }
