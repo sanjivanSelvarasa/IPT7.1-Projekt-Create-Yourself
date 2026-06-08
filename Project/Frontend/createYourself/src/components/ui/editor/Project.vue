@@ -21,7 +21,7 @@ function onSelected() {
 
 <template>
   <button @click="onSelected()" class="hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col rounded-xl aspect-square overflow-hidden bg-[var(--surface-color)] border border-gray-200" :class="props.isActive ? 'element-active' : ''">
-    <img :src="`http://localhost:3000${props.imageUrl}`" class="object-cover h-full w-full bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]"></img>
+    <img :src="`http://localhost:3000${props.imageUrl}`" class="object-cover h-full w-full bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]">
 
     <div class="h-fit p-4">
       <div class="flex flex-col items-start justify-center">
