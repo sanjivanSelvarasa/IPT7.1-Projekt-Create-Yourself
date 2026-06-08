@@ -71,7 +71,7 @@ async function listVersions(req, res) {
 }
 
 async function createVersion(req, res) {
-    const version = await portfolioService.createVersion(req.user.email, req.params.id)
+    const version = await portfolioService.createVersion(req.user.email, req.params.id, req.body)
     res.status(201).json(version)
 }
 

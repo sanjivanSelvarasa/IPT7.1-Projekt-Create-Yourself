@@ -276,15 +276,52 @@ async function listVersions(email, rawPortfolioId) {
     return portfolioModel.getVersionsByPortfolioId(portfolio.id)
 }
 
-async function createVersion(email, rawPortfolioId) {
+async function createVersion(email, rawPortfolioId, data) {
     const portfolio = await getOwnedPortfolio(email, rawPortfolioId)
 
-    const sourceVersionId = portfolio.currentVersionId
+    let requestedSourceVersionId = null
+    if (data !== undefined) {
+        ensurePayloadObject(data)
+        requestedSourceVersionId = parseOptionalId(data.sourceVersionId, 'Quell-Versions-ID')
+    }
+
     let sourceSections = []
-    if (sourceVersionId) {
-        const sourceVersion = await portfolioModel.getVersionById(sourceVersionId)
-        if (sourceVersion && sourceVersion.portfolioId === portfolio.id) {
-            sourceSections = await sectionModel.getSectionsByVersionId(sourceVersionId)
+    let sourceVersionId = null
+
+    if (requestedSourceVersionId) {
+        const requestedSourceVersion = await portfolioModel.getVersionById(requestedSourceVersionId)
+        if (!requestedSourceVersion || requestedSourceVersion.portfolioId !== portfolio.id) {
+            throw new ApiError(404, 'Quell-Version nicht gefunden.')
+        }
+
+        sourceVersionId = requestedSourceVersion.id
+        sourceSections = await sectionModel.getSectionsByVersionId(requestedSourceVersion.id)
+    }
+
+    if (!sourceVersionId && portfolio.currentVersionId) {
+        const currentVersion = await portfolioModel.getVersionById(portfolio.currentVersionId)
+        if (currentVersion && currentVersion.portfolioId === portfolio.id) {
+            const currentVersionSections = await sectionModel.getSectionsByVersionId(currentVersion.id)
+            if (currentVersionSections.length > 0) {
+                sourceVersionId = currentVersion.id
+                sourceSections = currentVersionSections
+            }
+        }
+    }
+
+    if (!sourceVersionId) {
+        const versions = await portfolioModel.getVersionsByPortfolioId(portfolio.id)
+        for (const version of versions) {
+            if (portfolio.currentVersionId && version.id === portfolio.currentVersionId) {
+                continue
+            }
+
+            const candidateSections = await sectionModel.getSectionsByVersionId(version.id)
+            if (candidateSections.length > 0) {
+                sourceVersionId = version.id
+                sourceSections = candidateSections
+                break
+            }
         }
     }
 
