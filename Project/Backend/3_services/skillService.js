@@ -80,6 +80,38 @@ async function updateSkill(email, rawPortfolioId, rawPortfolioSkillId, data) {
         throw new ApiError(404, 'Skill-Zuordnung nicht gefunden.')
     }
 
+    const name = data.name !== undefined
+        ? parseRequiredText(data.name, 'Skill-Name', 50)
+        : existing.name
+    const description = data.description !== undefined
+        ? parseOptionalText(data.description, 'Skill-Beschreibung', 4000)
+        : existing.description
+
+    let updatedSkillMeta = { name: existing.name, description: existing.description }
+    if (name !== existing.name || description !== existing.description) {
+        try {
+            const updatedSkill = await skillModel.updateSkillById(existing.skillId, {
+                name,
+                description
+            })
+
+            if (!updatedSkill) {
+                throw new ApiError(404, 'Skill nicht gefunden.')
+            }
+
+            updatedSkillMeta = {
+                name: updatedSkill.name,
+                description: updatedSkill.description
+            }
+        } catch (error) {
+            if (error.number === 2627 || error.number === 2601) {
+                throw new ApiError(409, 'Ein Skill mit diesem Namen existiert bereits.')
+            }
+
+            throw error
+        }
+    }
+
     const level = data.level !== undefined ? parseSkillLevel(data.level) : existing.level
     const sortOrder = data.sortOrder !== undefined
         ? parseOptionalSortOrder(data.sortOrder)
@@ -90,8 +122,8 @@ async function updateSkill(email, rawPortfolioId, rawPortfolioSkillId, data) {
         id: updated.id,
         portfolioId: updated.portfolioId,
         skillId: updated.skillId,
-        name: existing.name,
-        description: existing.description,
+        name: updatedSkillMeta.name,
+        description: updatedSkillMeta.description,
         level: updated.level,
         imageUrl: updated.imageUrl,
         sortOrder: updated.sortOrder,
