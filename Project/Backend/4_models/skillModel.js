@@ -47,6 +47,29 @@ async function createSkill(skill) {
     return result.recordset[0]
 }
 
+async function updateSkillById(skillId, skill) {
+    const pool = await database.getPool()
+    const result = await pool
+        .request()
+        .input('skillId', sql.Int, skillId)
+        .input('name', sql.NVarChar(50), skill.name)
+        .input('description', sql.NVarChar(sql.MAX), skill.description)
+        .query(`
+            UPDATE Skill
+            SET
+                [name] = @name,
+                description = @description
+            OUTPUT
+                inserted.id,
+                inserted.[name] AS name,
+                inserted.description,
+                inserted.created_at AS createdAt
+            WHERE id = @skillId
+        `)
+
+    return result.recordset[0]
+}
+
 async function getPortfolioSkillsByPortfolioId(portfolioId) {
     const pool = await database.getPool()
     const result = await pool
@@ -218,6 +241,7 @@ async function deletePortfolioSkillById(portfolioSkillId) {
 module.exports = {
     findSkillByName,
     createSkill,
+    updateSkillById,
     getPortfolioSkillsByPortfolioId,
     getPortfolioSkillById,
     getPortfolioSkillByPortfolioAndSkillId,
