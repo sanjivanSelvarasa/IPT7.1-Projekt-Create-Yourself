@@ -55,6 +55,8 @@ import router from "@/router";
 import {useVersionStore} from "@/stores/versionStore.ts";
 import type {CreateVersionType} from "@/types/createVersionType.ts";
 import {getBrandSvg} from "@/utils/brand.ts";
+import ExperienceModul from "@/components/ui/editor/ExperienceModul.vue";
+import ExperienceElement from "@/components/ui/editor/ExperienceElement.vue";
 
 const portfolioName = ref<string>('');
 
@@ -680,24 +682,52 @@ async function createEducationModul(){
   await educationStore.getEducation(portfolioId)
   await loadSortedSections()
 }
-async function createExperienceModul(){
-  if(sortedSections.value === null) return;
+async function createExperienceModul() {
+  if (sortedSections.value === null) return
 
   const maxSortCount = getMaxSortCount()
 
-  const experience : CreateExperienceType = {
-    companyName: 'TEMPLATE NAME',
-    position: 'TEMPLATE',
-    sortOrder: maxSortCount + 1,
+  const experiences: CreateExperienceType[] = [
+    {
+      companyName: 'Firmenname',
+      position: 'Beruf',
+      description: 'Beschreibung über den Beruf...',
+      startDate: '2024-05-30',
+      endDate: '2026-10-24',
+      sortOrder: 1,
+    },
+    {
+      companyName: 'Firmenname',
+      position: 'Beruf',
+      description: 'Beschreibung über den Beruf...',
+      startDate: '2024-05-30',
+      endDate: '2026-10-24',
+      sortOrder: 2,
+    },
+    {
+      companyName: 'Firmenname',
+      position: 'Beruf',
+      description: 'Beschreibung über den Beruf...',
+      startDate: '2024-05-30',
+      endDate: '2026-10-24',
+      sortOrder: 3,
+    },
+  ]
+
+  const createdExperiences = []
+
+  for (const experience of experiences) {
+    const res = await experienceStore.createExperience(portfolioId, experience)
+
+    if (res === null || res?.id === null) return
+
+    createdExperiences.push(res)
   }
 
-  const res = await experienceStore.createExperience(portfolioId, experience)
-  if(res?.id === null || res === null) return;
-
-  const editorText : CreateEditorBlockType = {
+  const editorText: CreateEditorBlockType = {
     blockType: "experience",
     contentJson: {
-      ids: [res!.id],
+      ids: createdExperiences.map(e => e.id),
     },
     sortOrder: maxSortCount + 1,
   }
@@ -857,8 +887,11 @@ async function addExperienceToModul(editorBlock: EditorBlockType){
   const maxSortCount = getMaxSortCount()
 
   const experience : CreateExperienceType = {
-    companyName: 'TEMPLATE NAME',
-    position: 'TEMPLATE',
+    companyName: 'Firmenname',
+    position: 'Beruf',
+    description: 'Beschreibung über den Beruf...',
+    startDate: '2024-05-30',
+    endDate: '2026-10-24',
     sortOrder: maxSortCount + 1,
   }
 
@@ -1053,7 +1086,7 @@ async function updateSocialLinkBlockFunc(linkBlock: SocialLinkType){
   // if (!ok) return
 
   try{
-    await socialLinkStore.updateSocialLink(portfolioId, linkBlock.id, linkBlock.url)
+    await socialLinkStore.updateSocialLink(portfolioId, linkBlock)
     await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionSelected.value)
     await loadSortedSections()
   }catch {}
@@ -1420,6 +1453,35 @@ const isSettingsOpen = ref<boolean>(true)
 function toggleSettings() {
   isSettingsOpen.value = !isSettingsOpen.value
 }
+
+// update portfolio title
+async function updatePortfolioTitle() {
+  if (!portfolioFacts.value) return
+
+  const newTitle = portfolioName.value.trim()
+
+  if (!newTitle) {
+    portfolioName.value = portfolioFacts.value.title
+    return
+  }
+
+  if (newTitle === portfolioFacts.value.title) return
+
+  try {
+    const updatedPortfolio : PortfolioType = {
+      ...portfolioFacts.value,
+      title: newTitle,
+    }
+
+    await portfolioStore.updatePortfolio(updatedPortfolio)
+
+    portfolioFacts.value.title = newTitle
+    portfolioFacts.value.updatedAt = new Date()
+  } catch (err) {
+    console.error(err)
+    portfolioName.value = portfolioFacts.value.title
+  }
+}
 </script>
 
 <template>
@@ -1434,7 +1496,7 @@ function toggleSettings() {
       <div class="flex items-center justify-center w-full max-w-[1200px]">
         <div class="flex items-center justify-between gap-3 w-full mx-5">
           <div class="lg:flex hidden items-center justify-center gap-5">
-            <input v-model="portfolioName" type="text" class="font-semibold px-3 py-2 ">
+            <input @blur="updatePortfolioTitle" @keydown.enter="updatePortfolioTitle" v-model="portfolioName" type="text" class="font-semibold px-3 py-2 bg-gray-100">
 
             <div class="flex items-center justify-center gap-2 bg-green-50 px-3 py-0.5 rounded-full text-sm text-green-700">
               <div class="relative w-[7px] h-[7px]">
@@ -1569,6 +1631,10 @@ function toggleSettings() {
                 <EducationModul v-if="editor.blockType === 'education' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @add="addEducationToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
                   <EducationElement v-for="education in editor.education" @selected="elementSelectedFunction(education.id, editor)" :is-active="elementSelectedId === education.id" :key="education.id" :name="education.institutionName" :degree="education.degree" :field-of-study="education.fieldOfStudy" :start-date="education.startDate" :end-date="education.endDate"></EducationElement>
                 </EducationModul>
+
+                <ExperienceModul v-if="editor.blockType === 'experience' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @add="addExperienceToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
+                  <ExperienceElement v-for="experience in editor.experience" :key="experience.id" :company="experience.companyName" :title="experience.position" :description="experience.description" :start-date="experience.startDate" :end-date="experience.endDate" :is-active="elementSelectedId === experience.id"></ExperienceElement>
+                </ExperienceModul>
 
                 <SocialLinkModul v-if="editor.blockType === 'link' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @add="addSocialLinkToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
                   <SocialLinkElement v-for="link in editor.link" @selected="elementSelectedFunction(link.id, editor)" :is-active="elementSelectedId === link.id" :key="link.id" :svg="getBrandSvg(link.platform)" :name="link.platform" :url="link.url"></SocialLinkElement>
