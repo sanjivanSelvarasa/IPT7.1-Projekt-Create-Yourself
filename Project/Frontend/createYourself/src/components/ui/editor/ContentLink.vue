@@ -22,9 +22,9 @@ function onSectionVisible(){
 function onUpdate() {
   const updatedLink : SocialLinkType = {
     ...props.linkBlock,
+    platform: inputName.value,
     url: url.value,
   }
-
   emit('update', updatedLink)
 }
 
@@ -45,7 +45,7 @@ watch(() => props.linkBlock, (newLink) => {
     <span class="md-subtitle text-[var(--text-color-light)]">Details</span>
 
     <InputStruct title="Anzeige-Name">
-      <input v-model="inputName" class="default-input w-full" type="text"/>
+      <input @change="onUpdate()" v-model="inputName" class="default-input w-full" type="text"/>
     </InputStruct>
 
     <InputStruct title="URL">
