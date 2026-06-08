@@ -24,14 +24,15 @@ export async function createSocialLinkApi(portoflioId: number, socialLink: Creat
   })
 }
 
-export async function updateSocialLinkApi(portoflioId: number,linkId: number, url: string){
+export async function updateSocialLinkApi(portoflioId: number,linkId: number, socialLink: SocialLinkType) : Promise<SocialLinkType>{
   return await apiFetch(`/portfolio/${portoflioId}/links/${linkId}`, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
     },
     body: JSON.stringify({
-      url: url,
+      url: socialLink.url,
+      platform: socialLink.platform,
     })
   })
 }
