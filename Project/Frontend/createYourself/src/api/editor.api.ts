@@ -2,6 +2,7 @@ import {apiFetch} from "@/api/api.ts";
 import type {CreateEditorBlockType} from "@/types/createEditorBlockType.ts";
 import type {EditorBlockType} from "@/types/editorBlockType.ts";
 import type {CreateTextEditorBlockType} from "@/types/createTextEditorBlockType.ts";
+import type {UploadImageResponseType} from "@/types/UploadImageResponseType.ts";
 
 export async function getEditorBlockApi(portfolioId: number, portfolioVersionId: number, sectionId: number) : Promise<EditorBlockType[]> {
   return await apiFetch(`/portfolio/${portfolioId}/versions/${portfolioVersionId}/sections/${sectionId}/blocks`, {
@@ -47,4 +48,15 @@ export async function deleteEditorBlockApi(portfolioId: number, portfolioVersion
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
     }
   })
+}
+
+export async function uploadEditorBlockImageApi(portfolioId: number, versionId: number, sectionId: number, blockId: number, image: File): Promise<UploadImageResponseType> {
+  const formData = new FormData();
+  formData.append("image", image);
+
+  return await apiFetch<UploadImageResponseType>(`/portfolio/${portfolioId}/versions/${versionId}/sections/${sectionId}/blocks/${blockId}/image`, {
+      method: "POST",
+      body: formData,
+    }
+  );
 }

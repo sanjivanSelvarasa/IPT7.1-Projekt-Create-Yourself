@@ -4,11 +4,12 @@ import {
   createEditorBlockApi,
   deleteEditorBlockApi,
   getEditorBlockApi,
-  updateEditorBlockApi
+  updateEditorBlockApi, uploadEditorBlockImageApi
 } from "@/api/editor.api.ts";
 import type {CreateEditorBlockType} from "@/types/createEditorBlockType.ts";
 import type {EditorBlockType} from "@/types/editorBlockType.ts";
 import type {CreateTextEditorBlockType} from "@/types/createTextEditorBlockType.ts";
+import type {UploadImageResponseType} from "@/types/UploadImageResponseType.ts";
 
 export const useEditorBlockStore = defineStore('editorBlock', () => {
   const error = ref<string | null>()
@@ -58,5 +59,18 @@ export const useEditorBlockStore = defineStore('editorBlock', () => {
     }
   }
 
-  return {error, loading, editorBlocks, getEditorBlock, createEditorBlock, deleteEditorBlock, updateEditorBlock}
+  async function uploadImageToEditorBlock(portfolioId: number, portfolioVersionId: number, sectionId: number, blockId: number, image: File): Promise<UploadImageResponseType | undefined> {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      return await uploadEditorBlockImageApi(portfolioId, portfolioVersionId, sectionId, blockId, image);
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : "Failed to upload editor block image";
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  return {error, loading, editorBlocks, getEditorBlock, createEditorBlock, deleteEditorBlock, updateEditorBlock, uploadImageToEditorBlock}
 })

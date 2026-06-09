@@ -1,173 +1,203 @@
 <script lang="ts" setup>
-  import {useRoute} from "vue-router";
-  import {computed, onMounted, ref} from "vue";
-  import {usePortfolioStore} from "@/stores/portfolioStore.ts";
-  import NavPublic from "@/components/layout/NavPublic.vue";
-  import SvgStruct from "@/components/ui/SvgStruct.vue";
-  import PublishModulStruct from "@/components/ui/PublishModulStruct.vue";
-  import PublishProjectElement from "@/components/ui/PublishProjectElement.vue";
-  import {usePortfolioSectionStore} from "@/stores/portfolioSectionStore.ts";
-  import type {PortfolioType} from "@/types/portfolioType.ts";
-  import type {TextBlockContent} from "@/types/textBlockContent.ts";
-  import type {ModulType} from "@/types/modulType.ts";
-  import {useEditorBlockStore} from "@/stores/editorBlockStore.ts";
-  import {useSkillStore} from "@/stores/skillStore.ts";
-  import {useProjectStore} from "@/stores/projectStore.ts";
-  import {useEducationStore} from "@/stores/educationStore.ts";
-  import {useExperienceStore} from "@/stores/experienceStore.ts";
-  import {useSocialLinkStore} from "@/stores/socialLinkStore.ts";
-  import PublishSkillModul from "@/components/ui/PublishSkillModul.vue";
-  import PublishSkillElement from "@/components/ui/PublishSkillElement.vue";
-  import PublishEducationElement from "@/components/ui/PublishEducationElement.vue";
-  import PublishLinkModul from "@/components/ui/editor/PublishLinkModul.vue";
-  import PublishLinkElement from "@/components/ui/PublishLinkElement.vue";
-  import PublishTextElement from "@/components/ui/editor/PublishTextElement.vue";
-  import {getBrandSvg} from "@/utils/brand.ts";
+import {useRoute} from "vue-router";
+import {computed, onMounted, ref} from "vue";
+import {usePortfolioStore} from "@/stores/portfolioStore.ts";
+import NavPublic from "@/components/layout/NavPublic.vue";
+import SvgStruct from "@/components/ui/SvgStruct.vue";
+import PublishModulStruct from "@/components/ui/PublishModulStruct.vue";
+import PublishProjectElement from "@/components/ui/PublishProjectElement.vue";
+import {usePortfolioSectionStore} from "@/stores/portfolioSectionStore.ts";
+import type {PortfolioType} from "@/types/portfolioType.ts";
+import type {TextBlockContent} from "@/types/textBlockContent.ts";
+import type {ModulType} from "@/types/modulType.ts";
+import {useEditorBlockStore} from "@/stores/editorBlockStore.ts";
+import {useSkillStore} from "@/stores/skillStore.ts";
+import {useProjectStore} from "@/stores/projectStore.ts";
+import {useEducationStore} from "@/stores/educationStore.ts";
+import {useExperienceStore} from "@/stores/experienceStore.ts";
+import {useSocialLinkStore} from "@/stores/socialLinkStore.ts";
+import PublishSkillModul from "@/components/ui/PublishSkillModul.vue";
+import PublishSkillElement from "@/components/ui/PublishSkillElement.vue";
+import PublishEducationElement from "@/components/ui/PublishEducationElement.vue";
+import PublishLinkModul from "@/components/ui/editor/PublishLinkModul.vue";
+import PublishLinkElement from "@/components/ui/PublishLinkElement.vue";
+import PublishTextElement from "@/components/ui/editor/PublishTextElement.vue";
+import {getBrandSvg} from "@/utils/brand.ts";
+import router from "@/router";
 
-  const route = useRoute();
-  const portfolioSlug = String(route.params.slug);
+const route = useRoute();
+const portfolioId = Number(route.params.id);
 
-  const portfolioStore = usePortfolioStore();
-  const portfolioSectionStore = usePortfolioSectionStore();
-  const editorBlockStore = useEditorBlockStore();
-  const skillStore = useSkillStore();
-  const projectStore = useProjectStore();
-  const educationStore = useEducationStore();
-  const experienceStore = useExperienceStore();
-  const socialLinkStore = useSocialLinkStore();
+const portfolioStore = usePortfolioStore();
+const portfolioSectionStore = usePortfolioSectionStore();
+const editorBlockStore = useEditorBlockStore();
+const skillStore = useSkillStore();
+const projectStore = useProjectStore();
+const educationStore = useEducationStore();
+const experienceStore = useExperienceStore();
+const socialLinkStore = useSocialLinkStore();
 
-  const portfolio = ref<any | null>(null);
-  const portfolioFacts = ref<PortfolioType | null>(null);
+const portfolio = ref<any | null>(null);
+const portfolioFacts = ref<PortfolioType | null>(null);
 
-  const sortedSections = ref<any[] | null>(null);
-  async function loadSortedSections() {
-    const res = [...portfolioSectionStore.sections].sort((a, b) => a.sortOrder - b.sortOrder)
+const sortedSections = ref<any[] | null>(null);
+async function loadSortedSections() {
+  const res = [...portfolioSectionStore.sections].sort((a, b) => a.sortOrder - b.sortOrder)
 
-    sortedSections.value = await Promise.all(
-      res.map(async (s) => ({
-        ...s,
-        editorBlock: await getEditorForSection(s.id)
-      }))
-    )
-  }
-
-  async function getEditorForSection(sectionId: number){
-    if(portfolioFacts.value === null) return;
-
-    const res = await editorBlockStore.getEditorBlock(portfolioFacts.value.id, portfolioFacts.value.currentVersionId, sectionId)
-
-    return res?.map(e => {
-      if(e.blockType === 'text'){
-        return {
-          ...e,
-          textBlockContent: JSON.parse(e.contentJson) as TextBlockContent
-        }
-      }
-
-      if(e.blockType === 'skill'){
-        const content = JSON.parse(e.contentJson) as ModulType
-        return {
-          ...e,
-          skills: skillStore.skills?.filter(t => content.ids?.includes(t.id))
-        }
-      }
-
-      if(e.blockType === 'project'){
-        const content = JSON.parse(e.contentJson) as ModulType
-        return {
-          ...e,
-          project: projectStore.projects?.filter(t => content.ids?.includes(t.id))
-        }
-      }
-
-      if(e.blockType === 'education'){
-        const content = JSON.parse(e.contentJson) as ModulType
-        return {
-          ...e,
-          education: educationStore.educations?.filter(t => content.ids?.includes(t.id))
-        }
-      }
-
-      if(e.blockType === 'experience'){
-        const content = JSON.parse(e.contentJson) as ModulType
-        return {
-          ...e,
-          experience: experienceStore.experiences?.filter(t => content.ids?.includes(t.id))
-        }
-      }
-
-      if(e.blockType === 'link'){
-        const content = JSON.parse(e.contentJson) as ModulType
-        return {
-          ...e,
-          link: socialLinkStore.socialLinks?.filter(t => content.ids?.includes(t.id))
-        }
-      }
-
-      return e
-    }) ?? []
-  }
-
-  onMounted(async () => {
-    portfolio.value = await portfolioStore.getFullPortfolioBySlug(portfolioSlug)
-    portfolioFacts.value = portfolio.value.portfolio
-
-    if(portfolioFacts.value !== null){
-      await skillStore.getSkills(portfolioFacts.value?.id)
-      await projectStore.getProjects(portfolioFacts.value?.id)
-      await educationStore.getEducation(portfolioFacts.value?.id)
-      await experienceStore.getExperience(portfolioFacts.value?.id)
-      await socialLinkStore.getSocialLink(portfolioFacts.value?.id)
-
-      await portfolioSectionStore.getSections(portfolioFacts.value?.id, portfolioFacts.value?.currentVersionId)
-      await loadSortedSections()
-    }
-  })
-
-  const rawName = computed(() => {
-    return sortedSections.value?.find(s => s.sectionType === 'Hero Section').editorBlock[1].textBlockContent.text
-  })
-
-  const firstname = computed(() => {
-    if(rawName.value === null || rawName.value === undefined) return
-
-    return rawName.value.split(' ')[0]
-  })
-
-  const lastname = computed(() => {
-    if(rawName.value === null || rawName.value === undefined) return
-
-    return rawName.value.split(' ')[1]
-  })
-
-
-  const mapForTabs = computed(() => {
-    if(sortedSections?.value === null) return;
-
-    return sortedSections?.value.map(s => ({
-      sectionType: s.sectionType,
-      id: s.id,
+  sortedSections.value = await Promise.all(
+    res.map(async (s) => ({
+      ...s,
+      editorBlock: await getEditorForSection(s.id)
     }))
-  })
+  )
+}
 
-  const projectSectionId = computed(() => {
-    return sortedSections.value?.find(s => s.sectionType === 'Projekte')?.id ?? null
-  })
+async function getEditorForSection(sectionId: number){
+  if(portfolioFacts.value === null) return;
 
-  const contactSectionId = computed(() => {
-    return sortedSections.value?.find(s => s.sectionType === 'Kontakt & Social')?.id ?? null
-  })
+  const res = await editorBlockStore.getEditorBlock(portfolioFacts.value.id, portfolioFacts.value.currentVersionId, sectionId)
 
-  const footerLinks = computed(() => {
-    if(socialLinkStore.socialLinks === null) return
-    return socialLinkStore.socialLinks?.slice(0, 3)
-  })
+  return res?.map(e => {
+    if(e.blockType === 'text'){
+      return {
+        ...e,
+        textBlockContent: JSON.parse(e.contentJson) as TextBlockContent
+      }
+    }
+
+    if(e.blockType === 'skill'){
+      const content = JSON.parse(e.contentJson) as ModulType
+      return {
+        ...e,
+        skills: skillStore.skills?.filter(t => content.ids?.includes(t.id))
+      }
+    }
+
+    if(e.blockType === 'project'){
+      const content = JSON.parse(e.contentJson) as ModulType
+      return {
+        ...e,
+        project: projectStore.projects?.filter(t => content.ids?.includes(t.id))
+      }
+    }
+
+    if(e.blockType === 'education'){
+      const content = JSON.parse(e.contentJson) as ModulType
+      return {
+        ...e,
+        education: educationStore.educations?.filter(t => content.ids?.includes(t.id))
+      }
+    }
+
+    if(e.blockType === 'experience'){
+      const content = JSON.parse(e.contentJson) as ModulType
+      return {
+        ...e,
+        experience: experienceStore.experiences?.filter(t => content.ids?.includes(t.id))
+      }
+    }
+
+    if(e.blockType === 'link'){
+      const content = JSON.parse(e.contentJson) as ModulType
+      return {
+        ...e,
+        link: socialLinkStore.socialLinks?.filter(t => content.ids?.includes(t.id))
+      }
+    }
+
+    return e
+  }) ?? []
+}
+
+onMounted(async () => {
+  portfolio.value = await portfolioStore.getFullPortfolioById(portfolioId)
+
+  if (!portfolio.value) return
+
+  portfolioFacts.value = {
+    id: portfolio.value.portfolio.id,
+    currentThemeId: portfolio.value.portfolio.currentThemeId,
+    currentVersionId: portfolio.value.portfolio.currentVersionId,
+    languageCode: portfolio.value.portfolio.languageCode,
+    userId: portfolio.value.portfolio.userId,
+    templateId: portfolio.value.portfolio.templateId,
+    title: portfolio.value.portfolio.title,
+    description: portfolio.value.portfolio.description,
+    slug: portfolio.value.portfolio.slug,
+    visibility: portfolio.value.portfolio.visibility,
+    createdAt: new Date(portfolio.value.portfolio.createdAt),
+    updatedAt: new Date(portfolio.value.portfolio.updatedAt),
+  }
+
+  await skillStore.getSkills(portfolioId)
+  await projectStore.getProjects(portfolioId)
+  await educationStore.getEducation(portfolioId)
+  await experienceStore.getExperience(portfolioId)
+  await socialLinkStore.getSocialLink(portfolioId)
+
+  await portfolioSectionStore.getSections(
+    portfolioFacts.value.id,
+    portfolioFacts.value.currentVersionId
+  )
+
+  await loadSortedSections()
+})
+
+const rawName = computed(() => {
+  return sortedSections.value?.find(s => s.sectionType === 'Hero Section').editorBlock[1].textBlockContent.text
+})
+
+const firstname = computed(() => {
+  if(rawName.value === null || rawName.value === undefined) return
+
+  return rawName.value.split(' ')[0]
+})
+
+const lastname = computed(() => {
+  if(rawName.value === null || rawName.value === undefined) return
+
+  return rawName.value.split(' ')[1]
+})
+
+
+const mapForTabs = computed(() => {
+  if(sortedSections?.value === null) return;
+
+  return sortedSections?.value.map(s => ({
+    sectionType: s.sectionType,
+    id: s.id,
+  }))
+})
+
+const projectSectionId = computed(() => {
+  return sortedSections.value?.find(s => s.sectionType === 'Projekte')?.id ?? null
+})
+
+const contactSectionId = computed(() => {
+  return sortedSections.value?.find(s => s.sectionType === 'Kontakt & Social')?.id ?? null
+})
+
+const footerLinks = computed(() => {
+  if(socialLinkStore.socialLinks === null) return
+  return socialLinkStore.socialLinks?.slice(0, 3)
+})
+
+async function pushToEditor(){
+  await router.push(`/portfolio/${portfolioId}/editor`)
+}
 </script>
 
 <template>
-  <div class="w-full h-full bg-[var(--background-color)] max-w-[100vw] overflow-x-hidden">
+  <div class="relative w-full h-full bg-[var(--background-color)] max-w-[100vw] overflow-x-hidden">
     <div class="max-w-[1200px] mx-auto mb-5 px-4">
       <NavPublic :firstname="firstname" :lastname="lastname" :tabs="mapForTabs"></NavPublic>
+
+      <button @click="pushToEditor()" class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-100 px-4 py-3 rounded-full border border-gray-500 fixed top-0 left-0 mx-5 my-20 flex items-center justify-center gap-2">
+        <SvgStruct>
+          <i class="fa-solid fa-arrow-left"></i>
+        </SvgStruct>
+        <span>Zurück zum Editor</span>
+      </button>
 
       <main>
         <section v-for="section in sortedSections" :key="section.id" :id="`${section.id}`">
@@ -233,7 +263,7 @@
               </div>
 
               <PublishSkillModul v-if="block.blockType === 'skill' " class="grid lg:grid-cols-2 grid-cols-1 gap-x-10 gap-y-5">
-                  <PublishSkillElement v-for="skill in block.skills" :key="skill.id" :title="skill.name" :value="skill.level"></PublishSkillElement>
+                <PublishSkillElement v-for="skill in block.skills" :key="skill.id" :title="skill.name" :value="skill.level"></PublishSkillElement>
               </PublishSkillModul>
 
               <div v-if="block.blockType === 'education' " class="flex flex-col gap-5">
@@ -288,24 +318,24 @@
 </template>
 
 <style scoped>
-  .bg-logo{
-    background: rgba(249, 250, 251, 0.05);
-  }
+.bg-logo{
+  background: rgba(249, 250, 251, 0.05);
+}
 
-  .bg-backdrop{
-    background: rgba(249, 250, 251, 0.15);
-  }
+.bg-backdrop{
+  background: rgba(249, 250, 251, 0.15);
+}
 
-  .rotate{
-    animation: rotate 5s linear infinite;
-  }
+.rotate{
+  animation: rotate 5s linear infinite;
+}
 
-  @keyframes rotate {
-    0%{
-      transform: rotate(0);
-    }
-    100%{
-      transform: rotate(360deg);
-    }
+@keyframes rotate {
+  0%{
+    transform: rotate(0);
   }
+  100%{
+    transform: rotate(360deg);
+  }
+}
 </style>
