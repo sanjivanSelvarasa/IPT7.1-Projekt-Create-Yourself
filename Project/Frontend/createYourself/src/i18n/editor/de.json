@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "saved": "Gespeichert - Fehler",
+    "Preview": "Vorschau",
+    "Save": "Speichern",
+    "Publish": "Veröffentlichen"
+  },
+  "modular-system": {
+    "Title": "Baukasten",
+    "subtitle": "Ziehe Blöcke auf den Editor oder klicke zum Einfügen",
+    "blocks": {
+      "title": "Blöcke",
+      "first": "Text",
+      "first-subtitle": "Absatz / Überschrift",
+      "second": "Bild",
+      "second-subtitle": "Foto hochladen",
+      "third": "Projekt",
+      "third-subtitle": "Titel, Beschreibung",
+      "fourth": "Skill",
+      "fourth-subtitle": "Fähigkeit / Tool",
+      "fifth": "Ausbildung",
+      "fifth-subtitle": "Schule, Studium",
+      "sixth": "Erfahrung",
+      "sixth-subtitle": "Berufe, Firmen",
+      "seventh": "Link",
+      "seventh-subtitle": "Social Media"
+    },
+    "section-title": "Sections",
+    "section-add": "Section hinzufügen"
+  },
+  "Main-Preview": {
+    "Desktop": "Desktop",
+    "Tablet": "Tablet",
+    "Mobile": "Mobil",
+    "section-add": "Section hinzufügen"
+  },
+  "main": {
+    "box-one-title": "Hero-Section",
+    "box-one-subtitle": "Startbereich mit Name, Titel und kurzer Vorstellung",
+    "box-two.title": "Projekte",
+    "box-two-subtitle": "Zeige deine wichtigsten Arbeiten und Projektlinks",
+    "box-three-title": "Skills",
+    "box-three-subtitle": "Präsentiere deine Fähigkeiten mit Level oder Tags.",
+    "box-four-title": "Erfahrung",
+    "box-four-subtitle": "Liste berufliche Stationen oder Praktika auf",
+    "box-five-title": "Ausbildung",
+    "box-five-subtitle": "Zeige Schule, Studium oder Weiterbildungen",
+    "box-six-title": "Kantakt & Social",
+    "box-six-subtitle": "Füge Kontaktmöglichkeiten und Social-Media-Links hinzu.",
+    "box-seven-title": "Freie Section",
+    "box-seven-subtitle": "Erstelle einen eigenen Bereich mit Text und Blöcken",
+    "Tip": "Tipp: Sections sind später per Drag-and-Drop verschiebbar.",
+    "Error": "Fehler beim Hochladen von dem Portfolio",
+    "cancel-button": "Abbrechen",
+    "add-Section": "Section hinzufügen"
+  }
+}

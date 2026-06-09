@@ -1,0 +1,75 @@
+{
+  "hero": {
+    "Pre-Title": "Share",
+    "Title": "Publish portfolio",
+    "Lead": "Check the key details before your portfolio goes live."
+  },
+  "status": {
+    "Title": "Status",
+    "correct-or-incorrect": {
+      "incorrect": "Not yet ready for publication",
+      "correct": "Ready for publication",
+      "time": "Last saved a few minutes ago"
+    },
+    "Privacy": {
+      "now": "Latest",
+      "error": "Loading error"
+    },
+    "summary": {
+      "Title": "Portfolio summary",
+      "subtitle-one": "Portfolio title",
+      "subtitle-two": "Main language",
+      "subtitle-three": "Brief description",
+      "subtitle-four": "Selected template",
+      "subtitle-five": "Visibility",
+      "subtitle-four-text": "None selected",
+      "subtitle-five-text": "Private",
+      "box-one": "Projects",
+      "box-two": "Skills",
+      "box-three": "Experiences",
+      "box-four": "Links"
+    },
+    "Live-Preview": {
+      "Title": "Live preview",
+      "Template": "Template",
+      "Template-chosen": "None selected",
+      "language": "Language",
+      "language-chosen": "Not selected"
+    }
+  },
+  "Info": {
+    "Title": "You can change everything later",
+    "subtitle": "Content, visibility and design can be adjusted at any time, even after publication."
+  },
+  "Link": {
+    "Title": "Public link",
+    "Slug": "Slug failed",
+    "subtitle": "This link will be publicly accessible once it has been published.",
+    "Copy-Link": "Copy-Link"
+  },
+  "checklist": {
+    "Title": "Pre-publication checklist",
+    "subtitle-one": "Title and description available",
+    "subtitle-two": "At least one project has been added",
+    "subtitle-three": "Contact link available",
+    "subtitle-four": "Design selected",
+    "subtitle-five": "Preview checked",
+    "correct": "Done",
+    "incorrect": "Missing"
+  },
+  "Visibility": {
+    "Title": "Set visibility",
+    "left-box": {
+      "Title": "Public",
+      "subtitle": "Anyone with the link can view your portfolio."
+    },
+    "right-box": {
+      "Title": "Keep it private",
+      "subtitle": "Only you can view your portfolio"
+    },
+    "Info": "When you publish your portfolio, people with the link will be able to view your content.",
+    "back-to-editor": "Back to the editor",
+    "back-to-preview": "Back to the preview",
+    "publish": "Publish now"
+  }
+}

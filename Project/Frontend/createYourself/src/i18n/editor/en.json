@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "saved": "Saved - Error",
+    "Preview": "Preview",
+    "Save": "Save",
+    "Publish": "Publish"
+  },
+  "modular-system": {
+    "Title": "Modular system",
+    "subtitle": "Drag blocks onto the editor or click to insert",
+    "blocks": {
+      "title": "Blocks",
+      "first": "Text",
+      "first-subtitle": "Paragraph / Heading",
+      "second": "Image",
+      "second-subtitle": "Upload photo",
+      "third": "Project",
+      "third-subtitle": "Title, Description",
+      "fourth": "Skill",
+      "fourth-subtitle": "Feature / Tool",
+      "fifth": "Training",
+      "fifth-subtitle": "School, university",
+      "sixth": "Experience",
+      "sixth-subtitle": "Professions, companies",
+      "seventh": "Link",
+      "seventh-subtitle": "Social Media"
+    },
+    "section-title": "Sections",
+    "section-add": "Add a section"
+  },
+  "Main-Preview": {
+    "Desktop": "Desktop",
+    "Tablet": "Tablet",
+    "Mobile": "Mobile",
+    "section-add": "Add a section"
+  },
+  "main": {
+    "box-one-title": "Hero section",
+    "box-one-subtitle": "Introductory section with name, title and a brief introduction",
+    "box-two.title": "Projects",
+    "box-two-subtitle": "Showcase your key work and project links",
+    "box-three-title": "Skills",
+    "box-three-subtitle": "Showcase your skills using levels or tags.",
+    "box-four-title": "Experience",
+    "box-four-subtitle": "List of previous employment or work placements",
+    "box-five-title": "Training",
+    "box-five-subtitle": "Show school, university or further education",
+    "box-six-title": "Contact & Social Media",
+    "box-six-subtitle": "Add contact details and social media links.",
+    "box-seven-title": "Open Section",
+    "box-seven-subtitle": "Create your own section using text and blocks",
+    "Tip": "Tip: Sections can be moved later using drag-and-drop.",
+    "Error": "Error uploading the portfolio",
+    "cancel-button": "Cancel",
+    "add-Section": "Add a section"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "hero": {
+    "Pre-Title": "Partager",
+    "Title": "Publier le portfolio",
+    "Lead": "Vérifiez les points essentiels avant la mise en ligne de votre portfolio."
+  },
+  "status": {
+    "Title": "Statut",
+    "correct-or-incorrect": {
+      "incorrect": "Pas encore prêt à être publié",
+      "correct": "Prêt à être publié",
+      "time": "Dernière mise à jour il y a quelques minutes"
+    },
+    "Privacy": {
+      "now": "Dernières nouvelles",
+      "error": "Erreur de chargement"
+    },
+    "summary": {
+      "Title": "Résumé du portefeuille",
+      "subtitle-one": "Titre du portfolio",
+      "subtitle-two": "Langue principale",
+      "subtitle-three": "Brève description",
+      "subtitle-four": "Modèle sélectionné",
+      "subtitle-five": "Visibilité",
+      "subtitle-four-text": "Aucun élément sélectionné",
+      "subtitle-five-text": "Privé",
+      "box-one": "Projets",
+      "box-two": "Compétences",
+      "box-three": "Expériences",
+      "box-four": "Liens"
+    },
+    "Live-Preview": {
+      "Title": "Aperçu en direct",
+      "Template": "Modèle",
+      "Template-chosen": "Aucun élément sélectionné",
+      "language": "Langue",
+      "language-chosen": "Non sélectionné"
+    }
+  },
+  "Info": {
+    "Title": "Tu pourras tout changer plus tard",
+    "subtitle": "Le contenu, la visibilité et la mise en page peuvent être modifiés à tout moment, même après la publication."
+  },
+  "Link": {
+    "Title": "Lien public",
+    "Slug": "Échec de la requête Slug",
+    "subtitle": "Ce lien sera accessible à tous dès sa publication.",
+    "Copy-Link": "Copier le lien"
+  },
+  "checklist": {
+    "Title": "Liste de contrôle avant publication",
+    "subtitle-one": "Titre et description disponibles",
+    "subtitle-two": "Au moins un projet a été ajouté",
+    "subtitle-three": "Lien de contact disponible",
+    "subtitle-four": "Modèle sélectionné",
+    "subtitle-five": "Aperçu vérifié",
+    "correct": "C'est fait",
+    "incorrect": "Disparu"
+  },
+  "Visibility": {
+    "Title": "Définir la visibilité",
+    "left-box": {
+      "Title": "Public",
+      "subtitle": "Toute personne disposant du lien peut consulter votre portfolio."
+    },
+    "right-box": {
+      "Title": "Gardez cela confidentiel",
+      "subtitle": "Vous seul pouvez consulter votre portfolio"
+    },
+    "Info": "Lorsque vous publierez votre portfolio, les personnes disposant du lien pourront consulter votre contenu.",
+    "back-to-editor": "Retour à l'éditeur",
+    "back-to-preview": "Retour à l'aperçu",
+    "publish": "Publier maintenant"
+  }
+}

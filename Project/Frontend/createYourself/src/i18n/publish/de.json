@@ -1,0 +1,75 @@
+{
+  "hero": {
+    "Pre-Title": "Freigeben",
+    "Title": "Portfolio veröffentlichen",
+    "Lead": "Überprüfe die wichtisten Angaben, bevor dein Portfolio öffentlich erreichbar ist."
+  },
+  "status": {
+    "Title": "Status",
+    "correct-or-incorrect": {
+      "incorrect": "Noch nicht bereit zur Veröffentlichung",
+      "correct": "Bereit zur Veröffentlichung",
+      "time": "Zuletzt gespeichert vor wenigen Minuten"
+    },
+    "Privacy": {
+      "now": "Aktuell",
+      "error": "Lade Fehler"
+    },
+    "summary": {
+      "Title": "Portfolio-Zusammenfassung",
+      "subtitle-one": "Portfolio-Titel",
+      "subtitle-two": "Hauptsprache",
+      "subtitle-three": "Kurzbeschreibung",
+      "subtitle-four": "Gewähltes Template",
+      "subtitle-five": "Sichtbarkeit",
+      "subtitle-four-text": "Keine Ausgewählt",
+      "subtitle-five-text": "Private",
+      "box-one": "Projekte",
+      "box-two": "Skills",
+      "box-three": "Erfahrungen",
+      "box-four": "Links"
+    },
+    "Live-Preview": {
+      "Title": "Live-Vorschau",
+      "Template": "Template",
+      "Template-chosen": "Keine Ausgewählt",
+      "language": "Sprache",
+      "language-chosen": "Nicht ausgewählt"
+    }
+  },
+  "Info": {
+    "Title": "Du kannst alles später ändern",
+    "subtitle": "Inhalte, Sichtbarkeit und Design lassen sich auch nach der Veröffentlichung jederzeit anpassen."
+  },
+  "Link": {
+    "Title": "Öffentlicher Link",
+    "Slug": "Slug fehlgeschlagen",
+    "subtitle": "Dieser Link ist nach der Veröffentlichung öffentlich erreichbar.",
+    "Copy-Link": "Copy-Link"
+  },
+  "checklist": {
+    "Title": "Checkliste vor der Veröffentlichung",
+    "subtitle-one": "Titel und Beschreibung vorhanden",
+    "subtitle-two": "Mindestens ein Projekt hinzugefügt",
+    "subtitle-three": "Kontaktlink vorhanden",
+    "subtitle-four": "Design ausgewählt",
+    "subtitle-five": "Vorschau geprüft",
+    "correct": "Erledigt",
+    "incorrect": "Fehlt"
+  },
+  "Visibility": {
+    "Title": "Sichtbarkeit festlegen",
+    "left-box": {
+      "Title": "Öffentlich",
+      "subtitle": "Jeder mit dem Link kann dein Portfolio sehen."
+    },
+      "right-box": {
+        "Title": "Privat lassen",
+        "subtitle": "Nur du kannst dein Portfolio einsehen"
+      },
+    "Info": "Wenn du dein Portfolio veröffentlichst, können Personen mit dem Link deine Inhalte ansehen.",
+    "back-to-editor": "Zurück zum Editor",
+    "back-to-preview": "Zurück zur Vorschau",
+    "publish": "Jetzt veröffentlichen"
+  }
+}

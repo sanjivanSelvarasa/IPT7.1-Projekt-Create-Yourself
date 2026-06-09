@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "saved": "Enregistré - Erreur",
+    "Preview": "Aperçu",
+    "Save": "Enregistrer",
+    "Publish": "Publier"
+  },
+  "modular-system": {
+    "Title": "Système modulaire",
+    "subtitle": "Faites glisser les blocs dans l'éditeur ou cliquez pour les insérer",
+    "blocks": {
+      "title": "Blocs",
+      "first": "Texte",
+      "first-subtitle": "Paragraphe / Titre",
+      "second": "Image",
+      "second-subtitle": "Télécharger une photo",
+      "third": "Projet",
+      "third-subtitle": "Titre, Description",
+      "fourth": "Compétence",
+      "fourth-subtitle": "Fonctionnalité / Outil",
+      "fifth": "Formation",
+      "fifth-subtitle": "École, université",
+      "sixth": "Expérience",
+      "sixth-subtitle": "Métiers, entreprises",
+      "seventh": "Lien",
+      "seventh-subtitle": "Réseaux sociaux"
+    },
+    "section-title": "Rubriques",
+    "section-add": "Ajouter une section"
+  },
+  "Main-Preview": {
+    "Desktop": "Bureau",
+    "Tablet": "Tablette",
+    "Mobile": "Mobile",
+    "section-add": "Ajouter une section"
+  },
+  "main": {
+    "box-one-title": "Section « À la une »",
+    "box-one-subtitle": "Section d'introduction comprenant le nom, le titre et une brève présentation",
+    "box-two.title": "Projets",
+    "box-two-subtitle": "Mettez en avant vos réalisations phares et les liens vers vos projets",
+    "box-three-title": "Compétences",
+    "box-three-subtitle": "Mettez en avant vos compétences à l'aide de niveaux ou de balises.",
+    "box-four-title": "Expérience",
+    "box-four-subtitle": "Liste des emplois précédents ou des stages effectués",
+    "box-five-title": "Formation",
+    "box-five-subtitle": "Afficher les établissements scolaires, les universités ou les établissements d'enseignement supérieur",
+    "box-six-title": "Contact et réseaux sociaux",
+    "box-six-subtitle": "Ajoutez vos coordonnées et les liens vers vos réseaux sociaux.",
+    "box-seven-title": "Section ouverte",
+    "box-seven-subtitle": "Créez votre propre section à l'aide de texte et de blocs",
+    "Tip": "Astuce : vous pouvez déplacer les sections ultérieurement par glisser-déposer.",
+    "Error": "Erreur lors du téléchargement du portfolio",
+    "cancel-button": "Annuler",
+    "add-Section": "Ajouter une section"
+  }
+}
