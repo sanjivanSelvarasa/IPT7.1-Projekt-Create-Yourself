@@ -81,6 +81,10 @@ const portfolioId = Number(route.params.id)
 const portfolio = ref<any | null>(null);
 const portfolioFacts = ref<PortfolioType | null>(null);
 
+const imageInputRef = ref<HTMLInputElement | null>(null)
+const pendingImageBlockId = ref<number | null>(null)
+const pendingImageSectionId = ref<number | null>(null)
+
 
 const sortedSections = ref<any[] | null>(null);
 async function loadSortedSections() {
@@ -383,6 +387,13 @@ async function getEditorForSection(sectionId: number){
         }
     }
 
+    if (e.blockType === 'image') {
+      return {
+        ...e,
+        imageBlockContent: JSON.parse(e.contentJson)
+      }
+    }
+
     if(e.blockType === 'skill'){
       const content = JSON.parse(e.contentJson) as ModulType
       return {
@@ -565,6 +576,39 @@ async function createTextModul(){
 
   await createEditorBlockFunc(editorText)
 }
+
+async function createImageModul() {
+  if (sortedSections.value === null || portfolioFacts.value === null || sectionSelected.value === null) return
+
+  const maxSortCount = getMaxSortCount()
+
+  const imageBlock: CreateEditorBlockType = {
+    blockType: "image",
+    contentJson: {
+      imageUrl: "",
+      alt: "Bild",
+    },
+    sortOrder: maxSortCount + 1,
+  }
+
+  const newBlock = await editorBlockStore.createEditorBlock(
+    portfolioId,
+    portfolioFacts.value.currentVersionId,
+    sectionSelected.value,
+    imageBlock
+  )
+
+  await portfolioSectionStore.getSections(portfolioId, portfolioFacts.value.currentVersionId)
+  await loadSortedSections()
+
+  if (!newBlock?.id) return
+
+  pendingImageBlockId.value = newBlock.id
+  pendingImageSectionId.value = sectionSelected.value
+
+  imageInputRef.value?.click()
+}
+
 async function createSkillModul(){
   if(sortedSections.value === null) return;
 
@@ -1046,7 +1090,7 @@ async function updateProjectBlockFunc(projectBlock: ProjectType){
 
   try{
     await projectStore.updateProject(portfolioId, projectBlock.id, updatedProject)
-    await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionSelected.value)
+    await projectStore.getProjects(portfolioId)
     await loadSortedSections()
   }catch {}
 }
@@ -1059,7 +1103,7 @@ async function updateSkillBlockFunc(skillBlock: UpdateSkillType){
 
   try{
     await skillStore.updateSkill(portfolioId, skillBlock)
-    await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionSelected.value)
+    await skillStore.getSkills(portfolioId)
     await loadSortedSections()
   }catch {}
 }
@@ -1076,7 +1120,7 @@ async function updateEducationBlockFunc(educationBlock: EducationType){
 
   try{
     await educationStore.updateEducation(portfolioId, educationBlock.id, updatedEducation)
-    await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionSelected.value)
+    await educationStore.getEducation(portfolioId)
     await loadSortedSections()
   }catch {}
 }
@@ -1122,13 +1166,17 @@ async function updateSocialLinkBlockFunc(linkBlock: SocialLinkType){
 
   try{
     await socialLinkStore.updateSocialLink(portfolioId, linkBlock)
-    await editorBlockStore.getEditorBlock(portfolioId, portfolioFacts.value.currentVersionId, sectionSelected.value)
+    await socialLinkStore.getSocialLink(portfolioId)
     await loadSortedSections()
   }catch {}
 }
 
 async function pushToPublish(){
   await router.push(`/portfolio/${portfolioId}/publish`)
+}
+
+async function pushToPreview(){
+  await router.push(`/portfolio/${portfolioId}/preview`)
 }
 
 const screenSize = ref<number>(1)
@@ -1211,6 +1259,37 @@ async function uploadProjectImage(file: File){
   try{
     await projectStore.createProjectImage(portfolioId, elementSelectedId.value, file)
   }catch{}
+}
+
+async function uploadEditorImage(event: Event) {
+  if (
+    portfolioFacts.value === null ||
+    pendingImageBlockId.value === null ||
+    pendingImageSectionId.value === null
+  ) return
+
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+
+  if (!file) return
+
+  try {
+    await editorBlockStore.uploadImageToEditorBlock(
+      portfolioId,
+      portfolioFacts.value.currentVersionId,
+      pendingImageSectionId.value,
+      pendingImageBlockId.value,
+      file
+    )
+
+    await loadSortedSections()
+  } catch (err) {
+    console.error(err)
+  } finally {
+    input.value = ""
+    pendingImageBlockId.value = null
+    pendingImageSectionId.value = null
+  }
 }
 
 async function moveEditorBlock(editorBlock: EditorBlockType, direction: "up" | "down") {
@@ -1525,10 +1604,10 @@ async function updatePortfolioTitle() {
   </div>
 
   <div class="flex flex-col bg-[var(--background-color)] w-full h-[100vh] overflow-y-hidden">
-    <nav class="z-999 px-3 py-2 flex items-center justify-between w-full h-fit bg-[var(--surface-color)] border border-b-gray-200 border-transparent">
+    <nav class="z-999 px-3 py-2 flex items-center sm:justify-between justify-center w-full h-fit bg-[var(--surface-color)] border border-b-gray-200 border-transparent">
       <logo class="sm:block hidden" link="/dashboard"></logo>
 
-      <div class="flex items-center justify-center w-full max-w-[1200px]">
+      <div class="lg:flex hidden items-center justify-center w-full max-w-[1200px]">
         <div class="flex items-center justify-between gap-3 w-full mx-5">
           <div class="lg:flex hidden items-center justify-center gap-5">
             <input @blur="updatePortfolioTitle" @keydown.enter="updatePortfolioTitle" v-model="portfolioName" type="text" class="font-semibold px-3 py-2 bg-gray-100">
@@ -1542,36 +1621,36 @@ async function updatePortfolioTitle() {
             </div>
           </div>
 
-          <div class="sm:flex hidden items-center justify-center gap-3">
-            <div class="flex items-center justify-center gap-5 text-[var(--text-color-light)] text-xl">
-              <button @click="undoVersion()" class="flex items-center justify-center hover:text-gray-500">
-                <i class="fa-solid fa-arrow-rotate-left"></i>
-              </button>
-              <button @click="redoVersion()" class="flex items-center justify-center hover:text-gray-500">
-                <i class="fa-solid fa-arrow-rotate-right"></i>
-              </button>
-            </div>
-            <div class="w-[1px] h-[30px] bg-gray-200"></div>
-          </div>
+<!--          <div class="sm:flex hidden items-center justify-center gap-3">-->
+<!--            <div class="flex items-center justify-center gap-5 text-[var(&#45;&#45;text-color-light)] text-xl">-->
+<!--              <button @click="undoVersion()" class="flex items-center justify-center hover:text-gray-500">-->
+<!--                <i class="fa-solid fa-arrow-rotate-left"></i>-->
+<!--              </button>-->
+<!--              <button @click="redoVersion()" class="flex items-center justify-center hover:text-gray-500">-->
+<!--                <i class="fa-solid fa-arrow-rotate-right"></i>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--            <div class="w-[1px] h-[30px] bg-gray-200"></div>-->
+<!--          </div>-->
         </div>
       </div>
 
-      <div class="flex justify-center items-center gap-2">
-        <div class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-75 flex items-center justify-center gap-2 px-3 py-2 border border-gray-200 rounded-lg select-none cursor-pointer">
+      <div class="flex justify-center items-center gap-2 sm:w-fit w-full">
+        <div @click="pushToPreview()" class="w-full hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-75 flex items-center justify-center gap-2 px-3 py-2 border border-gray-200 rounded-lg select-none cursor-pointer">
           <div class="flex items-center justify-center">
             <i class="fa-regular fa-eye"></i>
           </div>
           <span>Vorschau</span>
         </div>
 
-        <div @click="saveVersion()" class="sm:flex hidden hover:bg-transparent hover:text-[var(--text-color)] transition duration-75 items-center justify-center gap-2 px-3 py-2 border bg-[var(--text-color)] text-[var(--text-color-white)] rounded-lg select-none cursor-pointer">
-          <div class="flex items-center justify-center">
-            <i class="fa-regular fa-floppy-disk"></i>
-          </div>
-          <span>Speichern</span>
-        </div>
+<!--        <div @click="saveVersion()" class="sm:flex hidden hover:bg-transparent hover:text-[var(&#45;&#45;text-color)] transition duration-75 items-center justify-center gap-2 px-3 py-2 border bg-[var(&#45;&#45;text-color)] text-[var(&#45;&#45;text-color-white)] rounded-lg select-none cursor-pointer">-->
+<!--          <div class="flex items-center justify-center">-->
+<!--            <i class="fa-regular fa-floppy-disk"></i>-->
+<!--          </div>-->
+<!--          <span>Speichern</span>-->
+<!--        </div>-->
 
-        <button @click="pushToPublish()" class="hover:bg-transparent hover:text-[var(--primary-color)] transition duration-75 flex items-center justify-center gap-2 px-3 py-2 border bg-[var(--primary-color)] text-[var(--text-color-white)] rounded-lg select-none cursor-pointer">
+        <button @click="pushToPublish()" class="w-full hover:bg-transparent hover:text-[var(--primary-color)] transition duration-75 flex items-center justify-center gap-2 px-3 py-2 border bg-[var(--primary-color)] text-[var(--text-color-white)] rounded-lg select-none cursor-pointer">
           <div class="flex items-center justify-center">
             <i class="fa-solid fa-arrow-up-from-bracket"></i>
           </div>
@@ -1605,7 +1684,7 @@ async function updatePortfolioTitle() {
 
           <div class="grid grid-cols-2 my-5 gap-3">
             <Block @click="addTextBlockToSelectedSection()" title="Text" svg="fa-solid fa-align-left" subtitle="Absatz / Überschrift"></Block>
-            <Block @click="" title="Bild" svg="fa-regular fa-image" subtitle="Foto Hochladen"></Block>
+            <Block @click="createImageModul()" title="Bild" svg="fa-regular fa-image" subtitle="Foto Hochladen"></Block>
             <Block @click="addProjectBlockToSelectedSection()" title="Projekt" svg="fa-solid fa-diagram-project" subtitle="Titel, Beschreibung"></Block>
             <Block @click="addSkillBlockToSelectedSection()" title="Skill" svg="fa-solid fa-chart-line" subtitle="Fähigkeit / Tool"></Block>
             <Block @click="addEducationBlockToSelectedSection()" title="Ausbildung" svg="fa-solid fa-graduation-cap" subtitle="Schule, Studium"></Block>
@@ -1690,7 +1769,7 @@ async function updatePortfolioTitle() {
       <aside
         v-if="elementSelected"
         class="lg:static top-14 bottom-0 right-0 absolute z-999 sm:1 py-4 px-4 shrink-0 h-full overflow-y-scroll transition-all duration-200"
-        :class="isSettingsOpen ? 'sm:max-w-[350px] max-w-none w-full sm:min-w-[300px] bg-[var(--surface-color)]' : 'max-w-[60px] w-[60px] min-w-[60px] bg-transparent overflow-hidden'"
+        :class="[isSettingsOpen ? 'sm:max-w-[350px] max-w-none w-full sm:min-w-[300px] bg-[var(--surface-color)]' : 'max-w-[60px] w-[60px] min-w-[60px] bg-transparent overflow-hidden', isBaukastenOpen ? 'hidden' : '' ]"
         >
         <div class="flex flex-col justify-center items-start gap-1">
           <div class="flex items-center justify-between w-full">
