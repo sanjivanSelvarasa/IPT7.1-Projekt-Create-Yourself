@@ -174,8 +174,8 @@
           <header v-if="section.sectionType === 'Hero Section' " class="h-[100vh] w-full flex justify-center items-center">
             <div class="max-w-[1200px] w-full flex flex-col items-center lg:block">
               <div class="flex lg:flex-row flex-col-reverse mt-30 lg:mt-0 justify-between items-center gap-4">
-                <div class="flex flex-col justify-center items-start gap-4">
-                  <div class="flex flex-col gap-1 text-[70px]! font-medium!">
+                <div class="flex flex-col justify-center sm:items-start items-center gap-4">
+                  <div class="flex flex-col sm:items-start items-center gap-1 sm:text-[70px]! text-[40px]! font-medium!">
                     <PublishTextElement class="leading-tight" :text-block="section.editorBlock[0].textBlockContent"></PublishTextElement>
                     <PublishTextElement class="leading-tight"  :text-block="section.editorBlock[1].textBlockContent"></PublishTextElement>
                   </div>
@@ -184,7 +184,7 @@
 
                   <div class="flex gap-3">
                     <a :href="`#${projectSectionId}`" class="select-none hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] hover:bg-[var(--surface-color)] transition duration-75 border border-transparent flex justify-center items-center gap-2 px-4 py-3 rounded-xl shadow-md bg-[var(--primary-color)] text-[var(--text-color-white)]">
-                      <span>Projekte ansehen</span>
+                      <span class="text-nowrap">Projekte ansehen</span>
                       <SvgStruct>
                         <i class="fa-solid fa-arrow-right"></i>
                       </SvgStruct>
@@ -194,7 +194,7 @@
                       <SvgStruct>
                         <i class="fa-regular fa-envelope"></i>
                       </SvgStruct>
-                      <span>Kontakt aufnehmen</span>
+                      <span class="text-nowrap">Kontakt aufnehmen</span>
                     </a>
                   </div>
                 </div>
@@ -275,7 +275,7 @@
 
         <div class="my-5 w-full h-[1px] bg-[var(--text-color-light)]"></div>
 
-        <div class="flex items-center justify-between text-[var(--text-color-light)] text-xs">
+        <div class="text-nowrap flex sm:flex-row flex-col gap-2 items-center justify-between text-[var(--text-color-light)] text-xs">
           <span>© 2026 CreateYourself. Alle Rechte vorbehalten.</span>
           <RouterLink to="/" class="cursor-pointer flex gap-2 items-center justify-center px-3 py-2 bg-logo rounded-full text-[var(--text-color-light)]!">
             <img class="w-[15px] h-[15px] object-cover" src="../../public/CreateYourself_Logo.png" alt="CreateYourself Logo">
