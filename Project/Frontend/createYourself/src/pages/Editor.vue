@@ -57,6 +57,8 @@ import type {CreateVersionType} from "@/types/createVersionType.ts";
 import {getBrandSvg} from "@/utils/brand.ts";
 import ExperienceModul from "@/components/ui/editor/ExperienceModul.vue";
 import ExperienceElement from "@/components/ui/editor/ExperienceElement.vue";
+import ContentExperience from "@/components/ui/editor/ContentExperience.vue";
+import type {ExperienceType} from "@/types/experienceType.ts";
 
 const portfolioName = ref<string>('');
 
@@ -1079,6 +1081,39 @@ async function updateEducationBlockFunc(educationBlock: EducationType){
   }catch {}
 }
 
+async function updateExperienceBlockFunc(experienceBlock: ExperienceType) {
+  if (portfolioFacts.value === null || sectionSelected.value === null) return;
+
+  // const ok = await startVersionChange()
+  // if (!ok) return
+
+  const updatedExperience: CreateExperienceType = {
+    companyName: experienceBlock.companyName,
+    position: experienceBlock.position,
+    description: experienceBlock.description,
+    sortOrder: experienceBlock.sortOrder,
+    startDate: experienceBlock.startDate,
+    endDate: experienceBlock.endDate,
+  }
+
+  try {
+    await experienceStore.updateExperience(
+      portfolioId,
+      experienceBlock.id,
+      updatedExperience
+    )
+
+    await editorBlockStore.getEditorBlock(
+      portfolioId,
+      portfolioFacts.value.currentVersionId,
+      sectionSelected.value
+    )
+
+    await experienceStore.getExperience(portfolioId)
+    await loadSortedSections()
+  } catch {}
+}
+
 async function updateSocialLinkBlockFunc(linkBlock: SocialLinkType){
   if(portfolioFacts.value === null || sectionSelected.value === null) return;
 
@@ -1633,7 +1668,7 @@ async function updatePortfolioTitle() {
                 </EducationModul>
 
                 <ExperienceModul v-if="editor.blockType === 'experience' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @add="addExperienceToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
-                  <ExperienceElement v-for="experience in editor.experience" :key="experience.id" :company="experience.companyName" :title="experience.position" :description="experience.description" :start-date="experience.startDate" :end-date="experience.endDate" :is-active="elementSelectedId === experience.id"></ExperienceElement>
+                  <ExperienceElement v-for="experience in editor.experience" :key="experience.id" @selected="elementSelectedFunction(experience.id, editor)" :company="experience.companyName" :title="experience.position" :description="experience.description" :start-date="experience.startDate" :end-date="experience.endDate" :is-active="elementSelectedId === experience.id"></ExperienceElement>
                 </ExperienceModul>
 
                 <SocialLinkModul v-if="editor.blockType === 'link' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @add="addSocialLinkToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
@@ -1710,6 +1745,10 @@ async function updatePortfolioTitle() {
 
           <div v-if="elementSelected?.blockType === 'link' ">
             <ContentLink :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true" @section-visible="updateSectionVisible" :link-block="elementSelected.link.find(l => l.id === elementSelectedId)" @update="updateSocialLinkBlockFunc"></ContentLink>
+          </div>
+
+          <div v-if="elementSelected?.blockType === 'experience' ">
+            <ContentExperience @update="updateExperienceBlockFunc" @sectionVisible="updateSectionVisible" :experience-block="elementSelected.experience.find(l => l.id === elementSelectedId)" :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true"></ContentExperience>
           </div>
         </div>
 
