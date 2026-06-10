@@ -12,7 +12,7 @@ import {updateProfileApi} from "@/api/profile.api.ts";
 import profile from "@/pages/Profile.vue";
 
 import { useI18n } from "vue-i18n";
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const tl = (key: string) => t(`profile.${key}`);
 
 
@@ -42,6 +42,10 @@ onMounted(async () => {
   profileData.value = profileStore.profileData
 
   setProfileAttributs()
+
+  locale.value = profileStore.profileData?.preferredLanguage ?? 'de'
+
+  console.log(profileData.value)
 })
 
 const message = ref<string | null>(null);
@@ -93,6 +97,22 @@ watch(bio, (newValue) => {
     bio.value = bio.value?.slice(0, 220)
   }
 })
+
+// profile picture change
+async function onProfileImageChange(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+
+  if (!file) return
+
+  try {
+    await profileStore.updateProfilePicture(file)
+    await profileStore.getProfile()
+    profileData.value = profileStore.profileData
+  } catch (err) {
+    console.log(err)
+  }
+}
 </script>
 
 <template>
@@ -104,20 +124,20 @@ watch(bio, (newValue) => {
     <MainContent class="mb-4">
       <Interface>
         <div class="w-full flex items-center justify-start gap-4">
-          <div class="select-none flex items-center justify-center bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)] text-[var(--text-color-white)] font-bold text-3xl rounded-full w-[100px] h-[100px]">
+          <div v-if="profileData?.profileImg === null" class="select-none flex items-center justify-center bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)] text-[var(--text-color-white)] font-bold text-3xl rounded-full w-[100px] h-[100px]">
             {{ name?.slice(0,2).toUpperCase() }}
           </div>
+          <img v-else class="select-none flex items-center justify-center rounded-full w-[100px] h-[100px] object-cover" :src="`http://localhost:3000${profileData?.profileImg}`">
 
           <div class="flex flex-col gap-2">
             <p class="text-nowrap font-semibold">{{ name }}</p>
-            <button class="hidden sm:block w-fit cursor-pointer px-2.5 py-1.5 rounded-lg text-[var(--primary-color)] bg-blue-50 border border-blue-300 text-xs">
-              <div class=" flex items-center justify-center gap-1">
-                <div class="flex items-center justify-center text-sm">
-                  <i class="fa-regular fa-image"></i>
-                </div>
-                <span>{{ tl('Creation-box.profile-picture') }}</span>
+            <label class="hidden sm:flex w-fit cursor-pointer px-2.5 py-1.5 rounded-lg text-[var(--primary-color)] bg-blue-50 border border-blue-300 text-xs items-center justify-center gap-1">
+              <input type="file" accept="image/*" class="hidden" @change="onProfileImageChange"/>
+              <div class="flex items-center justify-center text-sm">
+                <i class="fa-regular fa-image"></i>
               </div>
-            </button>
+              <span>{{ tl('Creation-box.profile-picture') }}</span>
+            </label>
           </div>
         </div>
 
@@ -158,8 +178,8 @@ watch(bio, (newValue) => {
             </div>
           </form>
 
-          <div class="w-full flex flex-col-reverse sm:flex-row items-center justify-between pt-8 border border-t-gray-200 border-transparent">
-            <div class="mt-3 sm:mt-0">
+          <div class="w-full flex flex-col-reverse items-start justify-between pt-8 border border-t-gray-200 border-transparent">
+            <div class="mt-3">
               <span v-if="message" class="text-sm text-green-500">{{ message }}</span>
               <span v-if="error" class="text-sm text-red-500">{{ error }}</span>
             </div>
