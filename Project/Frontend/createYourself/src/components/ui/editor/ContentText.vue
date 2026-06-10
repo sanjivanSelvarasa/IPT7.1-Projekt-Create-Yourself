@@ -8,15 +8,27 @@ import {parse} from "vite";
   const props = defineProps<{
     textBlock: TextBlockContent,
     sectionVisible: boolean,
+    currentPosition: number,
+    totalSections: number,
   }>()
 
   const emit = defineEmits<{
     (e: 'update', updated: TextBlockContent) : void,
-    (e: 'sectionVisible', sectionVisible: boolean): void
+    (e: 'sectionVisible', sectionVisible: boolean): void,
+    (e: 'moveUp'): void,
+    (e: 'moveDown'): void,
   }>()
 
   function onSectionVisible(sectionVisible: boolean){
     emit('sectionVisible', sectionVisible)
+  }
+
+  function onMoveUp() {
+    emit('moveUp')
+  }
+
+  function onMoveDown() {
+    emit('moveDown')
   }
 
   function onUpdate() {
@@ -48,24 +60,29 @@ import {parse} from "vite";
     inputWeight.value = newTextBlock.fontWeight ?? 'normal';
     inputColor.value = newTextBlock.color ?? ''
   })
+
   const sizes = [
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20,
+    { label: "9 px", value: 9 },
+    { label: "10 px", value: 10 },
+    { label: "11 px", value: 11 },
+    { label: "12 px", value: 12 },
+    { label: "14 px", value: 14 },
+    { label: "16 px", value: 16 },
+    { label: "18 px", value: 18 },
+    { label: "20 px", value: 20 },
+    { label: "24 px", value: 24 },
+    { label: "28 px", value: 28 },
+    { label: "32 px", value: 32 },
+    { label: "36 px", value: 36 },
+    { label: "40 px", value: 40 },
+    { label: "48 px", value: 48 },
+    { label: "56 px", value: 56 },
+    { label: "64 px", value: 64 },
   ]
 </script>
 
 <template>
-  <ContentStruct :section-visible="props.sectionVisible" @sectionVisible="onSectionVisible">
+  <ContentStruct @move-down="onMoveDown" @move-up="onMoveUp" :current-position="props.currentPosition" :total-sections="props.totalSections" :section-visible="props.sectionVisible" @sectionVisible="onSectionVisible">
     <span class="md-subtitle text-[var(--text-color-light)]">Inhalt</span>
 
     <div>
@@ -89,8 +106,10 @@ import {parse} from "vite";
     </InputStruct>
 
     <InputStruct title="Grösse">
-      <select @change="onUpdate()" v-model="inputSize" class="default-input w-full">
-        <option v-for="size in sizes" :value="size">{{ size }}</option>
+      <select @change="onUpdate()" v-model.number="inputSize" class="default-input w-full">
+        <option v-for="size in sizes" :key="size.value" :value="size.value">
+          {{ size.label }}
+        </option>
       </select>
     </InputStruct>
 
