@@ -60,6 +60,10 @@ async function pushToEditor(){
   await router.push(`/portfolio/${portfolioId}/editor`);
 }
 
+async function pushToPreview(){
+  await router.push(`/portfolio/${portfolioId}/preview`);
+}
+
 const isPortfolioPublished = ref<boolean>(false);
 const error = ref<string | null>(null);
 async function publishPortfolio(){
@@ -282,7 +286,7 @@ async function copySlug(){
               </button>
 
               <div class="w-full flex flex-col-reverse sm:flex-row items-center justify-end gap-4 sm:gap-2 text-nowrap">
-                <button class="w-full sm:w-fit hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] transition duration-75 flex items-center justify-center gap-2 sm:px-3 sm:py-2 p-4 border border-gray-200 rounded-lg bg-[var(--surface-color)] text-sm text-[var(--text-color)]">
+                <button @click="pushToPreview()" class="w-full sm:w-fit hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] transition duration-75 flex items-center justify-center gap-2 sm:px-3 sm:py-2 p-4 border border-gray-200 rounded-lg bg-[var(--surface-color)] text-sm text-[var(--text-color)]">
                   <SvgStruct>
                     <i class="fa-solid fa-eye"></i>
                   </SvgStruct>
