@@ -29,13 +29,16 @@ export async function updateProfileApi(profile: ChangeProfileType) : Promise<Pro
   })
 }
 
-export async function updateProfilePictureApi(){
-  return await apiFetch('/account/profile/picture', {
-    method: 'POST',
-    // TODO multipart/form-data, feld image hinzufügen
+export async function updateProfilePictureApi(image: File) {
+  const formData = new FormData()
+  formData.append("image", image)
+
+  return await apiFetch("/account/profile/picture", {
+    method: "POST",
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    }
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+    body: formData,
   })
 }
 
