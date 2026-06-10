@@ -42,7 +42,7 @@ const portfolioFacts = ref<PortfolioType | null>(null);
 
 const sortedSections = ref<any[] | null>(null);
 async function loadSortedSections() {
-  const res = [...portfolioSectionStore.sections].sort((a, b) => a.sortOrder - b.sortOrder)
+  const res = [...portfolioSectionStore.sections].filter(p => p.isVisible === true).sort((a, b) => a.sortOrder - b.sortOrder)
 
   sortedSections.value = await Promise.all(
     res.map(async (s) => ({
@@ -144,7 +144,7 @@ onMounted(async () => {
 })
 
 const rawName = computed(() => {
-  return sortedSections.value?.find(s => s.sectionType === 'Hero Section').editorBlock[1].textBlockContent.text
+  return sortedSections.value?.find(s => s.sectionType === 'Hero Section')?.editorBlock[1].textBlockContent.text
 })
 
 const firstname = computed(() => {
