@@ -59,6 +59,7 @@ import ExperienceModul from "@/components/ui/editor/ExperienceModul.vue";
 import ExperienceElement from "@/components/ui/editor/ExperienceElement.vue";
 import ContentExperience from "@/components/ui/editor/ContentExperience.vue";
 import type {ExperienceType} from "@/types/experienceType.ts";
+import ContentImage from "@/components/ui/editor/ContentImage.vue";
 
 const portfolioName = ref<string>('');
 
@@ -447,6 +448,22 @@ function getMaxSortCount() : number {
 async function createHeroSection(sectionId: number) {
   if (portfolioFacts.value === null) return
 
+  const imageBlock: CreateEditorBlockType = {
+    blockType: "image",
+    contentJson: {
+      imageUrl: "",
+      alt: "Profilbild",
+    },
+    sortOrder: 1,
+  }
+
+  await editorBlockStore.createEditorBlock(
+    portfolioId,
+    portfolioFacts.value.currentVersionId,
+    sectionId,
+    imageBlock
+  )
+
   const textBlocks: CreateTextEditorBlockType[] = [
     {
       blockType: "text",
@@ -459,7 +476,7 @@ async function createHeroSection(sectionId: number) {
         fontWeight: "medium",
         color: "#2563EB",
       },
-      sortOrder: 1,
+      sortOrder: 2,
     },
     {
       blockType: "text",
@@ -472,7 +489,7 @@ async function createHeroSection(sectionId: number) {
         fontWeight: "medium",
         color: "#0F172A",
       },
-      sortOrder: 2,
+      sortOrder: 3,
     },
     {
       blockType: "text",
@@ -485,7 +502,7 @@ async function createHeroSection(sectionId: number) {
         fontWeight: "semibold",
         color: "#334155",
       },
-      sortOrder: 3,
+      sortOrder: 4,
     },
     {
       blockType: "text",
@@ -498,7 +515,7 @@ async function createHeroSection(sectionId: number) {
         fontWeight: "normal",
         color: "#64748B",
       },
-      sortOrder: 4,
+      sortOrder: 5,
     },
   ]
 
@@ -1616,9 +1633,73 @@ async function updatePortfolioTitle() {
     portfolioName.value = portfolioFacts.value.title
   }
 }
+
+// update image in image block
+type ImageBlockContent = {
+  imageUrl: string
+  alt?: string
+}
+
+async function uploadSelectedEditorImage(file: File) {
+  if (!portfolioFacts.value || !elementSelected.value) return
+
+  try {
+    await editorBlockStore.uploadImageToEditorBlock(
+      portfolioId,
+      portfolioFacts.value.currentVersionId,
+      elementSelected.value.sectionId,
+      elementSelected.value.id,
+      file
+    )
+
+    await loadSortedSections()
+
+    const section = sortedSections.value?.find(s => s.id === elementSelected.value?.sectionId)
+    const updatedBlock = section?.editorBlock?.find(b => b.id === elementSelected.value?.id)
+
+    if (updatedBlock) {
+      elementSelected.value = updatedBlock
+      elementSelectedId.value = updatedBlock.id
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+async function updateImageBlockFunc(imageBlock: ImageBlockContent) {
+  if (!portfolioFacts.value || !elementSelected.value) return
+
+  const updatedEditor: CreateEditorBlockType = {
+    blockType: "image",
+    contentJson: imageBlock,
+    sortOrder: elementSelected.value.sortOrder,
+  }
+
+  try {
+    await editorBlockStore.updateEditorBlock(
+      portfolioId,
+      portfolioFacts.value.currentVersionId,
+      elementSelected.value.sectionId,
+      elementSelected.value.id,
+      updatedEditor
+    )
+
+    await loadSortedSections()
+  } catch (err) {
+    console.error(err)
+  }
+}
 </script>
 
 <template>
+  <input
+    ref="imageInputRef"
+    type="file"
+    accept="image/*"
+    class="hidden"
+    @change="uploadEditorImage"
+  />
+
   <div v-if="addSectionVisible">
     <AddSection @submit="submitSection" @cancel="addSectionVisible = !addSectionVisible; addSectionAfterId = null" :error="error ?? '' "></AddSection>
   </div>
@@ -1766,6 +1847,8 @@ async function updatePortfolioTitle() {
                   <EducationElement v-for="education in editor.education" @selected="elementSelectedFunction(education.id, editor)" :is-active="elementSelectedId === education.id" :key="education.id" :name="education.institutionName" :degree="education.degree" :field-of-study="education.fieldOfStudy" :start-date="education.startDate" :end-date="education.endDate"></EducationElement>
                 </EducationModul>
 
+                <ImageModul v-if="editor.blockType === 'image'" @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @delete="deleteEditorBlockFunc(editor)" @selected="elementSelectedFunction(editor.id, editor)" :is-active="elementSelectedId === editor.id" :image-content="editor.imageBlockContent"/>
+
                 <ExperienceModul v-if="editor.blockType === 'experience' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @add="addExperienceToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
                   <ExperienceElement v-for="experience in editor.experience" :key="experience.id" @selected="elementSelectedFunction(experience.id, editor)" :company="experience.companyName" :title="experience.position" :description="experience.description" :start-date="experience.startDate" :end-date="experience.endDate" :is-active="elementSelectedId === experience.id"></ExperienceElement>
                 </ExperienceModul>
@@ -1848,6 +1931,10 @@ async function updatePortfolioTitle() {
 
           <div v-if="elementSelected?.blockType === 'experience' ">
             <ContentExperience @move-up="moveEditorBlock(elementSelected, 'up')" @move-down="moveEditorBlock(elementSelected, 'down')" :total-sections="selectedBlockTotal" :current-position="selectedBlockPosition" @update="updateExperienceBlockFunc" @sectionVisible="updateSectionVisible" :experience-block="elementSelected.experience.find(l => l.id === elementSelectedId)" :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true"></ContentExperience>
+          </div>
+
+          <div v-if="elementSelected?.blockType === 'image'">
+            <ContentImage @setImage="uploadSelectedEditorImage" @update="updateImageBlockFunc" @move-up="moveEditorBlock(elementSelected, 'up')" @move-down="moveEditorBlock(elementSelected, 'down')" :total-sections="selectedBlockTotal" :current-position="selectedBlockPosition" :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true" @section-visible="updateSectionVisible" :image-block="elementSelected.imageBlockContent"/>
           </div>
         </div>
 
