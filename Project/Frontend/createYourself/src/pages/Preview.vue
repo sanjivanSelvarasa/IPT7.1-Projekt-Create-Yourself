@@ -192,7 +192,7 @@ async function pushToEditor(){
     <div class="max-w-[1200px] mx-auto mb-5 px-4">
       <NavPublic :firstname="firstname" :lastname="lastname" :tabs="mapForTabs"></NavPublic>
 
-      <button @click="pushToEditor()" class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-100 px-4 py-3 rounded-full border border-gray-500 fixed top-0 left-0 mx-5 my-20 flex items-center justify-center gap-2">
+      <button @click="pushToEditor()" class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-100 px-4 py-3 rounded-full border border-gray-500 bg-[var(--background-color)] fixed top-0 left-0 mx-5 my-20 flex items-center justify-center gap-2">
         <SvgStruct>
           <i class="fa-solid fa-arrow-left"></i>
         </SvgStruct>
