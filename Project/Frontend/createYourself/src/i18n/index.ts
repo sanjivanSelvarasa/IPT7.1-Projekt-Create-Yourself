@@ -23,6 +23,10 @@ import navDe from "@/i18n/nav/de.json";
 import navEn from "@/i18n/nav/en.json";
 import navFr from "@/i18n/nav/fr.json";
 
+import navappDe from "@/i18n/navapp/de.json";
+import navappEn from "@/i18n/navapp/en.json";
+import navappFr from "@/i18n/navapp/fr.json";
+
 import registerDe from "@/i18n/registerpage/de.json";
 import registerEn from "@/i18n/registerpage/en.json";
 import registerFr from "@/i18n/registerpage/fr.json";
@@ -38,6 +42,14 @@ import settingsFr from "@/i18n/settings/fr.json";
 import createPortfolioDe from "./createportfolio/de.json";
 import createPortfolioEn from "./createportfolio/en.json";
 import createPortfolioFr from "./createportfolio/fr.json";
+
+import editorDe from "./editor/de.json";
+import editorEn from "./editor/en.json";
+import editorFr from "./editor/fr.json";
+
+import publishDe from "./publish/de.json";
+import publishEn from "./publish/en.json";
+import publishFr from "./publish/fr.json";
 
 const savedLang =
   localStorage.getItem("lang") ??
@@ -55,10 +67,13 @@ export const i18n = createI18n({
       footer: footerDe,
       login: loginDe,
       navHome: navDe,
+      navapp: navappDe,
       register: registerDe,
       profile: profileDe,
       settings: settingsDe,
       createPortfolio: createPortfolioDe,
+      editor: editorDe,
+      publish: publishDe,
     },
     en: {
       landingpage: landingpageEn,
@@ -67,10 +82,13 @@ export const i18n = createI18n({
       footer: footerEn,
       login: loginEn,
       navHome: navEn,
+      navapp: navappEn,
       register: registerEn,
       profile: profileEn,
       settings: settingsEn,
       createPortfolio: createPortfolioEn,
+      editor: editorEn,
+      publish: publishEn,
     },
     fr: {
       landingpage: landingpageFr,
@@ -79,10 +97,13 @@ export const i18n = createI18n({
       footer: footerFr,
       login: loginFr,
       navHome: navFr,
+      navapp: navappFr,
       register: registerFr,
       profile: profileFr,
       settings: settingsFr,
       createPortfolio: createPortfolioFr,
+      editor: editorFr,
+      publish: publishFr,
     },
   },
 });
