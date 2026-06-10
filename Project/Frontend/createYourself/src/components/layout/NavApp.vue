@@ -21,7 +21,7 @@ import { useI18n } from "vue-i18n";
 
 const { t, locale } = useI18n();
 
-const tl = (key: string) => t(`nav.${key}`);
+const tl = (key: string) => t(`navapp.${key}`);
 
 const currLang = ref<string>(locale.value);
 
