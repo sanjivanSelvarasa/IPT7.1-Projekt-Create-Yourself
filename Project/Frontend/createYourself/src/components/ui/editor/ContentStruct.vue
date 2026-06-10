@@ -1,14 +1,28 @@
 <script lang="ts" setup>
   const props = defineProps<{
     sectionVisible: boolean,
+    currentPosition: number,
+    totalSections: number,
   }>()
 
   const emit = defineEmits<{
-    (e: 'sectionVisible', sectionVisible: boolean): void
+    (e: 'sectionVisible', sectionVisible: boolean): void,
+    (e: 'moveUp'): void,
+    (e: 'moveDown'): void,
   }>()
 
   function onSectionVisible(){
     emit('sectionVisible', !props.sectionVisible)
+  }
+
+  function onMoveUp() {
+    if (props.currentPosition <= 1) return
+    emit('moveUp')
+  }
+
+  function onMoveDown() {
+    if (props.currentPosition >= props.totalSections) return
+    emit('moveDown')
   }
 </script>
 
@@ -23,22 +37,24 @@
 
       <div class="flex items-center justify-between w-full mt-5">
         <span class="font-semibold">Aktuelle Position</span>
-        <span class="uppercase font-semibold">1 / 2</span>
+        <span class="uppercase font-semibold">{{ props.currentPosition }} / {{ props.totalSections }}</span>
       </div>
 
       <div class="flex items-center justify-center w-full gap-2 mt-5">
-        <button class="hover:bg-gray-50 px-3 py-2 flex items-center justify-center gap-2 w-full rounded-md border border-gray-200">
+        <button @click="onMoveUp" :disabled="props.currentPosition <= 1"
+          class="hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 flex items-center justify-center gap-2 w-full rounded-md border border-gray-200">
           <div class="flex items-center justify-center">
             <i class="fa-solid fa-angle-up"></i>
           </div>
           <span>Nach oben</span>
         </button>
 
-        <button class="hover:bg-gray-50 px-3 py-2 flex items-center justify-center gap-2 w-full rounded-md border border-gray-200">
+        <button @click="onMoveDown" :disabled="props.currentPosition >= props.totalSections"
+          class="hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 flex items-center justify-center gap-2 w-full rounded-md border border-gray-200">
           <div class="flex items-center justify-center">
             <i class="fa-solid fa-angle-down"></i>
           </div>
-          <span>Nach Unten</span>
+          <span>Nach unten</span>
         </button>
       </div>
     </div>
