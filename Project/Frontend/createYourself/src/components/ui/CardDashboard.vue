@@ -12,7 +12,12 @@
     (e: 'publish', id: number): void
     (e: 'unpublish'): void
     (e: 'delete', id: number): void
+    (e: 'rename', id: number): void
   }>()
+
+  function submitRename(){
+    emit('rename', props.portfolio.id)
+  }
 
   function submitEdit(): void{
     emit('edit', props.portfolio.id)
@@ -58,7 +63,7 @@
       </div>
 
       <div class="dropdown-menu hidden mt-5 p-3 flex-col items-start justify-start text-sm font-semibold bg-[var(--surface-color)] rounded-lg border border-gray-200">
-        <button class="hover:bg-[var(--background-color)] w-full transition duration-150 cursor-pointer rounded-lg px-2 py-1">{{ tl("saved-card.top-left-choice-menu-rename") }}</button>
+        <button @click="submitRename()" class="hover:bg-[var(--background-color)] w-full transition duration-150 cursor-pointer rounded-lg px-2 py-1">{{ tl("saved-card.top-left-choice-menu-rename") }}</button>
         <button @click="submitDelete()" class="hover:bg-red-50 hover:text-red-500 hover:border-red-500 border border-transparent w-full transition duration-150 cursor-pointer rounded-lg px-2 py-1">{{ tl("saved-card.top-left-choice-menu-delete") }}</button>
       </div>
     </div>
