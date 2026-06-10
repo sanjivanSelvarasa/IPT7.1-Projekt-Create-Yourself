@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <div class="flex items-center justify-between px-6 py-6 bg-[var(--text-color)] text-sm text-[var(--text-color-light)]">
+  <div class="flex flex-col gap-4 sm:flex-row items-center justify-between px-6 py-6 bg-[var(--text-color)] text-sm text-[var(--text-color-light)]">
     <div>
       <span class="sm:text-md text-[11px] text-nowrap">{{ tl("Project-name") }}</span>
     </div>
