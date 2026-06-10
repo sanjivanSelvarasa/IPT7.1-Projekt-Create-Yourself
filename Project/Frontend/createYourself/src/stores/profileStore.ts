@@ -43,11 +43,11 @@ export const useProfileStore = defineStore('profile', () =>{
     }
   }
 
-  async function updateProfilePicture(){
+  async function updateProfilePicture(image: File){
     error.value = null
 
     try{
-      profilePicture.value = await updateProfilePictureApi()
+      profilePicture.value = await updateProfilePictureApi(image)
     }catch(error: any){
       error.value = error ? error.message : 'Failed to update profile picture.'
     }
