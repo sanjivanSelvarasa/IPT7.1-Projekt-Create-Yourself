@@ -1346,6 +1346,26 @@ async function moveEditorBlock(editorBlock: EditorBlockType, direction: "up" | "
   await loadSortedSections()
 }
 
+const selectedBlockPosition = computed(() => {
+  if (!elementSelected.value || !sortedSections.value) return 0
+
+  const section = sortedSections.value.find(s => s.id === elementSelected.value?.sectionId)
+  if (!section?.editorBlock) return 0
+
+  const blocks = [...section.editorBlock].sort((a, b) => a.sortOrder - b.sortOrder)
+  const index = blocks.findIndex(b => b.id === elementSelected.value?.id)
+
+  return index === -1 ? 0 : index + 1
+})
+
+const selectedBlockTotal = computed(() => {
+  if (!elementSelected.value || !sortedSections.value) return 0
+
+  const section = sortedSections.value.find(s => s.id === elementSelected.value?.sectionId)
+
+  return section?.editorBlock?.length ?? 0
+})
+
 // version system
 async function reloadEditorVersion(versionId: number) {
   if (!portfolioFacts.value) return
@@ -1807,27 +1827,27 @@ async function updatePortfolioTitle() {
 
         <div class="mt-5" v-if="isSettingsOpen">
           <div v-if="elementSelected?.blockType === 'text' ">
-            <ContentText :text-block="elementSelected.textBlockContent" @update="updateTextBlockFunc" :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true" @section-visible="updateSectionVisible"></ContentText>
+            <ContentText @move-up="moveEditorBlock(elementSelected, 'up')" @move-down="moveEditorBlock(elementSelected, 'down')" :total-sections="selectedBlockTotal" :current-position="selectedBlockPosition" :text-block="elementSelected.textBlockContent" @update="updateTextBlockFunc" :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true" @section-visible="updateSectionVisible"></ContentText>
           </div>
 
           <div v-if="elementSelected?.blockType === 'project' ">
-            <ContentProject :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true" @section-visible="updateSectionVisible" @setImage="uploadProjectImage" :project-block="elementSelected.project.find(p => p.id === elementSelectedId)" @update="updateProjectBlockFunc"></ContentProject>
+            <ContentProject @move-up="moveEditorBlock(elementSelected, 'up')" @move-down="moveEditorBlock(elementSelected, 'down')" :total-sections="selectedBlockTotal" :current-position="selectedBlockPosition" :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true" @section-visible="updateSectionVisible" @setImage="uploadProjectImage" :project-block="elementSelected.project.find(p => p.id === elementSelectedId)" @update="updateProjectBlockFunc"></ContentProject>
           </div>
 
           <div v-if="elementSelected?.blockType === 'skill' ">
-            <ContentSkill :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true" @section-visible="updateSectionVisible" :skill-block="elementSelected.skills.find(s => s.id === elementSelectedId)" @update="updateSkillBlockFunc"></ContentSkill>
+            <ContentSkill @move-up="moveEditorBlock(elementSelected, 'up')" @move-down="moveEditorBlock(elementSelected, 'down')" :total-sections="selectedBlockTotal" :current-position="selectedBlockPosition" :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true" @section-visible="updateSectionVisible" :skill-block="elementSelected.skills.find(s => s.id === elementSelectedId)" @update="updateSkillBlockFunc"></ContentSkill>
           </div>
 
           <div v-if="elementSelected?.blockType === 'education' ">
-            <ContentEducation :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true" @section-visible="updateSectionVisible" :education-block="elementSelected.education.find(e => e.id === elementSelectedId)" @update="updateEducationBlockFunc"></ContentEducation>
+            <ContentEducation @move-up="moveEditorBlock(elementSelected, 'up')" @move-down="moveEditorBlock(elementSelected, 'down')" :total-sections="selectedBlockTotal" :current-position="selectedBlockPosition" :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true" @section-visible="updateSectionVisible" :education-block="elementSelected.education.find(e => e.id === elementSelectedId)" @update="updateEducationBlockFunc"></ContentEducation>
           </div>
 
           <div v-if="elementSelected?.blockType === 'link' ">
-            <ContentLink :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true" @section-visible="updateSectionVisible" :link-block="elementSelected.link.find(l => l.id === elementSelectedId)" @update="updateSocialLinkBlockFunc"></ContentLink>
+            <ContentLink @move-up="moveEditorBlock(elementSelected, 'up')" @move-down="moveEditorBlock(elementSelected, 'down')" :total-sections="selectedBlockTotal" :current-position="selectedBlockPosition" :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true" @section-visible="updateSectionVisible" :link-block="elementSelected.link.find(l => l.id === elementSelectedId)" @update="updateSocialLinkBlockFunc"></ContentLink>
           </div>
 
           <div v-if="elementSelected?.blockType === 'experience' ">
-            <ContentExperience @update="updateExperienceBlockFunc" @sectionVisible="updateSectionVisible" :experience-block="elementSelected.experience.find(l => l.id === elementSelectedId)" :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true"></ContentExperience>
+            <ContentExperience @move-up="moveEditorBlock(elementSelected, 'up')" @move-down="moveEditorBlock(elementSelected, 'down')" :total-sections="selectedBlockTotal" :current-position="selectedBlockPosition" @update="updateExperienceBlockFunc" @sectionVisible="updateSectionVisible" :experience-block="elementSelected.experience.find(l => l.id === elementSelectedId)" :section-visible="portfolioSectionStore.sections.find(s => s.id === sectionSelected)?.isVisible ?? true"></ContentExperience>
           </div>
         </div>
 
