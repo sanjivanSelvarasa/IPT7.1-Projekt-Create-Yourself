@@ -23,6 +23,8 @@
   import PublishLinkElement from "@/components/ui/PublishLinkElement.vue";
   import PublishTextElement from "@/components/ui/editor/PublishTextElement.vue";
   import {getBrandSvg} from "@/utils/brand.ts";
+  import PublishExperienceModul from "@/components/ui/PublishExperienceModul.vue";
+  import PublishExperienceElement from "@/components/ui/PublishExperienceElement.vue";
 
   const route = useRoute();
   const portfolioSlug = String(route.params.slug);
@@ -41,7 +43,7 @@
 
   const sortedSections = ref<any[] | null>(null);
   async function loadSortedSections() {
-    const res = [...portfolioSectionStore.sections].sort((a, b) => a.sortOrder - b.sortOrder)
+    const res = [...portfolioSectionStore.sections].sort((a, b) => a.sortOrder - b.sortOrder).filter(p => p.isVisible === true)
 
     sortedSections.value = await Promise.all(
       res.map(async (s) => ({
@@ -240,6 +242,16 @@
                 <PublishEducationElement v-for="education in block.education" :key="education.id" :institution-name="education.institutionName" :degree="education.degree" :start-date="education.startDate" :end-date="education.endDate"></PublishEducationElement>
               </div>
 
+              <PublishExperienceModul v-if="block.blockType === 'experience' " class="flex flex-col gap-5">
+                <PublishExperienceElement
+                  v-for="experience in block.experience"
+                  :key="experience.id"
+                  :company="experience.companyName"
+                  :position="experience.position"
+                  :description="experience.description"
+                  :start-date="experience.startDate"
+                  :end-date="experience.endDate"
+                /></PublishExperienceModul>
               <PublishLinkModul v-if="block.blockType === 'link' ">
                 <div class="flex items-center justify-center gap-4">
                   <PublishLinkElement v-for="link in block.link" :key="link.id" :svg="getBrandSvg(link.platform)" :name="link.platform" :url="link.url"></PublishLinkElement>
@@ -264,7 +276,7 @@
               :href="link.url"
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:bg-white/25 transition duration-75 flex items-center justify-center w-[35px] h-[35px] rounded-lg backdrop-blur-sm bg-backdrop"
+              class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] border border-transparent transition duration-75 flex items-center justify-center w-[35px] h-[35px] rounded-lg backdrop-blur-sm bg-backdrop"
             >
               <SvgStruct>
                 <i :class="getBrandSvg(link.platform)"></i>
