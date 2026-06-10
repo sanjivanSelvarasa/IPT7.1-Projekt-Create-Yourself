@@ -10,7 +10,7 @@ import type {PasswordChangeType} from "@/types/passwordChangeType.ts";
 import {useRouter} from "vue-router";
 import SvgStruct from "@/components/ui/SvgStruct.vue";
 import { useI18n } from "vue-i18n";
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const tl = (key: string) => t(`settings.${key}`);
 
 const profileStore = useProfileStore();
@@ -25,12 +25,14 @@ const messageLanguage = ref<string | null>(null);
 onMounted(async () => {
   await profileStore.getProfile()
   prefLang.value = profileStore.profileData?.preferredLanguage ?? 'de'
+  locale.value = prefLang.value
 })
 
 async function submitLang() {
   messageLanguage.value = null
   if(!prefLang.value) errorLang.value = 'Sprache konnte nicht gesetzt werden.'
   await profileStore.updateLanguage(prefLang.value);
+  locale.value = profileStore.profileData?.preferredLanguage ?? 'de'
   messageLanguage.value = 'Sprache erfolgreich gesetzt.';
 }
 
