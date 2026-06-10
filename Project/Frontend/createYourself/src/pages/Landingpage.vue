@@ -316,7 +316,7 @@ function changeLang(lang: string) {
 
       <div class="p-4">
         <div class="grid lg:grid-cols-3 grid-cols-1 gap-4 mt-3 border rounded-[30px] py-8 px-8 border-gray-200">
-          <div class="relative flex flex-col items-start justify-center gap-2 flex-wrap border pr-3 lg:border-r-gray-200 lg:pb-0 pb-5 border-b-gray-200 border-transparent">
+          <div class="relative flex flex-col items-start justify-center gap-2 flex-wrap border pr-3 lg:border-r-gray-200 border-b-gray-200 lg:border-b-transparent lg:pb-0 pb-5 border-b-gray-200 border-transparent">
             <div class="flex items-center justify-center absolute -top-5 right-5 text-[50px] font-extrabold">
               <span class="bg-linear-to-r from-blue-200 to-violet-200 bg-clip-text text-transparent">01</span>
             </div>
@@ -349,7 +349,7 @@ function changeLang(lang: string) {
           </div>
 
 
-          <div class="w-full relative flex flex-col items-start justify-center gap-2 flex-wrap pr-5 lg:border-r-gray-200 border-b-gray-200 lg:pb-0 pb-5 border border-transparent">
+          <div class="w-full relative flex flex-col items-start justify-center gap-2 flex-wrap pr-5 lg:border-r-gray-200 border-b-gray-200 lg:border-b-transparent lg:pb-0 pb-5 border border-transparent">
             <div class="flex items-center justify-center absolute -top-5 right-5 text-[50px] font-extrabold">
               <span class="bg-linear-to-r from-blue-200 to-violet-200 bg-clip-text text-transparent">02</span>
             </div>
