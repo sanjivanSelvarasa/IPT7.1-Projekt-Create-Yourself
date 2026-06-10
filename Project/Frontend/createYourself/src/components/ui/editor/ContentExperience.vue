@@ -8,11 +8,15 @@ import { ref, watch } from "vue";
 const props = defineProps<{
   experienceBlock: ExperienceType,
   sectionVisible: boolean,
+  currentPosition: number,
+  totalSections: number,
 }>()
 
 const emit = defineEmits<{
-  (e: 'update', experience: ExperienceType): void
-  (e: 'sectionVisible', sectionVisible: boolean): void
+  (e: 'update', experience: ExperienceType): void,
+  (e: 'sectionVisible', sectionVisible: boolean): void,
+  (e: 'moveUp'): void,
+  (e: 'moveDown'): void,
 }>()
 
 const inputCompanyName = ref<string>(props.experienceBlock.companyName)
@@ -24,6 +28,16 @@ const endDate = ref<string>(props.experienceBlock.endDate?.slice(0, 10) ?? "")
 
 function onSectionVisible(): void {
   emit('sectionVisible', !props.sectionVisible)
+}
+
+function onMoveUp() {
+  if (props.currentPosition <= 1) return
+  emit('moveUp')
+}
+
+function onMoveDown() {
+  if (props.currentPosition >= props.totalSections) return
+  emit('moveDown')
 }
 
 function onUpdate(): void {
@@ -49,7 +63,7 @@ watch(() => props.experienceBlock, (newExperience) => {
 </script>
 
 <template>
-  <ContentStruct @sectionVisible="onSectionVisible" :sectionVisible="props.sectionVisible">
+  <ContentStruct @move-up="onMoveUp" @move-down="onMoveDown" :total-sections="props.totalSections" :current-position="props.currentPosition" @sectionVisible="onSectionVisible" :sectionVisible="props.sectionVisible">
     <span class="md-subtitle text-[var(--text-color-light)]">Berufserfahrung</span>
 
     <InputStruct title="Firmenname">

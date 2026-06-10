@@ -8,15 +8,29 @@ import {ref, watch} from "vue";
 const props = defineProps<{
   linkBlock: SocialLinkType,
   sectionVisible: boolean,
+  currentPosition: number,
+  totalSections: number,
 }>()
 
 const emit = defineEmits<{
-  (e: 'update', link: SocialLinkType): void
-  (e: 'sectionVisible', sectionVisible: boolean): void
+  (e: 'update', link: SocialLinkType): void,
+  (e: 'sectionVisible', sectionVisible: boolean): void,
+  (e: 'moveUp'): void,
+  (e: 'moveDown'): void,
 }>()
 
 function onSectionVisible(){
   emit('sectionVisible', !props.sectionVisible);
+}
+
+function onMoveUp() {
+  if (props.currentPosition <= 1) return
+  emit('moveUp')
+}
+
+function onMoveDown() {
+  if (props.currentPosition >= props.totalSections) return
+  emit('moveDown')
 }
 
 function onUpdate() {
@@ -41,7 +55,7 @@ watch(() => props.linkBlock, (newLink) => {
 </script>
 
 <template>
-  <ContentStruct @sectionVisible="onSectionVisible" :sectionVisible="props.sectionVisible">
+  <ContentStruct @move-down="onMoveDown" @move-up="onMoveUp" :current-position="props.currentPosition" :total-sections="props.totalSections" @sectionVisible="onSectionVisible" :sectionVisible="props.sectionVisible">
     <span class="md-subtitle text-[var(--text-color-light)]">Details</span>
 
     <InputStruct title="Anzeige-Name">

@@ -9,15 +9,29 @@
   const props = defineProps<{
     educationBlock: EducationType,
     sectionVisible: boolean,
+    currentPosition: number,
+    totalSections: number,
   }>()
 
   const emit = defineEmits<{
-    (e: 'update', education: EducationType): void
-    (e: 'sectionVisible', sectionVisible: boolean): void
+    (e: 'update', education: EducationType): void,
+    (e: 'sectionVisible', sectionVisible: boolean): void,
+    (e: 'moveUp'): void,
+    (e: 'moveDown'): void,
   }>()
 
   function onSectionVisible(): void {
     emit('sectionVisible', !props.sectionVisible)
+  }
+
+  function onMoveUp() {
+    if (props.currentPosition <= 1) return
+    emit('moveUp')
+  }
+
+  function onMoveDown() {
+    if (props.currentPosition >= props.totalSections) return
+    emit('moveDown')
   }
 
   function onUpdate(): void {
@@ -47,7 +61,7 @@
 </script>
 
 <template>
-  <ContentStruct @sectionVisible="onSectionVisible" :sectionVisible="props.sectionVisible">
+  <ContentStruct @move-up="onMoveUp" @move-down="onMoveDown" :total-sections="props.totalSections" :current-position="props.currentPosition" @sectionVisible="onSectionVisible" :sectionVisible="props.sectionVisible">
     <span class="md-subtitle text-[var(--text-color-light)]">Einrichtung</span>
 
     <InputStruct title="Institution">
