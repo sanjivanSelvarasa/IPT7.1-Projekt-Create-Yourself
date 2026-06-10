@@ -24,6 +24,10 @@ import PublishLinkElement from "@/components/ui/PublishLinkElement.vue";
 import PublishTextElement from "@/components/ui/editor/PublishTextElement.vue";
 import {getBrandSvg} from "@/utils/brand.ts";
 import router from "@/router";
+import ImageModul from "@/components/ui/editor/ImageModul.vue";
+import PublishImageElement from "@/components/ui/PublishImageElement.vue";
+import PublishExperienceElement from "@/components/ui/PublishExperienceElement.vue";
+import PublishExperienceModul from "@/components/ui/PublishExperienceModul.vue";
 
 const route = useRoute();
 const portfolioId = Number(route.params.id);
@@ -105,6 +109,13 @@ async function getEditorForSection(sectionId: number){
       }
     }
 
+    if (e.blockType === "image") {
+      return {
+        ...e,
+        imageBlockContent: JSON.parse(e.contentJson),
+      }
+    }
+
     return e
   }) ?? []
 }
@@ -144,7 +155,7 @@ onMounted(async () => {
 })
 
 const rawName = computed(() => {
-  return sortedSections.value?.find(s => s.sectionType === 'Hero Section')?.editorBlock[1].textBlockContent.text
+  return sortedSections.value?.find(s => s.sectionType === 'Hero Section')?.editorBlock[2].textBlockContent.text
 })
 
 const firstname = computed(() => {
@@ -206,11 +217,11 @@ async function pushToEditor(){
               <div class="flex lg:flex-row flex-col-reverse mt-30 lg:mt-0 justify-between items-center gap-4">
                 <div class="flex flex-col justify-center sm:items-start items-center gap-4">
                   <div class="flex flex-col sm:items-start items-center gap-1 sm:text-[70px]! text-[40px]! font-medium!">
-                    <PublishTextElement class="leading-tight" :text-block="section.editorBlock[0].textBlockContent"></PublishTextElement>
-                    <PublishTextElement class="leading-tight"  :text-block="section.editorBlock[1].textBlockContent"></PublishTextElement>
+                    <PublishTextElement class="leading-tight" :text-block="section.editorBlock[1].textBlockContent"></PublishTextElement>
+                    <PublishTextElement class="leading-tight"  :text-block="section.editorBlock[2].textBlockContent"></PublishTextElement>
                   </div>
-                  <PublishTextElement class="bg-linear-to-r! from-[var(--primary-color)]! to-[var(--secondary-color)]! bg-clip-text! text-transparent!" :text-block="section.editorBlock[2].textBlockContent"></PublishTextElement>
-                  <PublishTextElement class="max-w-[450px]" :text-block="section.editorBlock[3].textBlockContent"></PublishTextElement>
+                  <PublishTextElement class="bg-linear-to-r! from-[var(--primary-color)]! to-[var(--secondary-color)]! bg-clip-text! text-transparent!" :text-block="section.editorBlock[3].textBlockContent"></PublishTextElement>
+                  <PublishTextElement class="max-w-[450px]" :text-block="section.editorBlock[4].textBlockContent"></PublishTextElement>
 
                   <div class="flex gap-3">
                     <a :href="`#${projectSectionId}`" class="select-none hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] hover:bg-[var(--surface-color)] transition duration-75 border border-transparent flex justify-center items-center gap-2 px-4 py-3 rounded-xl shadow-md bg-[var(--primary-color)] text-[var(--text-color-white)]">
@@ -233,8 +244,13 @@ async function pushToEditor(){
                   <div class="relative select-none w-[400px] h-[400px]">
                     <div class="rotate absolute -inset-2 bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)] rounded-full"></div>
 
-                    <div class="relative z-10 flex justify-center items-center w-full h-full text-[80px] text-[var(--text-color-white)] font-extrabold rounded-full shadow-2xl bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)] border-5 border-[var(--surface-color)]">
-                      <span>{{ firstname.slice(0,1) + lastname.slice(0,1) }}</span>
+                    <div class="relative z-10 flex justify-center items-center w-full h-full overflow-hidden text-[80px] text-[var(--text-color-white)] font-extrabold rounded-full shadow-2xl bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)] border-5 border-[var(--surface-color)]">
+                      <img v-if="section.editorBlock[0]?.imageBlockContent?.imageUrl"
+                        :src="`http://localhost:3000${section.editorBlock[0].imageBlockContent.imageUrl}`"
+                        :alt="section.editorBlock[0].imageBlockContent.alt ?? 'Profilbild'"
+                        class="w-full h-full object-cover" />
+
+                      <span v-else>{{ firstname?.slice(0, 1) + lastname?.slice(0, 1) }}</span>
                     </div>
                   </div>
                 </div>
@@ -275,6 +291,21 @@ async function pushToEditor(){
                   <PublishLinkElement v-for="link in block.link" :key="link.id" :svg="getBrandSvg(link.platform)" :name="link.platform" :url="link.url"></PublishLinkElement>
                 </div>
               </PublishLinkModul>
+
+              <PublishExperienceModul v-if="block.blockType === 'experience' " class="flex flex-col gap-5">
+                <PublishExperienceElement
+                  v-for="experience in block.experience"
+                  :key="experience.id"
+                  :company="experience.companyName"
+                  :position="experience.position"
+                  :description="experience.description"
+                  :start-date="experience.startDate"
+                  :end-date="experience.endDate"
+                /></PublishExperienceModul>
+
+              <div v-if="block.blockType === 'image'">
+                <PublishImageElement :image-url="block.imageBlockContent?.imageUrl" :alt="block.imageBlockContent.alt"></PublishImageElement>
+              </div>
             </div>
           </PublishModulStruct>
         </section>
