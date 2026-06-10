@@ -1769,7 +1769,7 @@ async function updatePortfolioTitle() {
       <aside
         v-if="elementSelected"
         class="lg:static top-14 bottom-0 right-0 absolute z-999 sm:1 py-4 px-4 shrink-0 h-full overflow-y-scroll transition-all duration-200"
-        :class="[isSettingsOpen ? 'sm:max-w-[350px] max-w-none w-full sm:min-w-[300px] bg-[var(--surface-color)]' : 'max-w-[60px] w-[60px] min-w-[60px] bg-transparent overflow-hidden', isBaukastenOpen ? 'hidden' : '' ]"
+        :class="[isSettingsOpen ? 'sm:max-w-[350px] max-w-none w-full sm:min-w-[300px] bg-[var(--surface-color)]' : 'max-w-[60px] w-[60px] min-w-[60px] bg-transparent overflow-hidden', isBaukastenOpen ? 'hidden sm:block' : '' ]"
         >
         <div class="flex flex-col justify-center items-start gap-1">
           <div class="flex items-center justify-between w-full">
