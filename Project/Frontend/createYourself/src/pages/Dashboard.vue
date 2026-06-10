@@ -10,6 +10,8 @@ import Background from "@/components/layout/Background.vue";
 import MainContent from "@/components/layout/MainContent.vue";
 import {useProfileStore} from "@/stores/profileStore.ts";
 import type {PortfolioType} from "@/types/portfolioType.ts";
+import SvgStruct from "@/components/ui/SvgStruct.vue";
+import Rename from "@/components/ui/Rename.vue";
 
 const portfolioStore = usePortfolioStore();
 const profileStore = useProfileStore();
@@ -31,14 +33,35 @@ const noResults = computed(() => {
 const status = ref<string>('all');
 
 const updatedPortfolios = computed(() => {
-  const filteredPortfolios = portfolioStore.portfolios?.filter(t => t.title.toLowerCase().includes(searchText.value.toLowerCase()) || t.description.toLowerCase().includes(searchText.value.toLowerCase()));
+  let filteredPortfolios = portfolioStore.portfolios?.filter(t =>
+    t.title.toLowerCase().includes(searchText.value.toLowerCase()) ||
+    t.description.toLowerCase().includes(searchText.value.toLowerCase())
+  ) ?? []
 
-  if(status.value === "all")
-    return filteredPortfolios
-  else if(status.value === "private")
-    return filteredPortfolios?.filter(t => t.visibility.toLowerCase() === "private");
-  else
-    return filteredPortfolios?.filter(t => t.visibility.toLowerCase() === "public");
+  if (status.value === "private") {
+    filteredPortfolios = filteredPortfolios.filter(t => t.visibility.toLowerCase() === "private")
+  } else if (status.value === "public") {
+    filteredPortfolios = filteredPortfolios.filter(t => t.visibility.toLowerCase() === "public")
+  }
+
+  return [...filteredPortfolios].sort((a, b) => {
+    switch (selectedSort.value) {
+      case "Name / Titel":
+        return a.title.localeCompare(b.title)
+
+      case "Erstellungsdatum":
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+
+      case "Letzte Änderung":
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+
+      case "Sprache":
+        return a.languageCode.localeCompare(b.languageCode)
+
+      default:
+        return 0
+    }
+  })
 })
 
 async function pushToEditor(id: number){
@@ -72,6 +95,35 @@ async function deletePortfolio(id: number){
   }
 }
 
+// filter
+const selectedSort = ref("")
+
+// rename
+const currPortfolio = ref<PortfolioType | null>(null);
+const isRenameOpen = ref<boolean>(false);
+function renameOn(id: number){
+  currPortfolio.value = portfolioStore.portfolios?.find(p => p.id === id) ?? null
+  if(currPortfolio.value === null) return;
+  isRenameOpen.value = true;
+}
+async function renamePortfolio(id: number, newTitle: string, newDescription: string){
+  const portfolio = portfolioStore.portfolios?.find(p => p.id === id) ?? null
+
+  const newPortfolio : PortfolioType = {
+    ...portfolio,
+    title: newTitle,
+    description: newDescription,
+  }
+
+  try{
+    await portfolioStore.updatePortfolio(newPortfolio);
+    await portfolioStore.getPortfolio()
+    isRenameOpen.value = false
+  }catch(err){
+    console.log(err);
+  }
+}
+
 // language
 const { t, locale } = useI18n();
 
@@ -79,6 +131,9 @@ const tl = (key: string) => t(`dashboard.${key}`);
 </script>
 
 <template>
+  <div>
+    <Rename v-if="isRenameOpen" @submit="renamePortfolio" @cancel="isRenameOpen = false" :id="currPortfolio?.id" :title="currPortfolio?.title ?? '' " :description="currPortfolio?.description ?? '' "></Rename>
+  </div>
 
   <RouterLink to="/create" class="sm:hidden z-999 m-4 fixed bottom-0 left-0 right-0 flex text-nowrap hover:scale-101 hover:-translate-y-[1px] transition duration-100 items-center justify-center gap-2 px-4 py-3 bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)] rounded-lg shadow-lg text-[var(--text-color-white)] cursor-pointer">
     <div class="flex items-center justify-center">
@@ -147,16 +202,25 @@ const tl = (key: string) => t(`dashboard.${key}`);
           </select>
         </div>
 
-        <div class="md:flex hidden hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] items-center justify-center gap-2 shadow-lg px-4 py-2 text-[var(--text-color-light)] outline-none border border-gray-200 rounded-lg bg-[var(--surface-color)] cursor-pointer">
-          <div class="flex items-center justify-center">
+        <div :class="selectedSort.length > 0 ? 'active-sort' : '' " class="relative md:flex hidden hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] items-center justify-center gap-2 shadow-lg px-4 py-2 text-[var(--text-color-light)] outline-none border border-gray-200 rounded-lg bg-[var(--surface-color)] cursor-pointer">
+          <SvgStruct>
             <i class="fa-solid fa-sort"></i>
-          </div>
-          <span>{{ tl("start.bars-and-sort-functions.sort") }}</span>
+          </SvgStruct>
+
+          <span> {{ selectedSort || tl("start.bars-and-sort-functions.sort") }} </span>
+
+          <select v-model="selectedSort" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+            <option disabled value=""> {{ tl("start.bars-and-sort-functions.sort") }} </option>
+            <option value="Name / Titel">Name / Titel</option>
+            <option value="Erstellungsdatum">Erstellungsdatum</option>
+            <option value="Letzte Änderung">Letzte Änderung</option>
+            <option value="Sprache">Sprache</option>
+          </select>
         </div>
       </div>
 
       <div class="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 grid-rows-[auto_1fr] gap-4 w-full mb-8">
-        <CardDashboard @delete="deletePortfolio" @unpublish="unpublishPortfolio(portfolio)" @publish="pushToPublish" @edit="pushToEditor" v-for="portfolio in updatedPortfolios" :key="portfolio.id" :portfolio="portfolio"></CardDashboard>
+        <CardDashboard @rename="renameOn" @delete="deletePortfolio" @unpublish="unpublishPortfolio(portfolio)" @publish="pushToPublish" @edit="pushToEditor" v-for="portfolio in updatedPortfolios" :key="portfolio.id" :portfolio="portfolio"></CardDashboard>
 
         <!-- create project-->
         <RouterLink to="/create" v-if="!noResults" class="select-none group hover:border-[var(--primary-color)] cursor-pointer transition duration-150 relative bg-transparent w-full h-[350px] aspect-square rounded-2xl overflow-hidden border-3 border-gray-200 border-dashed">
@@ -182,3 +246,10 @@ const tl = (key: string) => t(`dashboard.${key}`);
     </MainContent>
   </Background>
 </template>
+
+<style scoped>
+  .active-sort{
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+  }
+</style>
