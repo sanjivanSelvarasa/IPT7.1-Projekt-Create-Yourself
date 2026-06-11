@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const tl = (key: string) => t(`editorrightside.right-Section.${key}`);
   const props = defineProps<{
     sectionVisible: boolean,
     currentPosition: number,
@@ -33,10 +37,10 @@
     <div class="divider"></div>
 
     <div>
-      <span class="md-subtitle text-[var(--text-color-light)]">Reihenfolge</span>
+      <span class="md-subtitle text-[var(--text-color-light)]">{{ tl('Order.order') }}</span>
 
       <div class="flex items-center justify-between w-full mt-5">
-        <span class="font-semibold">Aktuelle Position</span>
+        <span class="font-semibold">{{ tl('Order.current position') }}</span>
         <span class="uppercase font-semibold">{{ props.currentPosition }} / {{ props.totalSections }}</span>
       </div>
 
@@ -46,7 +50,7 @@
           <div class="flex items-center justify-center">
             <i class="fa-solid fa-angle-up"></i>
           </div>
-          <span>Nach oben</span>
+          <span>{{ tl('Order.up') }}</span>
         </button>
 
         <button @click="onMoveDown" :disabled="props.currentPosition >= props.totalSections"
@@ -54,17 +58,17 @@
           <div class="flex items-center justify-center">
             <i class="fa-solid fa-angle-down"></i>
           </div>
-          <span>Nach unten</span>
+          <span>{{ tl('Order.down') }}</span>
         </button>
       </div>
     </div>
 
     <div class="divider"></div>
 
-    <span class="md-subtitle text-[var(--text-color-light)]">Sichtbarkeit</span>
+    <span class="md-subtitle text-[var(--text-color-light)]">{{ tl('Visibility.Title') }}</span>
 
     <div class="flex items-center justify-between w-full">
-      <span class="font-semibold">Section sichtbar</span>
+      <span class="font-semibold">{{ tl('Visibility.active') }}</span>
       <label class="switch">
         <input @click="onSectionVisible()" type="checkbox" :checked="props.sectionVisible" />
         <span class="slider round"></span>
