@@ -23,6 +23,9 @@
       "subtitle-four": "Selected template",
       "subtitle-five": "Visibility",
       "subtitle-four-text": "None selected",
+      "no-title": "No title selected",
+      "no-language": "No language selected",
+      "no-description": "No description",
       "subtitle-five-text": "Private",
       "box-one": "Projects",
       "box-two": "Skills",
@@ -45,7 +48,8 @@
     "Title": "Public link",
     "Slug": "Slug failed",
     "subtitle": "This link will be publicly accessible once it has been published.",
-    "Copy-Link": "Copy-Link"
+    "Copy-Link": "Copy Link",
+    "Copied-Link": "Link copied"
   },
   "checklist": {
     "Title": "Pre-publication checklist",

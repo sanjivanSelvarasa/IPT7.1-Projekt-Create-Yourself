@@ -23,6 +23,9 @@
       "subtitle-four": "Modèle sélectionné",
       "subtitle-five": "Visibilité",
       "subtitle-four-text": "Aucun élément sélectionné",
+      "no-title": "Aucun titre sélectionné",
+      "no-language": "Aucune langue sélectionnée",
+      "no-description": "Aucune description disponible",
       "subtitle-five-text": "Privé",
       "box-one": "Projets",
       "box-two": "Compétences",
@@ -45,7 +48,8 @@
     "Title": "Lien public",
     "Slug": "Échec de la requête Slug",
     "subtitle": "Ce lien sera accessible à tous dès sa publication.",
-    "Copy-Link": "Copier le lien"
+    "Copy-Link": "Copier le lien",
+    "Copied-Link": "Lien copié"
   },
   "checklist": {
     "Title": "Liste de contrôle avant publication",
