@@ -1,0 +1,13 @@
+{
+  "Sections": {
+    "Hero": "Section Héros",
+    "Training": "Formation",
+    "Projects": "Projets",
+    "Skills": "Compétences",
+    "Experience": "Expérience",
+    "Contact-and-Social": "Contact et réseaux sociaux",
+    "Empty": "Section libre"
+  },
+  "contact-button": "Nous contacter",
+  "leave-button": "Retour à l'éditeur"
+}

@@ -27,6 +27,15 @@
       "seventh-subtitle": "Réseaux sociaux"
     },
     "section-title": "Rubriques",
+    "Sections": {
+      "Hero": "Section Héros",
+      "Training": "Formation",
+      "Projects": "Projets",
+      "Skills": "Compétences",
+      "Experience": "Expérience",
+      "Contact-and-Social": "Contact et réseaux sociaux",
+      "empty": "Section libre"
+    },
     "section-add": "Ajouter une section"
   },
   "Main-Preview": {

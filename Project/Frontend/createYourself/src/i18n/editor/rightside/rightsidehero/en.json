@@ -1,0 +1,37 @@
+{
+  "Top": "Hero",
+  "Title": "Contents",
+  "text": "Text",
+  "text-placeholder": "PLACEHOLDER TITLE",
+  "text-character": "Characters",
+  "Tag": "Tag",
+  "Tag-Choice": {
+    "First": "Title",
+    "second": "Paragraph",
+    "third": "Subtitle",
+    "fourth": "Headline"
+  },
+  "Colour": "Colour",
+  "Height": "Height",
+  "Weight": "Weight",
+  "Weight-Choice": {
+    "First": "Normal",
+    "second": "Medium",
+    "third": "Semibold",
+    "fourth": "Bold"
+  },
+  "Alignment": "Alignment",
+  "Alignment-Choice": {
+    "first": "left",
+    "second": "center",
+    "third": "right"
+  },
+  "Picture": {
+    "Title": "image",
+    "no-picture": "no uplaoded image",
+    "subtitle-one": "upload image",
+    "placeholder": "choose image",
+    "subtitle-two": "Alternative Text",
+    "placeholder-two": "Profile picture"
+  }
+}

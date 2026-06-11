@@ -1,0 +1,13 @@
+{
+  "Sections": {
+    "Hero": "Hero-Section",
+    "Training": "Ausbildung",
+    "Projects": "Projekte",
+    "Skills": "Skills",
+    "Experience": "Erfahrung",
+    "Contact-and-Social": "Kontakt und Social",
+    "Empty": "Freie Section"
+  },
+  "contact-button": "Kontakt aufnehmen",
+  "leave-button": "Zurück zum Editor"
+}

@@ -1,0 +1,37 @@
+{
+  "Top": "Hero",
+  "Title": "Inhalt",
+  "text": "Text",
+  "text-placeholder": "PLATZHALTER TITEL",
+  "text-character": "Zeichen",
+  "Tag": "Tag",
+  "Tag-Choice": {
+    "First": "Titel",
+    "second": "Paragraph",
+    "third": "Untertitel",
+    "fourth": "Überschrift"
+  },
+  "Colour": "Farbe",
+  "Height": "Grösse",
+  "Weight": "Schriftstärke",
+  "Weight-Choice": {
+    "First": "Normal",
+    "second": "Mittel",
+    "third": "Semibold",
+    "fourth": "Bold"
+  },
+  "Alignment": "Ausrichtung",
+  "Alignment-Choice": {
+    "first": "links",
+    "second": "zentriert",
+    "third": "rechts"
+  },
+  "Picture": {
+    "Title": "Bild",
+    "no-picture": "Kein Bild hochgeladen",
+    "subtitle-one": "Bild hochladen",
+    "placeholder": "Bild auswählen",
+    "subtitle-two": "Alternativer Text",
+    "placeholder-two": "Profilbild"
+  }
+}
