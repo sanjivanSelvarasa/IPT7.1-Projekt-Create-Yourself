@@ -24,10 +24,14 @@ import PublishLinkElement from "@/components/ui/PublishLinkElement.vue";
 import PublishTextElement from "@/components/ui/editor/PublishTextElement.vue";
 import {getBrandSvg} from "@/utils/brand.ts";
 import router from "@/router";
-import ImageModul from "@/components/ui/editor/ImageModul.vue";
 import PublishImageElement from "@/components/ui/PublishImageElement.vue";
 import PublishExperienceElement from "@/components/ui/PublishExperienceElement.vue";
 import PublishExperienceModul from "@/components/ui/PublishExperienceModul.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const tn = (key: string) => t(`previewnavbar.${key}`);
+const tf = (key: string) => t(`previewfooter.${key}`);
 
 const route = useRoute();
 const portfolioId = Number(route.params.id);
@@ -170,7 +174,6 @@ const lastname = computed(() => {
   return rawName.value.split(' ')[1]
 })
 
-
 const mapForTabs = computed(() => {
   if(sortedSections?.value === null) return;
 
@@ -207,7 +210,7 @@ async function pushToEditor(){
         <SvgStruct>
           <i class="fa-solid fa-arrow-left"></i>
         </SvgStruct>
-        <span>Zurück zum Editor</span>
+        <span>{{ tn('leave-button') }}</span>
       </button>
 
       <main>
@@ -225,7 +228,7 @@ async function pushToEditor(){
 
                   <div class="flex gap-3">
                     <a :href="`#${projectSectionId}`" class="select-none hover:text-[var(--primary-color)] hover:border-[var(--primary-color)] hover:bg-[var(--surface-color)] transition duration-75 border border-transparent flex justify-center items-center gap-2 px-4 py-3 rounded-xl shadow-md bg-[var(--primary-color)] text-[var(--text-color-white)]">
-                      <span class="text-nowrap">Projekte ansehen</span>
+                      <span class="text-nowrap">{{ tn('projects-button') }}</span>
                       <SvgStruct>
                         <i class="fa-solid fa-arrow-right"></i>
                       </SvgStruct>
@@ -235,7 +238,7 @@ async function pushToEditor(){
                       <SvgStruct>
                         <i class="fa-regular fa-envelope"></i>
                       </SvgStruct>
-                      <span class="text-nowrap">Kontakt aufnehmen</span>
+                      <span class="text-nowrap">{{ tn('contact-button') }}</span>
                     </a>
                   </div>
                 </div>
@@ -247,7 +250,7 @@ async function pushToEditor(){
                     <div class="relative z-10 flex justify-center items-center w-full h-full overflow-hidden text-[80px] text-[var(--text-color-white)] font-extrabold rounded-full shadow-2xl bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)] border-5 border-[var(--surface-color)]">
                       <img v-if="section.editorBlock[0]?.imageBlockContent?.imageUrl"
                         :src="`http://localhost:3000${section.editorBlock[0].imageBlockContent.imageUrl}`"
-                        :alt="section.editorBlock[0].imageBlockContent.alt ?? 'Profilbild'"
+                        :alt="section.editorBlock[0].imageBlockContent.alt ?? tn('profile-image-alt')"
                         class="w-full h-full object-cover" />
 
                       <span v-else>{{ firstname?.slice(0, 1) + lastname?.slice(0, 1) }}</span>
@@ -337,10 +340,10 @@ async function pushToEditor(){
         <div class="my-5 w-full h-[1px] bg-[var(--text-color-light)]"></div>
 
         <div class="text-nowrap flex sm:flex-row flex-col gap-2 items-center justify-between text-[var(--text-color-light)] text-xs">
-          <span>© 2026 CreateYourself. Alle Rechte vorbehalten.</span>
+          <span>{{ tf('rights') }}</span>
           <RouterLink to="/" class="cursor-pointer flex gap-2 items-center justify-center px-3 py-2 bg-logo rounded-full text-[var(--text-color-light)]!">
-            <img class="w-[15px] h-[15px] object-cover" src="../../public/CreateYourself_Logo.png" alt="CreateYourself Logo">
-            Erstellt mit CreateYourself
+            <img class="w-[15px] h-[15px] object-cover" src="../../public/CreateYourself_Logo.png" :alt="tf('logo-alt')">
+            {{ tf('creator') }}
           </RouterLink>
         </div>
       </div>
