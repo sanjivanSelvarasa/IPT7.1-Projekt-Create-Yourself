@@ -1099,21 +1099,24 @@ async function updateTextBlockFunc(textBlock: TextBlockContent){
   }catch {}
 }
 
-async function updateProjectBlockFunc(projectBlock: ProjectType){
-  if(portfolioFacts.value === null || sectionSelected.value === null) return;
+async function updateProjectBlockFunc(projectBlock: ProjectType) {
+  if (portfolioFacts.value === null || sectionSelected.value === null) return
 
-  // const ok = await startVersionChange()
-  // if (!ok) return
-
-  const updatedProject : CreateProjectType = {
-      ...projectBlock,
+  const updatedProject: CreateProjectType = {
+    title: projectBlock.title,
+    description: projectBlock.description,
+    projectUrl: projectBlock.projectUrl,
+    githubUrl: projectBlock.githubUrl,
+    sortOrder: projectBlock.sortOrder,
   }
 
-  try{
+  try {
     await projectStore.updateProject(portfolioId, projectBlock.id, updatedProject)
     await projectStore.getProjects(portfolioId)
     await loadSortedSections()
-  }catch {}
+  } catch (err) {
+    console.error("Update project failed:", err)
+  }
 }
 
 async function updateSkillBlockFunc(skillBlock: UpdateSkillType){
@@ -1844,7 +1847,7 @@ async function updateImageBlockFunc(imageBlock: ImageBlockContent) {
                 </SkillModul>
 
                 <ProjectModul v-if="editor.blockType === 'project' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @add="addProjectToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
-                  <Project v-for="project in editor.project" @selected="elementSelectedFunction(project.id, editor)" :is-active="elementSelectedId === project.id" :key="project.id" :image-url="project.imageUrl" :title="project.title" :description="project.description"></Project>
+                  <Project v-for="project in editor.project" @selected="elementSelectedFunction(project.id, editor)" :code-url="project.githubUrl" :demo-url="project.projectUrl" :is-active="elementSelectedId === project.id" :key="project.id" :image-url="project.imageUrl" :title="project.title" :description="project.description"></Project>
                 </ProjectModul>
 
                 <EducationModul v-if="editor.blockType === 'education' " @up="moveEditorBlock(editor, 'up')" @down="moveEditorBlock(editor, 'down')" @add="addEducationToModul(editor)" @delete="deleteEditorBlockFunc(editor)">
