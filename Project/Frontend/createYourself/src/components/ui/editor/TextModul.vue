@@ -3,6 +3,10 @@ import SvgStruct from "@/components/ui/SvgStruct.vue";
 import type {TextBlockContent} from "@/types/textBlockContent.ts";
 import {computed, ref} from "vue";
 import ModulStruct from "@/components/ui/editor/ModulStruct.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const tl = (key: string) => t(`editorhero.${key}`);
 
 const props = defineProps<{
   textContent: TextBlockContent,
@@ -85,9 +89,9 @@ function onDown(){
 </script>
 
 <template>
-  <ModulStruct @up="onUp()" @down="onDown()" @delete="onDelete()" svg="fa-solid fa-align-left" type="Text" :name="tag">
+  <ModulStruct @up="onUp()" @down="onDown()" @delete="onDelete()" svg="fa-solid fa-align-left" :type="tl('text-title')" :name="tag">
     <button class="w-full" @click="onSelected()" :class="[tagClass, fontWeightClass, props.isActive ? 'element-active' : '']" :style="{fontSize: props.textContent.fontSize ?? 16, color: props.textContent.color, textAlign: props.textContent.align}">
-      <textarea readonly maxlength="500" class="outline-gray-200! rounded-none! w-full" :style="{textAlign: props.textContent.align}" v-model="text"  placeholder="Schreib was rein ..."  />
+      <textarea readonly maxlength="500" class="outline-gray-200! rounded-none! w-full" :style="{textAlign: props.textContent.align}" v-model="text"  :placeholder="tl('text-placeholder')"  />
     </button>
   </ModulStruct>
 </template>

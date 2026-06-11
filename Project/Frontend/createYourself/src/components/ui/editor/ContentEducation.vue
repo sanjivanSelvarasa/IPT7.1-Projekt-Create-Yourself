@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const tl = (key: string) => t(`editorrightsidetraining.${key}`);
   import type {EducationType} from "@/types/educationType.ts";
   import ContentStruct from "@/components/ui/editor/ContentStruct.vue";
   import InputStruct from "@/components/ui/editor/InputStruct.vue";
@@ -62,21 +66,21 @@
 
 <template>
   <ContentStruct @move-up="onMoveUp" @move-down="onMoveDown" :total-sections="props.totalSections" :current-position="props.currentPosition" @sectionVisible="onSectionVisible" :sectionVisible="props.sectionVisible">
-    <span class="md-subtitle text-[var(--text-color-light)]">Einrichtung</span>
+    <span class="md-subtitle text-[var(--text-color-light)]">{{ tl('Title-one') }}</span>
 
-    <InputStruct title="Institution">
+    <InputStruct :title="tl('subtitle-one')">
       <input @change="onUpdate()" v-model="inputInsitution" class="default-input w-full" type="text"/>
     </InputStruct>
 
-    <InputStruct title="Abschluss / Fach">
+    <InputStruct :title="tl('subtitle-two')">
       <input @change="onUpdate()" v-model="inputDegree" class="default-input w-full" type="text"/>
     </InputStruct>
 
     <div class="divider"></div>
 
-    <span class="md-subtitle text-[var(--text-color-light)]">Zeitraum</span>
+    <span class="md-subtitle text-[var(--text-color-light)]">{{ tl('Title-two') }}</span>
 
-    <InputStruct title="Von - Bis">
+    <InputStruct :title="tl('from-to')">
       <div class="flex gap-2">
         <input @change="onUpdate()" v-model="startDate" class="default-input w-full" type="text" placeholder="YYYY-MM-DD"/>
         <SvgStruct>

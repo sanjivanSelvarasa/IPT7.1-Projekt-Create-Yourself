@@ -10,7 +10,6 @@ import {useAuthStore} from "@/stores/authStore.ts";
 import Profile from "@/pages/Profile.vue";
 import Settings from "@/pages/Settings.vue";
 import CreatePortfolio from "@/pages/CreatePortfolio.vue";
-import {typescriptRules} from "eslint-plugin-oxlint/rules-by-scope";
 import PublishPortfolio from "@/pages/PublishPortfolio.vue";
 import Preview from "@/pages/Preview.vue";
 

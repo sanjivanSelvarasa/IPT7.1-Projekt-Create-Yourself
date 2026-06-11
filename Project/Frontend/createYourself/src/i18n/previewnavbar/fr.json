@@ -9,5 +9,7 @@
     "Empty": "Section libre"
   },
   "contact-button": "Nous contacter",
-  "leave-button": "Retour à l'éditeur"
+  "leave-button": "Retour à l'éditeur",
+  "projects-button": "Voir les projets",
+  "profile-image-alt": "Image de profil"
 }

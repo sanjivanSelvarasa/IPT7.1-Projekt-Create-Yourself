@@ -42,6 +42,15 @@ wait_for_database_online() {
     done
 }
 
+wait_for_database_connections() {
+    local db_name="$1"
+    echo "Waiting for database ${db_name} to accept connections..."
+
+    until sqlcmd_run -d "${db_name}" -Q "SELECT 1" >/dev/null 2>&1; do
+        sleep 2
+    done
+}
+
 recreate_database() {
     local db_name="$1"
     sqlcmd_run -d master -Q "ALTER DATABASE [${db_name}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [${db_name}]; CREATE DATABASE [${db_name}]"
@@ -50,8 +59,9 @@ recreate_database() {
 wait_for_sql_server
 
 echo "Ensuring database ${DB_NAME} exists..."
-sqlcmd_run -Q "IF DB_ID('${DB_NAME}') IS NULL BEGIN CREATE DATABASE [${DB_NAME}] END"
+sqlcmd_run -d master -Q "IF DB_ID('${DB_NAME}') IS NULL BEGIN CREATE DATABASE [${DB_NAME}] END"
 wait_for_database_online "${DB_NAME}"
+wait_for_database_connections "${DB_NAME}"
 
 echo "Checking for legacy schema drift..."
 LEGACY_SCHEMA="$(sqlcmd_scalar -d "${DB_NAME}" -Q "SET NOCOUNT ON;
@@ -72,6 +82,7 @@ if [[ "${LEGACY_SCHEMA}" == "1" ]]; then
     echo "Legacy schema detected. Recreating ${DB_NAME} so the current schema can be applied cleanly."
     recreate_database "${DB_NAME}"
     wait_for_database_online "${DB_NAME}"
+    wait_for_database_connections "${DB_NAME}"
 fi
 
 echo "Checking whether schema is already initialized..."

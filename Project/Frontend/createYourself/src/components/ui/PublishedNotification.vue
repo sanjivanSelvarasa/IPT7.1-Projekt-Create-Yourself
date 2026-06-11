@@ -1,7 +1,10 @@
 <script lang="ts" setup>
   import SvgStruct from "@/components/ui/SvgStruct.vue";
-  import router from "@/router";
   import {ref} from "vue";
+  import {useI18n} from "vue-i18n";
+
+  const { t } = useI18n();
+  const tl = (key: string) => t(`publishconfirm.${key}`);
 
   const props = defineProps<{
     slug: string,
@@ -32,8 +35,8 @@
         <i class="fa-solid fa-check"></i>
       </SvgStruct>
       <div class="z-2 flex flex-col gap-2 items-center">
-        <h2 class="text-[30px]!">Portfolio veröffentlicht</h2>
-        <span class="text-[var(--text-color-light)] text-md text-center text-wrap max-w-[400px]">Dein Portfolio ist jetzt über den öffentlichen Link erreichbar.</span>
+        <h2 class="text-[30px]!">{{ tl('Title') }}</h2>
+        <span class="text-[var(--text-color-light)] text-md text-center text-wrap max-w-[400px]">{{ tl('Lead') }}</span>
       </div>
 
       <div class="w-full mt-7 flex flex-col gap-4">
@@ -48,18 +51,20 @@
           <SvgStruct>
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
           </SvgStruct>
-          <span>Öffentliches Portfolio öffnen</span>
+          <span>{{ tl('open') }}</span>
         </button>
 
         <button @click="copySlug()" :class="isCopied ? 'copied' : '' " class="hover:bg-gray-50 hover:border-gray-400 transition duration-75 outline-none flex items-center justify-center gap-3 w-full bg-[var(--surface-color)] py-3 px-4 rounded-xl text-[var(--text-color)] font-semibold border border-gray-200">
           <SvgStruct>
             <i class="fa-regular fa-copy"></i>
           </SvgStruct>
-          <span v-if="!isCopied">Link kopieren</span>
-          <span v-else>Link wurde kopiert!</span>
+          <span v-if="!isCopied">{{ tl('copy-link') }}</span>
+          <span v-else>{{ tl('copied-link') }}</span>
         </button>
 
-        <RouterLink to="/dashboard" class="hover:text-[var(--primary-color)] mt-2 text-center font-semibold text-[var(--text-color-light)]">Zurück zum Dashboard</RouterLink>
+        <RouterLink to="/dashboard" class="hover:text-[var(--primary-color)] mt-2 text-center font-semibold text-[var(--text-color-light)]">
+          {{ tl('back') }}
+        </RouterLink>
       </div>
     </div>
   </div>

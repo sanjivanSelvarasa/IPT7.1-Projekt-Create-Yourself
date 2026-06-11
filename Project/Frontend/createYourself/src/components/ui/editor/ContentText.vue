@@ -1,9 +1,12 @@
 <script lang="ts" setup>
+import { useI18n } from "vue-i18n";
 import {onMounted, ref, watch} from "vue";
+
+const { t } = useI18n();
+const tl = (key: string) => t(`editorrightsidehero.${key}`);
   import InputStruct from "@/components/ui/editor/InputStruct.vue";
   import type {TextBlockContent} from "@/types/textBlockContent.ts";
   import ContentStruct from "@/components/ui/editor/ContentStruct.vue";
-import {parse} from "vite";
 
   const props = defineProps<{
     textBlock: TextBlockContent,
@@ -83,29 +86,29 @@ import {parse} from "vite";
 
 <template>
   <ContentStruct @move-down="onMoveDown" @move-up="onMoveUp" :current-position="props.currentPosition" :total-sections="props.totalSections" :section-visible="props.sectionVisible" @sectionVisible="onSectionVisible">
-    <span class="md-subtitle text-[var(--text-color-light)]">Inhalt</span>
+    <span class="md-subtitle text-[var(--text-color-light)]">{{ tl('Title') }}</span>
 
     <div>
-      <InputStruct title="Text">
+      <InputStruct :title="tl('text')">
         <textarea maxlength="500" @change="onUpdate()" v-model="inputText" class="default-input w-full"/>
       </InputStruct>
-      <span class="text-[var(--text-color-light)] text-sm font-light">{{ inputText.length }} / 500 Zeichen</span>
+      <span class="text-[var(--text-color-light)] text-sm font-light">{{ inputText.length }} / 500 {{ tl('text-character') }}</span>
     </div>
 
-    <InputStruct title="Tag">
+    <InputStruct :title="tl('Tag')">
       <select @change="onUpdate()" v-model="inputTag" class="default-input w-full">
-        <option value="p">Paragraph</option>
-        <option value="h1">Titel</option>
-        <option value="h2">Untertitel</option>
-        <option value="h3">Überschrift</option>
+        <option value="p">{{ tl('Tag-Choice.second') }}</option>
+        <option value="h1">{{ tl('Tag-Choice.First') }}</option>
+        <option value="h2">{{ tl('Tag-Choice.third') }}</option>
+        <option value="h3">{{ tl('Tag-Choice.fourth') }}</option>
       </select>
     </InputStruct>
 
-    <InputStruct title="Farbe">
+    <InputStruct :title="tl('Colour')">
       <input @change="onUpdate()" v-model="inputColor" type="color" class="w-full outline-none">
     </InputStruct>
 
-    <InputStruct title="Grösse">
+    <InputStruct :title="tl('Height')">
       <select @change="onUpdate()" v-model.number="inputSize" class="default-input w-full">
         <option v-for="size in sizes" :key="size.value" :value="size.value">
           {{ size.label }}
@@ -113,12 +116,12 @@ import {parse} from "vite";
       </select>
     </InputStruct>
 
-    <InputStruct title="Weight">
+    <InputStruct :title="tl('Weight')">
       <select @change="onUpdate()" v-model="inputWeight" class="default-input w-full">
-        <option value="normal">Normal</option>
-        <option value="medium">Medium</option>
-        <option value="semibold">Semibold</option>
-        <option value="bold">Bold</option>
+        <option value="normal">{{ tl('Weight-Choice.First') }}</option>
+        <option value="medium">{{ tl('Weight-Choice.second') }}</option>
+        <option value="semibold">{{ tl('Weight-Choice.third') }}</option>
+        <option value="bold">{{ tl('Weight-Choice.fourth') }}</option>
       </select>
     </InputStruct>
 
@@ -128,11 +131,11 @@ import {parse} from "vite";
 <!--      </select>-->
 <!--    </InputStruct>-->
 
-    <InputStruct title="Ausrichtung">
+    <InputStruct :title="tl('Alignment')">
       <select @change="onUpdate()" v-model="inputAlign" class="default-input w-full cursor-pointer outline-none">
-        <option value="left">Links</option>
-        <option value="center">Zentriert</option>
-        <option value="right">Rechts</option>
+        <option value="left">{{ tl('Alignment-Choice.first') }}</option>
+        <option value="center">{{ tl('Alignment-Choice.second') }}</option>
+        <option value="right">{{ tl('Alignment-Choice.third') }}</option>
       </select>
     </InputStruct>
   </ContentStruct>
