@@ -10,10 +10,7 @@ const apiPrefixes = [
   '/users',
   '/token',
   '/account',
-  '/portfolio',
-  '/portfolios',
   '/templates',
-  '/p',
   '/uploads',
 ]
 
