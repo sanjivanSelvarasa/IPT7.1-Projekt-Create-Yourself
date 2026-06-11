@@ -1,7 +1,5 @@
 import {apiFetch} from "@/api/api.ts";
 import type {CreateProjectType} from "@/types/createProjectType.ts";
-import project from "@/components/ui/editor/Project.vue";
-import type {Project} from "@playwright/test";
 import type {ProjectType} from "@/types/projectType.ts";
 
 export async function getProjectApi(portfolioId:number) : Promise<ProjectType[]> {

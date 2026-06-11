@@ -1,4 +1,33 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const envApiUrl = import.meta.env.VITE_API_URL?.trim();
+
+function resolveApiUrl(): string {
+  if (typeof window === "undefined") {
+    return envApiUrl ?? "";
+  }
+
+  const currentOrigin = window.location.origin;
+  const currentHost = window.location.hostname;
+  const isCurrentHostLocal = ["localhost", "127.0.0.1", "::1"].includes(currentHost);
+
+  if (!envApiUrl) {
+    return currentOrigin;
+  }
+
+  try {
+    const parsedUrl = new URL(envApiUrl, currentOrigin);
+    const targetsLocalhost = ["localhost", "127.0.0.1", "::1"].includes(parsedUrl.hostname);
+
+    if (!isCurrentHostLocal && targetsLocalhost) {
+      return currentOrigin;
+    }
+
+    return parsedUrl.origin;
+  } catch {
+    return envApiUrl.replace(/\/$/, "");
+  }
+}
+
+const API_URL = resolveApiUrl();
 import { useAuthStore } from "@/stores/authStore.ts";
 
 export async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {

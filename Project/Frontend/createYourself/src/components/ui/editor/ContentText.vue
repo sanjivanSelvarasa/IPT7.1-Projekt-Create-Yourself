@@ -7,7 +7,6 @@ const tl = (key: string) => t(`editorrightsidehero.${key}`);
   import InputStruct from "@/components/ui/editor/InputStruct.vue";
   import type {TextBlockContent} from "@/types/textBlockContent.ts";
   import ContentStruct from "@/components/ui/editor/ContentStruct.vue";
-import {parse} from "vite";
 
   const props = defineProps<{
     textBlock: TextBlockContent,
