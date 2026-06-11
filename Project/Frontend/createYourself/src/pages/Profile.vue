@@ -44,8 +44,6 @@ onMounted(async () => {
   setProfileAttributs()
 
   locale.value = profileStore.profileData?.preferredLanguage ?? 'de'
-
-  console.log(profileData.value)
 })
 
 const message = ref<string | null>(null);
