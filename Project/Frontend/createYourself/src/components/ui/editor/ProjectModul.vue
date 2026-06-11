@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const tl = (key: string) => t(`editorproject.${key}`);
 
 import ModulStruct from "@/components/ui/editor/ModulStruct.vue";
 import AddButton from "@/components/ui/editor/AddButton.vue";
@@ -28,7 +32,7 @@ function onDown(){
 </script>
 
 <template>
-  <ModulStruct @delete="onDelete()" @up="onUp()" @down="onDown()" type="Projekt" name="4 Einträge" svg="fa-solid fa-briefcase">
+  <ModulStruct @delete="onDelete()" @up="onUp()" @down="onDown()" :type="tl('entry-title')" :name="`4 ${tl('entry')}`" svg="fa-solid fa-briefcase">
     <div class="grid grid-cols-[repeat(auto-fit,minmax(380px,1fr))] gap-4">
       <slot></slot>
       <AddButton class="aspect-square" @click="onAdd()" ></AddButton>
