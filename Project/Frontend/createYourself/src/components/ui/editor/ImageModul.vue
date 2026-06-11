@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import ModulStruct from "@/components/ui/editor/ModulStruct.vue"
 import SvgStruct from "@/components/ui/SvgStruct.vue"
+import {computed} from "vue";
 
 const props = defineProps<{
   imageContent: {
@@ -32,12 +33,23 @@ function onUp() {
 function onDown() {
   emit("down")
 }
+
+const apiUrl = import.meta.env.VITE_API_URL
+const imageSrc = computed(() => {
+  if (!props.imageContent.imageUrl) return ''
+
+  if (props.imageContent.imageUrl.startsWith('http')) {
+    return props.imageContent.imageUrl
+  }
+
+  return `${apiUrl}${props.imageContent.imageUrl}`
+})
 </script>
 
 <template>
   <ModulStruct @click="onSelected" @delete="onDelete" @up="onUp" @down="onDown" type="Bild" :name="props.imageContent.alt ?? 'Bild'" svg="fa-regular fa-image" :class="props.isActive ? 'element-active' : ''">
     <div class="flex items-center justify-center relative w-full rounded-lg overflow-hidden bg-linear-to-br from-[var(--primary-color-light)] to-[var(--secondary-color-light)] min-h-[120px]">
-      <img v-if="props.imageContent.imageUrl" :src="`http://localhost:3000${props.imageContent.imageUrl}`" :alt="props.imageContent.alt ?? 'Bild'" class="w-full max-h-[250px] object-cover"/>
+      <img v-if="props.imageContent.imageUrl" :src="imageSrc" :alt="props.imageContent.alt ?? 'Bild'" class="w-full max-h-[250px] object-cover"/>
       <template v-else>
         <div class="absolute w-full h-full bg-lines"></div>
 
