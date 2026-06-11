@@ -12,8 +12,9 @@
   }
 
   const isCopied = ref<boolean>(false);
+  const apiUrl = 'https://create-yourself.gian.ink'
   async function copySlug(){
-    await navigator.clipboard.writeText(props.slug);
+    await navigator.clipboard.writeText(apiUrl + '/' + props.slug);
     isCopied.value = true;
 
     setTimeout(() => {
@@ -40,7 +41,7 @@
           <SvgStruct class="w-[35px] h-[35px] rounded-lg border border-gray-200 text-[var(--primary-color)] text-sm">
             <i class="fa-solid fa-link"></i>
           </SvgStruct>
-          <span>{{ props.slug }}</span>
+          <span>{{ apiUrl + '/' + props.slug }}</span>
         </div>
 
         <button @click="pushToPublic()" class="hover:bg-[var(--surface-color)] hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-75 border border-transparent flex items-center justify-center gap-3 w-full bg-[var(--primary-color)] py-3 px-4 rounded-xl text-[var(--text-color-white)] font-semibold">
