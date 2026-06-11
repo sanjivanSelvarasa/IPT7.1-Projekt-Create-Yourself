@@ -1,6 +1,7 @@
 {
   "nav": {
-    "saved": "Enregistré - Erreur",
+    "saved": "Enregistré",
+    "error": "Erreur",
     "Preview": "Aperçu",
     "Save": "Enregistrer",
     "Publish": "Publier"

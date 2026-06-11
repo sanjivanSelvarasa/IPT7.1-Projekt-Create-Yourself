@@ -1,6 +1,7 @@
 {
   "nav": {
-    "saved": "Gespeichert - Fehler",
+    "saved": "Gespeichert",
+    "error": "Fehler",
     "Preview": "Vorschau",
     "Save": "Speichern",
     "Publish": "Veröffentlichen"

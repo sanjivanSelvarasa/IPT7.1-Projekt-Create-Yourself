@@ -1,6 +1,7 @@
 {
   "nav": {
-    "saved": "Saved - Error",
+    "saved": "Saved",
+    "error": "Error",
     "Preview": "Preview",
     "Save": "Save",
     "Publish": "Publish"
