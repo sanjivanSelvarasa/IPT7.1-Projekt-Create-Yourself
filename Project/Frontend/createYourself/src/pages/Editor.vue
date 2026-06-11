@@ -61,6 +61,7 @@ import ContentExperience from "@/components/ui/editor/ContentExperience.vue";
 import type {ExperienceType} from "@/types/experienceType.ts";
 import ContentImage from "@/components/ui/editor/ContentImage.vue";
 import { useI18n } from "vue-i18n";
+import {SECTION_TYPES} from "@/utils/section_types.ts";
 const { t, locale } = useI18n();
 const tl = (key: string) => t(`editor.${key}`);
 
@@ -89,7 +90,6 @@ const portfolioFacts = ref<PortfolioType | null>(null);
 const imageInputRef = ref<HTMLInputElement | null>(null)
 const pendingImageBlockId = ref<number | null>(null)
 const pendingImageSectionId = ref<number | null>(null)
-
 
 const sortedSections = ref<any[] | null>(null);
 async function loadSortedSections() {
@@ -218,27 +218,27 @@ async function submitSection(sectionHeader: string) {
 
     sectionSelected.value = newSection.id
 
-    if (sectionHeader === 'Hero Section') {
+    if (sectionHeader === SECTION_TYPES.HERO) {
       await createHeroSection(newSection.id)
     }
 
-    if (sectionHeader === 'Projekte') {
+    if (sectionHeader === SECTION_TYPES.PROJECTS) {
       await createProjectModul()
     }
 
-    if (sectionHeader === 'Skills') {
+    if (sectionHeader === SECTION_TYPES.SKILLS) {
       await createSkillModul()
     }
 
-    if (sectionHeader === 'Erfahrung') {
+    if (sectionHeader === SECTION_TYPES.EXPERIENCE) {
       await createExperienceModul()
     }
 
-    if (sectionHeader === 'Ausbildung') {
+    if (sectionHeader === SECTION_TYPES.EDUCATION) {
       await createEducationModul()
     }
 
-    if (sectionHeader === 'Kontakt & Social') {
+    if (sectionHeader === SECTION_TYPES.CONTACT) {
       await createSocialLinkModul()
     }
 
@@ -253,12 +253,12 @@ async function submitSection(sectionHeader: string) {
 }
 
 function getSvgToSectionType(type: string) : string{
-  if(type === "Hero Section") return "fa-regular fa-user";
-  if(type === "Projekte") return "fa-solid fa-diagram-project";
-  if(type === "Skills") return "fa-solid fa-chart-line";
-  if(type === "Erfahrung") return "fa-solid fa-briefcase";
-  if(type === "Ausbildung") return "fa-solid fa-graduation-cap";
-  if(type === "Kontakt & Social") return "fa-regular fa-envelope";
+  if(type === SECTION_TYPES.HERO) return "fa-regular fa-user";
+  if(type === SECTION_TYPES.PROJECTS) return "fa-solid fa-diagram-project";
+  if(type === SECTION_TYPES.SKILLS) return "fa-solid fa-chart-line";
+  if(type === SECTION_TYPES.EXPERIENCE) return "fa-solid fa-briefcase";
+  if(type === SECTION_TYPES.EDUCATION) return "fa-solid fa-graduation-cap";
+  if(type === SECTION_TYPES.CONTACT) return "fa-regular fa-envelope";
   if(type === "Freie Section") return "fa-solid fa-circle-info";
   else
     return "fa-solid fa-header";
@@ -562,7 +562,7 @@ async function createHeroSection(sectionId: number) {
     contentJson: {
       ids: createdLinks.map(l => l.id),
     },
-    sortOrder: 5,
+    sortOrder: 6,
   }
 
   await editorBlockStore.createEditorBlock(
