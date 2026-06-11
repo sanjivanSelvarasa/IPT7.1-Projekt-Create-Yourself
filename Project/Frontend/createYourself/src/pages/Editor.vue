@@ -585,7 +585,7 @@ async function createTextModul(){
     blockType: "text",
     contentJson: {
       id: Date.now() + Math.floor(Math.random() * 1000),
-      text: "PLATZHALTER TEXT",
+      text: tl('Main-Preview.placeholder'),
       align: "left",
       tag: "h1",
       fontSize: 16,
@@ -1722,7 +1722,7 @@ async function updateImageBlockFunc(imageBlock: ImageBlockContent) {
                 <div class="w-full h-full bg-green-500 rounded-full"></div>
                 <div class="absolute w-full h-full bg-green-300 rounded-full animate-ping -translate-y-[7px]"></div>
               </div>
-              <span>{{ tl('nav.saved') }} - {{ portfolioFacts?.updatedAt ? getDateGap(portfolioFacts?.updatedAt) : 'tl(nav.error)' }}</span>
+              <span>{{ tl('nav.saved') }} - {{ portfolioFacts?.updatedAt ? getDateGap(portfolioFacts?.updatedAt) : tl('nav.error') }}</span>
             </div>
           </div>
 
