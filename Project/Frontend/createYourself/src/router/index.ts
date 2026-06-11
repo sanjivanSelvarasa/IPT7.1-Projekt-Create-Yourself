@@ -48,7 +48,7 @@ const router = createRouter({
     },
     {
       path: '/:slug',
-      name: 'public',
+      name: 'publicPage',
       component: Public,
       meta: { requiresAuth: false },
     },
