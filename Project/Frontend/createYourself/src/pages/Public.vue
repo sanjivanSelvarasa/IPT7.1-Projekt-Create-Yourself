@@ -244,7 +244,7 @@
               </div>
 
               <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
-                <PublishProjectElement v-for="project in block.project" :key="project.id" :title="project.title" :description="project.description" :demo-url="project.demoUrl" :code-url="project.githubUrl" :image="project.imageUrl"></PublishProjectElement>
+                <PublishProjectElement v-for="project in block.project" :key="project.id" :title="project.title" :description="project.description" :demo-url="project.projectUrl" :code-url="project.githubUrl" :image="project.imageUrl"></PublishProjectElement>
               </div>
 
               <PublishSkillModul v-if="block.blockType === 'skill' " class="grid lg:grid-cols-2 grid-cols-1 gap-x-10 gap-y-5">
