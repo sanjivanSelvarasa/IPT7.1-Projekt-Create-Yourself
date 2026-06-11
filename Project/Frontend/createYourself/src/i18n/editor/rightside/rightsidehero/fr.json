@@ -1,0 +1,37 @@
+{
+  "Top": "Héros",
+  "Title": "Sommaire",
+  "text": "Texte",
+  "text-placeholder": "TITRE PLACEBO",
+  "text-character": "caractère",
+  "Tag": "Étiquette",
+  "Tag-Choice": {
+    "First": "Titre",
+    "second": "paragraphe",
+    "third": "Sous-titres",
+    "fourth": "Titre"
+  },
+  "Colour": "Couleur",
+  "Height": "Taille",
+  "Weight": "épaisseur de la police",
+  "Weight-Choice": {
+    "First": "Normal",
+    "second": "moyen",
+    "third": "Semibold",
+    "fourth": "Bold"
+  },
+  "Alignment": "Orientation",
+  "Alignment-Choice": {
+    "first": "à gauche",
+    "second": "centré",
+    "third": "à droite"
+  },
+  "Picture": {
+    "Title": "Image",
+    "no-picture": "Aucune image n'a été téléchargée",
+    "subtitle-one": "Télécharger une image",
+    "placeholder": "Sélectionner une image",
+    "subtitle-two": "Texte alternatif",
+    "placeholder-two": "Photo de profil"
+  }
+}

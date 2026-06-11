@@ -1,0 +1,13 @@
+{
+  "Top": "Skill",
+  "Title": "Skill",
+  "subtitle-one": "Name",
+  "placeholder": "PLACEHOLDER",
+  "subtitle-two": "Level",
+  "Title-two": "Presentation",
+  "subtitle-three": "Appearance",
+  "Choice": {
+    "bar": "Bar",
+    "dots": "Dots"
+  }
+}

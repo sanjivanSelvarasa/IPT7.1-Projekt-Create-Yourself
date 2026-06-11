@@ -1,0 +1,19 @@
+{
+  "right-Section": {
+    "Lead": {
+      "text": "Texte",
+      "chosen": "Sélectionné",
+      "subtitle": "Aucun élément sélectionné"
+    },
+    "Order": {
+      "order": "Ordre",
+      "current position": "Position actuelle",
+      "up": "Haut de la page",
+      "down": "Vers le bas"
+    },
+    "Visibility": {
+      "Title": "Visibilité",
+      "active": "Section visible"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "Sections": {
+    "Hero": "Hero-Section",
+    "Training": "Training",
+    "Projects": "Projects",
+    "Skills": "Skills",
+    "Experience": "Experience",
+    "Contact-and-Social": "Contact and Social",
+    "Empty": "Empty Section"
+  },
+  "contact-button": "Get in touch",
+  "leave-button": "Back to the editor"
+}

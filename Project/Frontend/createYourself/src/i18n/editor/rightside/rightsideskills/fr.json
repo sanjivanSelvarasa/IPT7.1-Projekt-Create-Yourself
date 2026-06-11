@@ -1,0 +1,13 @@
+{
+  "Top": "Compétence",
+  "Title": "Compétence",
+  "subtitle-one": "Nom",
+  "placeholder": "ESPACE RÉSERVÉ",
+  "subtitle-two": "Niveau",
+  "Title-two": "Représentation",
+  "subtitle-three": "Aspect",
+  "Choice": {
+    "bar": "poutre",
+    "dots": "Points"
+  }
+}

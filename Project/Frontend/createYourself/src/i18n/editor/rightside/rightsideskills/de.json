@@ -1,0 +1,13 @@
+{
+  "Top": "Skill",
+  "Title": "Skill",
+  "subtitle-one": "Name",
+  "placeholder": "PLATZHALTER",
+  "subtitle-two": "Level",
+  "Title-two": "Darstellung",
+  "subtitle-three": "Aussehen",
+  "Choice": {
+    "bar": "Balken",
+    "dots": "Punkte"
+  }
+}

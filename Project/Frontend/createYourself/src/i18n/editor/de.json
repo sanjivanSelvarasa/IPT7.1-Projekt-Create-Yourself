@@ -27,6 +27,15 @@
       "seventh-subtitle": "Social Media"
     },
     "section-title": "Sections",
+    "Sections": {
+      "Hero": "Hero-Section",
+      "Training": "Ausbildung",
+      "Projects": "Projekte",
+      "Skills": "Skills",
+      "Experience": "Erfahrung",
+      "Contact-and-Social": "Kontakt und Social",
+      "empty": "Freie Section"
+    },
     "section-add": "Section hinzufügen"
   },
   "Main-Preview": {

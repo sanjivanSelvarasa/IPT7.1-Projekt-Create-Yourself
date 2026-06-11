@@ -1,0 +1,19 @@
+{
+  "right-Section": {
+    "Lead": {
+      "text": "Text",
+      "chosen": "Ausgewählt",
+      "subtitle": "Nichts ausgewählt"
+    },
+    "Order": {
+      "order": "Reihenfolge",
+      "current position": "Aktuelle Position",
+      "up": "Nach oben",
+      "down": "Nach unten"
+    },
+    "Visibility": {
+      "Title": "Sichtbarkeit",
+      "active": "Section sichtbar"
+    }
+  }
+}
