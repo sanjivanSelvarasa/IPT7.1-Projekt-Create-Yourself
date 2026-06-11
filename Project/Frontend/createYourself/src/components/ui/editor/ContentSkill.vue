@@ -1,9 +1,13 @@
 <script lang="ts" setup>
+import { useI18n } from "vue-i18n";
 import ContentStruct from "@/components/ui/editor/ContentStruct.vue";
 import InputStruct from "@/components/ui/editor/InputStruct.vue";
 import type {SkillType} from "@/types/skillType.ts";
 import {ref, watch} from "vue";
 import type {UpdateSkillType} from "@/types/updateSkillType.ts";
+
+const { t } = useI18n();
+const tl = (key: string) => t(`editorrightsidaskills.${key}`);
 
 const props = defineProps<{
   skillBlock: SkillType,
@@ -57,25 +61,25 @@ watch(() => props.skillBlock, (newSkill) => {
 
 <template>
   <ContentStruct @move-down="onMoveDown" @move-up="onMoveUp" :current-position="props.currentPosition" :total-sections="props.totalSections" @sectionVisible="onSectionVisible" :section-visible="props.sectionVisible">
-    <span class="md-subtitle text-[var(--text-color-light)]">Skill</span>
+    <span class="md-subtitle text-[var(--text-color-light)]">{{ tl('Title') }}</span>
 
-    <InputStruct title="Name">
+    <InputStruct :title="tl('subtitle-one')">
       <input v-model="inputName" class="default-input w-full" type="text"/>
     </InputStruct>
 
-    <InputStruct title="Level" class="flex gap-2">
+    <InputStruct :title="tl('subtitle-two')" class="flex gap-2">
       <input @change="onUpdate()" v-model="inputLevel" type="range" class="w-full rounded-full" />
       <span>{{ inputLevel }} %</span>
     </InputStruct>
 
     <div class="divider"></div>
 
-    <span class="md-subtitle text-[var(--text-color-light)]">Darstellung</span>
+    <span class="md-subtitle text-[var(--text-color-light)]">{{ tl('Title-two') }}</span>
 
-    <InputStruct title="Aussehen">
+    <InputStruct :title="tl('subtitle-three')">
       <select class="default-input w-full cursor-pointer outline-none">
-        <option>Balken</option>
-        <option>Dots</option>
+        <option>{{ tl('Choice.bar') }}</option>
+        <option>{{ tl('Choice.dots') }}</option>
       </select>
     </InputStruct>
 
