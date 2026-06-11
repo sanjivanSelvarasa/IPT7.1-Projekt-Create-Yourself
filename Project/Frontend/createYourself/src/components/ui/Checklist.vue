@@ -1,5 +1,8 @@
 <script lang="ts" setup>
   import SvgStruct from "@/components/ui/SvgStruct.vue";
+  import { useI18n } from "vue-i18n";
+  const { t, locale } = useI18n();
+  const tl = (key: string) => t(`publish.${key}`);
 
   const props = defineProps<{
     title: string,
@@ -19,8 +22,8 @@
       </SvgStruct>
       <span class="font-semibold">{{ props.title }}</span>
     </div>
-    <span v-if="isDone" class="text-green-600 text-sm font-semibold">Erledigt</span>
+    <span v-if="isDone" class="text-green-600 text-sm font-semibold">{{ tl('checklist.correct') }}</span>
 
-    <span v-if="!isDone" class="text-red-600 text-sm font-semibold">Fehlt</span>
+    <span v-if="!isDone" class="text-red-600 text-sm font-semibold">{{tl('checklist.incorrect')}}</span>
   </li>
 </template>
