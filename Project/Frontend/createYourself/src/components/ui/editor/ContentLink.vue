@@ -1,9 +1,13 @@
 <script lang="ts" setup>
+import { useI18n } from "vue-i18n";
 import ContentStruct from "@/components/ui/editor/ContentStruct.vue";
 import type {SocialLinkType} from "@/types/SocialLinkType.ts";
 import SvgStruct from "@/components/ui/SvgStruct.vue";
 import InputStruct from "@/components/ui/editor/InputStruct.vue";
 import {ref, watch} from "vue";
+
+const { t } = useI18n();
+const tl = (key: string) => t(`editorrightsidecontact.${key}`);
 
 const props = defineProps<{
   linkBlock: SocialLinkType,
@@ -56,15 +60,15 @@ watch(() => props.linkBlock, (newLink) => {
 
 <template>
   <ContentStruct @move-down="onMoveDown" @move-up="onMoveUp" :current-position="props.currentPosition" :total-sections="props.totalSections" @sectionVisible="onSectionVisible" :sectionVisible="props.sectionVisible">
-    <span class="md-subtitle text-[var(--text-color-light)]">Details</span>
+    <span class="md-subtitle text-[var(--text-color-light)]">{{ tl('Title') }}</span>
 
-    <InputStruct title="Anzeige-Name">
+    <InputStruct :title="tl('subtitle-one')">
       <input @change="onUpdate()" v-model="inputName" class="default-input w-full" type="text"/>
     </InputStruct>
 
-    <InputStruct title="URL">
+    <InputStruct :title="tl('subtitle-two')">
       <input @change="onUpdate()" v-model="url" class="default-input w-full" type="text"/>
-      <span class="text-xs text-[var(--text-color-light)]">Öffnet im neuem Tab</span>
+      <span class="text-xs text-[var(--text-color-light)]">{{ tl('info') }}</span>
     </InputStruct>
 
   </ContentStruct>
