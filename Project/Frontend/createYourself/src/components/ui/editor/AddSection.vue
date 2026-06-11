@@ -4,6 +4,9 @@ import Interface from "@/components/ui/Interface.vue";
 import SvgStruct from "@/components/ui/SvgStruct.vue";
 import SectionCard from "@/components/ui/editor/SectionCard.vue";
 import {ref} from "vue";
+import { useI18n } from "vue-i18n";
+const { t, locale } = useI18n();
+const tl = (key: string) => t(`editor.${key}`);
 
 const props = defineProps<{
   error: string,
@@ -23,13 +26,13 @@ function cancelSection() : void {
 }
 
 const sections = [
-  ["Hero Section", "Startbereich mit Name, Titel und kürzer Vorstellung"],
-  ["Projekte", "Zeige deine wichtigsten Arbeiten und Projektlinks"],
-  ["Skills", "Präsentiere deine Fähigkeiten mit Level oder Tags."],
-  ["Erfahrung", "Liste berufliche Stationen oder Praktika auf."],
-  ["Ausbildung", "Zeige Schule, Studium oder Weiterbildungen."],
-  ["Kontakt & Social", "Füge Kontaktmöglichkeiten und Social-Media-Links hinzu."],
-  ["Freie Section", "Erstelle einen eigenen Bereich mit Text und Blöcken."],
+  [tl('main.box-one-title'), tl('main.box-one-subtitle')],
+  [tl('main.box-two-title'), tl('main.box-two-subtitle')],
+  [tl('main.box-three-title'), tl('main.box-three-subtitle')],
+  [tl('main.box-four-title'), tl('main.box-four-subtitle')],
+  [tl('main.box-five-title'), tl('main.box-five-subtitle')],
+  [tl('main.box-six-title'), tl('main.box-six-subtitle')],
+  [tl('main.box-seven-title'), tl('main.box-seven-subtitle')],
 ]
 
 const selectedSection = ref<string>('')
@@ -43,8 +46,8 @@ function selectSection(sectionTitle: string) : void {
   <div class="flex lg:items-center justify-center items-start z-9999 fixed inset-0 overflow-y-scroll overflow-x-hidden w-[100vw] h-[100vh] bg-transparent backdrop-blur-sm">
     <Interface class="max-w-[1200px] lg:h-fit h-full overflow-y-scroll lg:overflow-hidden lg:rounded-2xl! rounded-none!">
       <div>
-        <h2>Neue Section hinzufügen</h2>
-        <span class="text-sm text-[var(--text-color-light)]">Wähle einen Bereich aus, den du deinem Portfolio hinzufügen möchstest.</span>
+        <h2>{{ tl('main.Title') }}</h2>
+        <span class="text-sm text-[var(--text-color-light)]">{{ tl('main.Subtitle') }}</span>
       </div>
 
       <div class="divider"></div>
@@ -54,7 +57,7 @@ function selectSection(sectionTitle: string) : void {
           <SvgStruct>
             <i class="fa-solid fa-search"></i>
           </SvgStruct>
-          <input class="w-full rounded-none! text-[var(--text-color)]" type="search" placeholder="Section suchen ...">
+          <input class="w-full rounded-none! text-[var(--text-color)]" type="search" :placeholder="tl('main.placeholder')">
         </div>
 
         <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 w-full mt-5">
@@ -228,14 +231,14 @@ function selectSection(sectionTitle: string) : void {
           <SvgStruct>
             <i class="fa-solid fa-circle-info"></i>
           </SvgStruct>
-          <span>Tipp: Sections sind später per Drag-and-Drop verschiebbar.</span>
+          <span>{{ tl('main.Tip') }}</span>
         </div>
 
         <div class="flex items-center justify-center gap-2 w-full sm:w-fit">
-          <button @click="cancelSection()" class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-75 w-full sm:w-fit px-3 py-2 border border-gray-200 rounded-lg text-sm">Abbrechen</button>
+          <button @click="cancelSection()" class="hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition duration-75 w-full sm:w-fit px-3 py-2 border border-gray-200 rounded-lg text-sm">{{ tl('main.cancel-button') }}</button>
 
           <button @click="submitSection()" class="hover:border-[var(--primary-color)] hover:from-transparent hover:to-transparent hover:text-[var(--primary-color)] transition duration-75 w-full sm:w-fit border border-b-transparent flex items-center justify-center gap-1 text-sm text-[var(--text-color-white)] rounded-lg bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)] px-3 py-2">
-            <span class="text-nowrap">Section hinzufügen</span>
+            <span class="text-nowrap">{{ tl('main.add-Section') }}</span>
             <SvgStruct>
               <i class="fa-solid fa-plus"></i>
             </SvgStruct>
