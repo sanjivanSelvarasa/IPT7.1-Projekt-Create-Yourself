@@ -15,6 +15,9 @@ import {useRoute, useRouter} from "vue-router";
 import type {PortfolioType} from "@/types/portfolioType.ts";
 import router from "@/router";
 import PublishedNotification from "@/components/ui/PublishedNotification.vue";
+import { useI18n } from "vue-i18n";
+const { t, locale } = useI18n();
+const tl = (key: string) => t(`publish.${key}`);
 
 const isPublic = ref<boolean>(true);
 
@@ -110,7 +113,7 @@ async function copySlug(){
   <Background>
     <NavApp></NavApp>
 
-    <HeaderComp title="Portfolio veröffentlichen" tag="Freigeben" subtitle="Überprüfe die wichtisten Angaben, bevor dein Portfolio öffentlich erreichbar ist."></HeaderComp>
+    <HeaderComp :title="tl('hero.Title')" :tag="tl('hero.Pre-Title')" :subtitle="tl('hero.Lead')"></HeaderComp>
 
     <MainContent class="mb-5">
       <div class="grid grid-cols-6 gap-8 w-full">
@@ -129,15 +132,15 @@ async function copySlug(){
             </SvgStruct>
 
             <div class="flex flex-col items-start justify-center gap-2">
-              <span class="uppercase text-sm text-[var(--text-color-light)]">Status</span>
-              <h2 v-if="isReadyToPublish">Bereit zur Veröffentlichung</h2>
-              <h2 v-if="!isReadyToPublish">Noch nicht bereit zur Veröffentlichung</h2>
+              <span class="uppercase text-sm text-[var(--text-color-light)]">{{tl('status.Title')}}</span>
+              <h2 v-if="isReadyToPublish">{{ tl('status.correct-or-incorrect.correct') }}</h2>
+              <h2 v-if="!isReadyToPublish">{{ tl('status.correct-or-incorrect.incorrect') }}</h2>
               <div class="flex flex-col md:flex-row items-start md:items-center justify-start gap-5 text-sm">
                 <div class="flex justify-start items-center gap-2 text-[var(--text-color-light)]">
                   <SvgStruct>
                     <i class="fa-regular fa-clock"></i>
                   </SvgStruct>
-                  <span>Zuletzt gespeichert vor wenigen Minuten</span>
+                  <span>{{ tl('status.correct-or-incorrect.time') }}</span>
                 </div>
 
                 <div class="flex items-center justify-start gap-2">
@@ -145,39 +148,39 @@ async function copySlug(){
                     <SvgStruct>
                       <i class="fa-solid fa-lock"></i>
                     </SvgStruct>
-                    <span>Aktuell:</span>
+                    <span>{{ tl('status.Privacy.now') }}:</span>
                   </div>
-                  <span class="text-xs px-2 py-1 text-gray-400 bg-gray-50 rounded-full font-semibold border border-gray-200 uppercase">{{ portfolioFacts?.visibility ?? 'LADE FEHLER' }}</span>
+                  <span class="text-xs px-2 py-1 text-gray-400 bg-gray-50 rounded-full font-semibold border border-gray-200 uppercase">{{ portfolioFacts?.visibility ?? tl('status.Privacy.error') }}</span>
                 </div>
               </div>
             </div>
           </Interface>
 
           <Interface>
-            <Subtitle title="Portfolio-Zusammenfassung">
+            <Subtitle :title="tl('status.summary.Title')">
               <i class="fa-regular fa-address-card"></i>
             </Subtitle>
 
             <div class="grid grid-cols-2 gap-2">
-              <StatsPreview class="col-span-1" title="Portfolio-Titel" :value="portfolioFacts?.title === null || portfolioFacts?.title.length === 0 ? 'Keinen Titel gewählt' : portfolioFacts?.title "></StatsPreview>
-              <StatsPreview class="col-span-1" title="Hauptsprache" :value="portfolioFacts?.languageCode === null || portfolioFacts?.languageCode.length === 0 ? 'Keine Sprache ausgewählt' : portfolioFacts?.languageCode "></StatsPreview>
-              <StatsPreview class="col-span-2" title="Kurzbeschreibung" :value="portfolioFacts?.description === null || portfolioFacts?.description.length === 0 ? 'Keine Beschreibung' : portfolioFacts?.description  "></StatsPreview>
-              <StatsPreview title="Gewähltes Template" :value="portfolioFacts?.currentThemeId ?? 'Keine Ausgewählt' "></StatsPreview>
-              <StatsPreview title="Sichtbarkeit" value="Private"></StatsPreview>
+              <StatsPreview class="col-span-1" :title="tl('status.summary.subtitle-one')" :value="portfolioFacts?.title === null || portfolioFacts?.title.length === 0 ? tl('status.summary.no-title') : portfolioFacts?.title "></StatsPreview>
+              <StatsPreview class="col-span-1" :title="tl('status.summary.subtitle-two')" :value="portfolioFacts?.languageCode === null || portfolioFacts?.languageCode.length === 0 ? tl('status.summary.no-language') : portfolioFacts?.languageCode "></StatsPreview>
+              <StatsPreview class="col-span-2" :title="tl('status.summary.subtitle-three')" :value="portfolioFacts?.description === null || portfolioFacts?.description.length === 0 ? tl('status.summary.no-description') : portfolioFacts?.description  "></StatsPreview>
+              <StatsPreview :title="tl('status.summary.subtitle-four')" :value="portfolioFacts?.currentThemeId ?? tl('status.summary.subtitle-four-text') "></StatsPreview>
+              <StatsPreview :title="tl('status.summary.subtitle-five')" :value="tl('status.summary.subtitle-five-text')"></StatsPreview>
             </div>
 
             <div class="divider"></div>
 
             <div class="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-2">
-              <StatsCard title="Projekte" :value="portfolio?.projects?.length ?? 0"></StatsCard>
-              <StatsCard title="Skills" :value="portfolio?.skills?.length ?? 0"></StatsCard>
-              <StatsCard title="Erfahrungen" :value="portfolio?.experiences?.length ?? 0"></StatsCard>
-              <StatsCard title="Links" :value="portfolio?.socialLinks?.length ?? 0"></StatsCard>
+              <StatsCard :title="tl('status.summary.box-one')" :value="portfolio?.projects?.length ?? 0"></StatsCard>
+              <StatsCard :title="tl('status.summary.box-two')" :value="portfolio?.skills?.length ?? 0"></StatsCard>
+              <StatsCard :title="tl('status.summary.box-three')" :value="portfolio?.experiences?.length ?? 0"></StatsCard>
+              <StatsCard :title="tl('status.summary.box-four')" :value="portfolio?.socialLinks?.length ?? 0"></StatsCard>
             </div>
           </Interface>
 
           <Interface>
-            <Subtitle title="Öffentlicher Link">
+            <Subtitle :title="tl('Link.Title')">
               <i class="fa-regular fa-star"></i>
             </Subtitle>
 
@@ -193,8 +196,8 @@ async function copySlug(){
                 <SvgStruct>
                   <i class="fa-regular fa-clone"></i>
                 </SvgStruct>
-                <span v-if="!isCopied">Link kopieren</span>
-                <span v-else>Link kopiert</span>
+                <span v-if="!isCopied">{{ tl('Link.Copy-Link') }}</span>
+                <span v-else>{{ tl('Link.Copied-Link') }}</span>
               </button>
             </div>
 
@@ -203,27 +206,27 @@ async function copySlug(){
                 <i class="fa-solid fa-circle-info"></i>
               </SvgStruct>
               <span>
-                Dieser Link ist nach der Veröffentlichung öffentlich erreichbar.
+                {{ tl('Link.subtitle') }}
               </span>
             </div>
           </Interface>
 
           <Interface>
-            <Subtitle title="Checkliste vor der Veröffentlichung">
+            <Subtitle :title="tl('checklist.Title')">
               <i class="fa-solid fa-list-check"></i>
             </Subtitle>
 
             <ul class="mt-2">
-              <Checklist title="Titel und Beschreibung vorhanden" :is-done="checkTitleAndDescription"></Checklist>
-              <Checklist title="Mindestens ein Projekt hinzugefügt" :is-done="checkLeastOneProject"></Checklist>
-              <Checklist title="Kontaktlink vorhanden" :is-done="checkLeastOneLink"></Checklist>
-              <Checklist title="Design ausgewählt" :is-done="checkDesignIsChoosen"></Checklist>
-              <Checklist title="Vorschau geprüft" :is-done="false"></Checklist>
+              <Checklist :title="tl('checklist.subtitle-one')" :is-done="checkTitleAndDescription"></Checklist>
+              <Checklist :title="tl('checklist.subtitle-two')" :is-done="checkLeastOneProject"></Checklist>
+              <Checklist :title="tl('checklist.subtitle-three')" :is-done="checkLeastOneLink"></Checklist>
+              <Checklist :title="tl('checklist.subtitle-four')" :is-done="checkDesignIsChoosen"></Checklist>
+              <Checklist :title="tl('checklist.subtitle-five')" :is-done="false"></Checklist>
             </ul>
           </Interface>
 
           <Interface>
-            <Subtitle title="Sichtbarkeit festlegen">
+            <Subtitle :title="tl('Visibility.Title')">
               <i class="fa-regular fa-eye"></i>
             </Subtitle>
 
@@ -242,9 +245,9 @@ async function copySlug(){
                     <SvgStruct>
                       <i class="fa-solid fa-globe"></i>
                     </SvgStruct>
-                    <span class="font-semibold">Öffentlich</span>
+                    <span class="font-semibold">{{ tl('Visibility.left-box.Title') }}</span>
                   </div>
-                  <span class="text-[var(--text-color-light)] text-sm text-start">Jeder mit dem Link kann dein Portfolio sehen.</span>
+                  <span class="text-[var(--text-color-light)] text-sm text-start">{{ tl('Visibility.left-box.subtitle') }}</span>
                 </div>
               </button>
 
@@ -261,9 +264,9 @@ async function copySlug(){
                     <SvgStruct>
                       <i class="fa-solid fa-lock"></i>
                     </SvgStruct>
-                    <span class="font-semibold">Privat lassen</span>
+                    <span class="font-semibold">{{ tl('Visibility.right-box.Title') }}</span>
                   </div>
-                  <span class="text-[var(--text-color-light)] text-sm text-start">Nur du kannst dein Portfolio einsehen.</span>
+                  <span class="text-[var(--text-color-light)] text-sm text-start">{{ tl('Visibility.right-box.subtitle') }}</span>
                 </div>
               </button>
             </div>
@@ -272,7 +275,7 @@ async function copySlug(){
               <SvgStruct>
                 <i class="fa-solid fa-triangle-exclamation"></i>
               </SvgStruct>
-              <span>Wenn du dein Portfolio veröffentlichst, können Personen mit dem Link deine Inhalte ansehen.</span>
+              <span>{{ tl('Visibility.Info') }}</span>
             </div>
 
             <div class="divider"></div>
@@ -282,7 +285,7 @@ async function copySlug(){
                 <SvgStruct>
                   <i class="fa-solid fa-angle-left"></i>
                 </SvgStruct>
-                <span>Zurück zum Editor</span>
+                <span>{{ tl('Visibility.back-to-editor') }}</span>
               </button>
 
               <div class="w-full flex flex-col-reverse sm:flex-row items-center justify-end gap-4 sm:gap-2 text-nowrap">
@@ -290,14 +293,14 @@ async function copySlug(){
                   <SvgStruct>
                     <i class="fa-solid fa-eye"></i>
                   </SvgStruct>
-                  <span>Zurück zur Vorschau</span>
+                  <span>{{ tl('Visibility.back-to-preview') }}</span>
                 </button>
 
                 <button @click="publishPortfolio()" class="w-full sm:w-fit text-nowrap hover:text-[var(--primary-color)] hover:bg-transparent hover:border-[var(--primary-color)] transition duration-75 flex items-center justify-center border border-transparent gap-2 sm:px-3 sm:py-2 p-4 rounded-lg bg-[var(--primary-color)] text-sm text-[var(--text-color-white)]">
                   <SvgStruct>
                     <i class="fa-regular fa-paper-plane"></i>
                   </SvgStruct>
-                  <span>Jetzt veröffentlichen</span>
+                  <span>{{ tl('Visibility.publish') }}</span>
                 </button>
               </div>
             </div>
@@ -312,7 +315,7 @@ async function copySlug(){
               <SvgStruct>
                 <i class="fa-solid fa-eye"></i>
               </SvgStruct>
-              <span>Live-Vorschau</span>
+              <span>{{ tl('status.Live-Preview.Title') }}</span>
             </div>
 
             <div class="h-[400px] relative my-5">
@@ -323,13 +326,13 @@ async function copySlug(){
 
             <div class="flex items-center justify-between gap-2 text-sm">
               <div class="flex items-center justify-start gap-2">
-                <span class="text-[var(--text-color-light)]">Template: </span>
-                <span class="font-semibold">{{ portfolioFacts?.currentThemeId ?? 'Keine Ausgewählt' }}</span>
+                <span class="text-[var(--text-color-light)]">{{ tl('status.Live-Preview.Template') }}: </span>
+                <span class="font-semibold">{{ portfolioFacts?.currentThemeId ?? tl('status.Live-Preview.Template-chosen') }}</span>
               </div>
 
               <div class="flex items-center justify-start gap-2">
-                <span class="text-[var(--text-color-light)]">Sprache: </span>
-                <span class="font-semibold uppercase">{{ portfolioFacts?.languageCode ?? 'Nicht ausgewählt' }}</span>
+                <span class="text-[var(--text-color-light)]">{{ tl('status.Live-Preview.language') }}: </span>
+                <span class="font-semibold uppercase">{{ portfolioFacts?.languageCode ?? tl('status.Live-Preview.language-chosen') }}</span>
               </div>
             </div>
           </Interface>
@@ -339,8 +342,8 @@ async function copySlug(){
               <i class="fa-solid fa-info"></i>
             </SvgStruct>
             <div class="flex flex-col items-start justify-center gap-2 flex-1">
-              <span class="font-semibold">Du kannst alles später ändern</span>
-              <span class="text-[var(--text-color-light)]">Inhalte, Sichtbarkeit und Design lassen sich auch nach der Veröffentlichung jederzeit anpassen.</span>
+              <span class="font-semibold">{{ tl('Info.Title') }}</span>
+              <span class="text-[var(--text-color-light)]">{{ tl('Info.subtitle') }}</span>
             </div>
           </Interface>
         </div>
