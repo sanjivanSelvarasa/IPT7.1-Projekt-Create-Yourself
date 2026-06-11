@@ -33,12 +33,16 @@
     "Desktop": "Desktop",
     "Tablet": "Tablet",
     "Mobile": "Mobil",
-    "section-add": "Section hinzufügen"
+    "section-add": "Section hinzufügen",
+    "placeholder": "PLATZHALTER TITEL"
   },
   "main": {
+    "Title": "Neue Section hinzufügen",
+    "Subtitle": "Wähle eine Vorlage oder erstelle eine freie Section",
+    "placeholder": "Section suchen ...",
     "box-one-title": "Hero-Section",
     "box-one-subtitle": "Startbereich mit Name, Titel und kurzer Vorstellung",
-    "box-two.title": "Projekte",
+    "box-two-title": "Projekte",
     "box-two-subtitle": "Zeige deine wichtigsten Arbeiten und Projektlinks",
     "box-three-title": "Skills",
     "box-three-subtitle": "Präsentiere deine Fähigkeiten mit Level oder Tags.",

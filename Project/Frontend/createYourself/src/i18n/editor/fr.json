@@ -33,12 +33,16 @@
     "Desktop": "Bureau",
     "Tablet": "Tablette",
     "Mobile": "Mobile",
-    "section-add": "Ajouter une section"
+    "section-add": "Ajouter une section",
+    "placeholder": "TITRE DE REMPLACEMENT"
   },
   "main": {
+    "Title": "Ajouter une nouvelle section",
+    "Subtitle": "Choisissez un modèle ou créez une section libre",
+    "placeholder": "Rechercher une section ...",
     "box-one-title": "Section « À la une »",
     "box-one-subtitle": "Section d'introduction comprenant le nom, le titre et une brève présentation",
-    "box-two.title": "Projets",
+    "box-two-title": "Projets",
     "box-two-subtitle": "Mettez en avant vos réalisations phares et les liens vers vos projets",
     "box-three-title": "Compétences",
     "box-three-subtitle": "Mettez en avant vos compétences à l'aide de niveaux ou de balises.",

@@ -33,12 +33,16 @@
     "Desktop": "Desktop",
     "Tablet": "Tablet",
     "Mobile": "Mobile",
-    "section-add": "Add a section"
+    "section-add": "Add a section",
+    "placeholder": "PLACEHOLDER TITLE"
   },
   "main": {
+    "Title": "Add a new section",
+    "Subtitle": "Choose a template or create a free section",
+    "placeholder": "Search section ...",
     "box-one-title": "Hero section",
     "box-one-subtitle": "Introductory section with name, title and a brief introduction",
-    "box-two.title": "Projects",
+    "box-two-title": "Projects",
     "box-two-subtitle": "Showcase your key work and project links",
     "box-three-title": "Skills",
     "box-three-subtitle": "Showcase your skills using levels or tags.",
