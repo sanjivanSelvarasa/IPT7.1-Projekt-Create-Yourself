@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import SvgStruct from "@/components/ui/SvgStruct.vue";
+import {computed} from "vue";
 
 const props = defineProps<{
   title: string,
@@ -17,11 +18,23 @@ const emit = defineEmits<{
 function onSelected() {
   emit('selected')
 }
+
+const apiUrl = import.meta.env.VITE_API_URL
+const imageSrc = computed(() => {
+  if (!props.imageUrl) return ''
+
+  if (props.imageUrl.startsWith('http')) {
+    return props.imageUrl
+  }
+
+  return `${apiUrl}${props.imageUrl}`
+})
 </script>
 
 <template>
   <button @click="onSelected()" class="hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col rounded-xl aspect-square overflow-hidden bg-[var(--surface-color)] border border-gray-200" :class="props.isActive ? 'element-active' : ''">
-    <img :src="`http://localhost:3000${props.imageUrl}`" class="object-cover h-full w-full bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]">
+    <div v-if="!imageUrl" class="min-h-[175px] max-h-[175px] bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]"></div>
+    <img v-else :src="imageSrc" class="object-cover h-[175px] max-h-[275px] w-full ">
 
     <div class="h-fit p-4">
       <div class="flex flex-col items-start justify-center">
