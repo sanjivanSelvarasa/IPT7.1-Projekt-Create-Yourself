@@ -5,6 +5,7 @@ import SvgStruct from "@/components/ui/SvgStruct.vue";
 import SectionCard from "@/components/ui/editor/SectionCard.vue";
 import {ref} from "vue";
 import { useI18n } from "vue-i18n";
+import {SECTION_TYPES} from "@/utils/section_types.ts";
 const { t, locale } = useI18n();
 const tl = (key: string) => t(`editor.${key}`);
 
@@ -26,18 +27,46 @@ function cancelSection() : void {
 }
 
 const sections = [
-  [tl('main.box-one-title'), tl('main.box-one-subtitle')],
-  [tl('main.box-two-title'), tl('main.box-two-subtitle')],
-  [tl('main.box-three-title'), tl('main.box-three-subtitle')],
-  [tl('main.box-four-title'), tl('main.box-four-subtitle')],
-  [tl('main.box-five-title'), tl('main.box-five-subtitle')],
-  [tl('main.box-six-title'), tl('main.box-six-subtitle')],
-  [tl('main.box-seven-title'), tl('main.box-seven-subtitle')],
+  {
+    type: SECTION_TYPES.HERO,
+    title: tl('main.box-one-title'),
+    subtitle: tl('main.box-one-subtitle'),
+  },
+  {
+    type: SECTION_TYPES.PROJECTS,
+    title: tl('main.box-two-title'),
+    subtitle: tl('main.box-two-subtitle'),
+  },
+  {
+    type: SECTION_TYPES.SKILLS,
+    title: tl('main.box-three-title'),
+    subtitle: tl('main.box-three-subtitle'),
+  },
+  {
+    type: SECTION_TYPES.EXPERIENCE,
+    title: tl('main.box-four-title'),
+    subtitle: tl('main.box-four-subtitle'),
+  },
+  {
+    type: SECTION_TYPES.EDUCATION,
+    title: tl('main.box-five-title'),
+    subtitle: tl('main.box-five-subtitle'),
+  },
+  {
+    type: SECTION_TYPES.CONTACT,
+    title: tl('main.box-six-title'),
+    subtitle: tl('main.box-six-subtitle'),
+  },
+  {
+    type: 'Freie Section',
+    title: tl('main.box-seven-title'),
+    subtitle: tl('main.box-seven-subtitle'),
+  },
 ]
 
 const selectedSection = ref<string>('')
-function selectSection(sectionTitle: string) : void {
-  selectedSection.value = sectionTitle
+function selectSection(sectionType: string) : void {
+  selectedSection.value = sectionType
 }
 
 </script>
@@ -61,7 +90,13 @@ function selectSection(sectionTitle: string) : void {
         </div>
 
         <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 w-full mt-5">
-          <SectionCard @pressed="selectSection" class="grid-cols-1" :is-selected="selectedSection === sections[0]?.[0]" :title="sections[0]?.[0] ?? '' " :description="sections[0]?.[1] ?? ''">
+          <SectionCard
+            @pressed="() => selectSection(sections[0].type)"
+            class="grid-cols-1"
+            :is-selected="selectedSection === sections[0]?.type"
+            :title="sections[0]?.title ?? ''"
+            :description="sections[0]?.subtitle ?? ''"
+          >
             <template #svg>
               <SvgStruct class="min-w-[35px] min-h-[35px] rounded-lg bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]  text-[var(--text-color-white)]">
                 <i class="fa-regular fa-user"></i>
@@ -78,7 +113,13 @@ function selectSection(sectionTitle: string) : void {
             </template>
           </SectionCard>
 
-          <SectionCard @pressed="selectSection" class="grid-cols-1" :is-selected="selectedSection === sections[1]?.[0]" :title="sections[1]?.[0] ?? ''" :description="sections[1]?.[1] ?? ''">
+          <SectionCard
+            @pressed="() => selectSection(sections[1].type)"
+            class="grid-cols-1"
+            :is-selected="selectedSection === sections[1]?.type"
+            :title="sections[1]?.title ?? ''"
+            :description="sections[1]?.subtitle ?? ''"
+          >
             <template #svg>
               <SvgStruct class="min-w-[35px] min-h-[35px] rounded-lg bg-violet-50  text-violet-500">
                 <i class="fa-solid fa-diagram-project"></i>
@@ -96,7 +137,13 @@ function selectSection(sectionTitle: string) : void {
             </template>
           </SectionCard>
 
-          <SectionCard @pressed="selectSection" class="grid-cols-1" :is-selected="selectedSection === sections[2]?.[0]" :title="sections[2]?.[0] ?? ''" :description="sections[2]?.[1] ?? ''">
+          <SectionCard
+            @pressed="() => selectSection(sections[2].type)"
+            class="grid-cols-1"
+            :is-selected="selectedSection === sections[2]?.type"
+            :title="sections[2]?.title ?? ''"
+            :description="sections[2]?.subtitle ?? ''"
+          >
             <template #svg>
               <SvgStruct class="min-w-[35px] min-h-[35px] rounded-lg bg-green-50  text-green-500">
                 <i class="fa-solid fa-chart-line"></i>
@@ -127,7 +174,13 @@ function selectSection(sectionTitle: string) : void {
             </template>
           </SectionCard>
 
-          <SectionCard @pressed="selectSection" class="grid-cols-1" :is-selected="selectedSection === sections[3]?.[0]" :title="sections[3]?.[0] ?? ''" :description="sections[3]?.[1] ?? ''">
+          <SectionCard
+            @pressed="() => selectSection(sections[3].type)"
+            class="grid-cols-1"
+            :is-selected="selectedSection === sections[3]?.type"
+            :title="sections[3]?.title ?? ''"
+            :description="sections[3]?.subtitle ?? ''"
+          >
             <template #svg>
               <SvgStruct class="min-w-[35px] min-h-[35px] rounded-lg bg-yellow-50  text-yellow-500">
                 <i class="fa-solid fa-briefcase"></i>
@@ -153,7 +206,13 @@ function selectSection(sectionTitle: string) : void {
             </template>
           </SectionCard>
 
-          <SectionCard @pressed="selectSection" class="grid-cols-1" :is-selected="selectedSection === sections[4]?.[0]" :title="sections[4]?.[0] ?? ''" :description="sections[4]?.[1] ?? ''">
+          <SectionCard
+            @pressed="() => selectSection(sections[4].type)"
+            class="grid-cols-1"
+            :is-selected="selectedSection === sections[4]?.type"
+            :title="sections[4]?.title ?? ''"
+            :description="sections[4]?.subtitle ?? ''"
+          >
             <template #svg>
               <SvgStruct class="min-w-[35px] min-h-[35px] rounded-lg bg-cyan-50  text-cyan-500">
                 <i class="fa-solid fa-graduation-cap"></i>
@@ -177,7 +236,13 @@ function selectSection(sectionTitle: string) : void {
             </template>
           </SectionCard>
 
-          <SectionCard @pressed="selectSection" class="grid-cols-1" :is-selected="selectedSection === sections[5]?.[0]" :title="sections[5]?.[0] ?? ''" :description="sections[5]?.[1] ?? ''">
+          <SectionCard
+            @pressed="() => selectSection(sections[5].type)"
+            class="grid-cols-1"
+            :is-selected="selectedSection === sections[5]?.type"
+            :title="sections[5]?.title ?? ''"
+            :description="sections[5]?.subtitle ?? ''"
+          >
             <template #svg>
               <SvgStruct class="min-w-[35px] min-h-[35px] rounded-lg bg-red-50  text-red-500">
                 <i class="fa-regular fa-envelope"></i>
@@ -202,7 +267,13 @@ function selectSection(sectionTitle: string) : void {
             </template>
           </SectionCard>
 
-          <SectionCard @pressed="selectSection" class="grid-cols-1" :is-selected="selectedSection === sections[6]?.[0]" :title="sections[6]?.[0] ?? ''" :description="sections[6]?.[1] ?? ''">
+          <SectionCard
+            @pressed="() => selectSection(sections[6].type)"
+            class="grid-cols-1"
+            :is-selected="selectedSection === sections[6]?.type"
+            :title="sections[6]?.title ?? ''"
+            :description="sections[6]?.subtitle ?? ''"
+          >
             <template #svg>
               <SvgStruct class="min-w-[35px] min-h-[35px] rounded-lg bg-gray-50  text-gray-500">
                 <i class="fa-regular fa-pen-to-square"></i>
