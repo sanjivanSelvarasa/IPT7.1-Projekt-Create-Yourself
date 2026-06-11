@@ -1,9 +1,13 @@
 <script lang="ts" setup>
+import { useI18n } from "vue-i18n";
 import {onMounted, ref, watch} from "vue";
 import InputStruct from "@/components/ui/editor/InputStruct.vue";
 import type {TextBlockContent} from "@/types/textBlockContent.ts";
 import ContentStruct from "@/components/ui/editor/ContentStruct.vue";
 import type {ProjectType} from "@/types/projectType.ts";
+
+const { t } = useI18n();
+const tl = (key: string) => t(`editorrightsideprojects.${key}`);
 
 const props = defineProps<{
   projectBlock: ProjectType,
@@ -57,29 +61,29 @@ function onSetImage(event: Event){
 
 <template>
   <ContentStruct @sectionVisible="onsectionVisible" :section-visible="props.sectionVisible">
-    <span class="md-subtitle text-[var(--text-color-light)]">Projektdaten</span>
+    <span class="md-subtitle text-[var(--text-color-light)]">{{ tl('Title-one') }}</span>
 
-    <InputStruct title="Titel">
+    <InputStruct :title="tl('subtitle-one')">
       <input @change="onUpdate()" v-model="inputTitle" class="default-input w-full" type="text"/>
     </InputStruct>
 
-    <InputStruct title="Kurzbeschreibung">
+    <InputStruct :title="tl('subtitle-two')">
       <textarea @change="onUpdate()" v-model="inputDescription" class="default-input w-full"/>
     </InputStruct>
 
-    <InputStruct title="Projektbild">
+    <InputStruct :title="tl('subtitle-three')">
         <input type="file" accept="image/*" class="default-input w-full cursor-pointer" @change="onSetImage" />
     </InputStruct>
 
     <div class="divider"></div>
 
-    <span class="md-subtitle text-[var(--text-color-light)]">Links</span>
+    <span class="md-subtitle text-[var(--text-color-light)]">{{ tl('Title-two') }}</span>
 
-    <InputStruct title="Github">
+    <InputStruct :title="tl('Github')">
       <input @change="onUpdate()" v-model="inputGithubLink" class="default-input w-full" type="text"/>
     </InputStruct>
 
-    <InputStruct title="Demo-URL">
+    <InputStruct :title="tl('Demo')">
       <input @change="onUpdate()" v-model="inputDemoLink" class="default-input w-full" type="text"/>
     </InputStruct>
 
