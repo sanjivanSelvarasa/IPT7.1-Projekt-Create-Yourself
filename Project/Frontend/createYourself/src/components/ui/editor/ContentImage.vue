@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch } from "vue"
+import {computed, ref, watch} from "vue"
 import ContentStruct from "@/components/ui/editor/ContentStruct.vue"
 import InputStruct from "@/components/ui/editor/InputStruct.vue"
 import SvgStruct from "@/components/ui/SvgStruct.vue"
@@ -60,6 +60,17 @@ function onImageChange(event: Event) {
 watch(() => props.imageBlock, (newImageBlock) => {
   inputAlt.value = newImageBlock.alt ?? ""
 })
+
+const apiUrl = import.meta.env.VITE_API_URL
+const imageSrc = computed(() => {
+  if (!props.imageBlock.imageUrl) return ''
+
+  if (props.imageBlock.imageUrl.startsWith('http')) {
+    return props.imageBlock.imageUrl
+  }
+
+  return `${apiUrl}${props.imageBlock.imageUrl}`
+})
 </script>
 
 <template>
@@ -68,7 +79,7 @@ watch(() => props.imageBlock, (newImageBlock) => {
 
     <div class="w-full rounded-xl overflow-hidden border border-gray-200 bg-[var(--background-color)]">
       <img v-if="props.imageBlock.imageUrl"
-        :src="`http://localhost:3000${props.imageBlock.imageUrl}`"
+        :src="imageSrc"
         :alt="props.imageBlock.alt ?? 'Bild'"
         class="w-full max-h-[220px] object-cover" />
 
