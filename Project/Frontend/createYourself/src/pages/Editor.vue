@@ -60,6 +60,10 @@ import ExperienceElement from "@/components/ui/editor/ExperienceElement.vue";
 import ContentExperience from "@/components/ui/editor/ContentExperience.vue";
 import type {ExperienceType} from "@/types/experienceType.ts";
 import ContentImage from "@/components/ui/editor/ContentImage.vue";
+import { useI18n } from "vue-i18n";
+const { t, locale } = useI18n();
+const tl = (key: string) => t(`editor.${key}`);
+
 
 const portfolioName = ref<string>('');
 
@@ -200,7 +204,7 @@ async function submitSection(sectionHeader: string) {
 
   const section: CreateSectionType = {
     sectionType: sectionHeader,
-    title: 'PLATZHALTER TITEL',
+    title: tl('Main-Preview.placeholder'),
     sortOrder: newSortOrder,
     isVisible: true,
   }
@@ -1718,7 +1722,7 @@ async function updateImageBlockFunc(imageBlock: ImageBlockContent) {
                 <div class="w-full h-full bg-green-500 rounded-full"></div>
                 <div class="absolute w-full h-full bg-green-300 rounded-full animate-ping -translate-y-[7px]"></div>
               </div>
-              <span>Gespeichert - {{ portfolioFacts?.updatedAt ? getDateGap(portfolioFacts?.updatedAt) : 'FEHLER' }}</span>
+              <span>{{ tl('nav.saved') }} - {{ portfolioFacts?.updatedAt ? getDateGap(portfolioFacts?.updatedAt) : 'tl(nav.error)' }}</span>
             </div>
           </div>
 
@@ -1741,21 +1745,21 @@ async function updateImageBlockFunc(imageBlock: ImageBlockContent) {
           <div class="flex items-center justify-center">
             <i class="fa-regular fa-eye"></i>
           </div>
-          <span>Vorschau</span>
+          <span>{{ tl('nav.Preview') }}</span>
         </div>
 
 <!--        <div @click="saveVersion()" class="sm:flex hidden hover:bg-transparent hover:text-[var(&#45;&#45;text-color)] transition duration-75 items-center justify-center gap-2 px-3 py-2 border bg-[var(&#45;&#45;text-color)] text-[var(&#45;&#45;text-color-white)] rounded-lg select-none cursor-pointer">-->
 <!--          <div class="flex items-center justify-center">-->
 <!--            <i class="fa-regular fa-floppy-disk"></i>-->
 <!--          </div>-->
-<!--          <span>Speichern</span>-->
+<!--          <span>{{ tl('nav.Save') }}</span>-->
 <!--        </div>-->
 
         <button @click="pushToPublish()" class="w-full hover:bg-transparent hover:text-[var(--primary-color)] transition duration-75 flex items-center justify-center gap-2 px-3 py-2 border bg-[var(--primary-color)] text-[var(--text-color-white)] rounded-lg select-none cursor-pointer">
           <div class="flex items-center justify-center">
             <i class="fa-solid fa-arrow-up-from-bracket"></i>
           </div>
-          <span>Veröffentlichen</span>
+          <span>{{ tl('nav.Publish') }}</span>
         </button>
       </div>
     </nav>
@@ -1767,7 +1771,7 @@ async function updateImageBlockFunc(imageBlock: ImageBlockContent) {
       >
         <div class="flex flex-col justify-center items-start gap-1">
           <div class="w-full flex justify-between gap-2">
-            <span v-if="isBaukastenOpen" class="sm-subtitle">Baukasten</span>
+            <span v-if="isBaukastenOpen" class="sm-subtitle">{{ tl('modular-system.Title') }}</span>
             <SvgStruct
               @click="toggleBaukasten"
               class="hover:bg-gray-100 transition duration-75 cursor-pointer w-[30px] h-[30px] rounded-md bg-[var(--surface-color)] border border-gray-200"
@@ -1775,29 +1779,29 @@ async function updateImageBlockFunc(imageBlock: ImageBlockContent) {
               <i :class="isBaukastenOpen ? 'fa-solid fa-angle-left' : 'fa-solid fa-angle-right'"></i>
             </SvgStruct>
           </div>
-          <span v-if="isBaukastenOpen" class="text-sm text-[var(--text-color-light)]">Ziehe Blöcke auf den Editor oder klicke zum Einfügen</span>
+          <span v-if="isBaukastenOpen" class="text-sm text-[var(--text-color-light)]">{{ tl('modular-system.subtitle') }}</span>
         </div>
 
         <div v-if="isBaukastenOpen" class="divider"></div>
 
         <div v-if="isBaukastenOpen">
-          <span class="sm-subtitle">Blöcke</span>
+          <span class="sm-subtitle">{{ tl('modular-system.blocks.title') }}</span>
 
           <div class="grid grid-cols-2 my-5 gap-3">
-            <Block @click="addTextBlockToSelectedSection()" title="Text" svg="fa-solid fa-align-left" subtitle="Absatz / Überschrift"></Block>
-            <Block @click="createImageModul()" title="Bild" svg="fa-regular fa-image" subtitle="Foto Hochladen"></Block>
-            <Block @click="addProjectBlockToSelectedSection()" title="Projekt" svg="fa-solid fa-diagram-project" subtitle="Titel, Beschreibung"></Block>
-            <Block @click="addSkillBlockToSelectedSection()" title="Skill" svg="fa-solid fa-chart-line" subtitle="Fähigkeit / Tool"></Block>
-            <Block @click="addEducationBlockToSelectedSection()" title="Ausbildung" svg="fa-solid fa-graduation-cap" subtitle="Schule, Studium"></Block>
-            <Block @click="addExperienceBlockToSelectedSection()" title="Erfahrung" svg="fa-solid fa-briefcase" subtitle="Berufe, Firmen"></Block>
-            <Block @click="addSocialLinkBlockToSelectedSection()" title="Link" svg="fa-regular fa-envelope" subtitle="Social Media"></Block>
+            <Block @click="addTextBlockToSelectedSection()" :title="tl('modular-system.blocks.first')" svg="fa-solid fa-align-left" :subtitle="tl('modular-system.blocks.first-subtitle')"></Block>
+            <Block @click="createImageModul()" :title="tl('modular-system.blocks.second')" svg="fa-regular fa-image" :subtitle="tl('modular-system.blocks.second-subtitle')"></Block>
+            <Block @click="addProjectBlockToSelectedSection()" :title="tl('modular-system.blocks.third')" svg="fa-solid fa-diagram-project" :subtitle="tl('modular-system.blocks.third-subtitle')"></Block>
+            <Block @click="addSkillBlockToSelectedSection()" :title="tl('modular-system.blocks.fourth')" svg="fa-solid fa-chart-line" :subtitle="tl('modular-system.blocks.fourth-subtitle')"></Block>
+            <Block @click="addEducationBlockToSelectedSection()" :title="tl('modular-system.blocks.fifth')" svg="fa-solid fa-graduation-cap" :subtitle="tl('modular-system.blocks.fifth-subtitle')"></Block>
+            <Block @click="addExperienceBlockToSelectedSection()" :title="tl('modular-system.blocks.sixth')" svg="fa-solid fa-briefcase" :subtitle="tl('modular-system.blocks.sixth-subtitle')"></Block>
+            <Block @click="addSocialLinkBlockToSelectedSection()" :title="tl('modular-system.blocks.seventh')" svg="fa-regular fa-envelope" :subtitle="tl('modular-system.blocks.seventh-subtitle')"></Block>
           </div>
         </div>
 
         <div v-if="isBaukastenOpen" class="divider"></div>
 
         <div v-if="isBaukastenOpen">
-          <span class="sm-subtitle">Sections</span>
+          <span class="sm-subtitle">{{ tl('modular-system.section-title') }}</span>
 
           <div class="mt-3 flex flex-col justify-center items-center gap-0.5">
             <Sections v-for="section in sortedSections" :key="section.id" :title="section.sectionType" :svg="getSvgToSectionType(section.sectionType)" :count="section.editorBlock.length"></Sections>
@@ -1807,7 +1811,7 @@ async function updateImageBlockFunc(imageBlock: ImageBlockContent) {
                 <div class="flex items-center justify-center">
                   <i class="fa-solid fa-plus"></i>
                 </div>
-                <span>Section hinzufügen</span>
+                <span>{{ tl('modular-system.section-add') }}</span>
               </div>
             </button>
           </div>
@@ -1818,9 +1822,9 @@ async function updateImageBlockFunc(imageBlock: ImageBlockContent) {
         <div class="w-full flex justify-center">
           <div class="sm:flex hidden px-5 py-3 max-w-[600px] xl:max-w-[900px] 2xl:max-w-[1200px] w-full h-fit border border-transparent border-b-gray-200 justify-between items-center">
             <div class="bg-[var(--surface-color)] border border-gray-200 rounded-lg flex justify-center items-center text-sm text-[var(--text-color-light)]">
-              <ScreenButton @clicked="changeScreenSizeOption(1)" :active="screenSize === 1" title="Desktop" svg="fa-solid fa-desktop"></ScreenButton>
-              <ScreenButton @clicked="changeScreenSizeOption(2)" :active="screenSize === 2"  title="Tablet" svg="fa-solid fa-tablet-screen-button"></ScreenButton>
-              <ScreenButton @clicked="changeScreenSizeOption(3)" :active="screenSize === 3"  title="Mobil" svg="fa-solid fa-mobile-screen"></ScreenButton>
+              <ScreenButton @clicked="changeScreenSizeOption(1)" :active="screenSize === 1" :title="tl('Main-Preview.Desktop')" svg="fa-solid fa-desktop"></ScreenButton>
+              <ScreenButton @clicked="changeScreenSizeOption(2)" :active="screenSize === 2" :title="tl('Main-Preview.Tablet')" svg="fa-solid fa-tablet-screen-button"></ScreenButton>
+              <ScreenButton @clicked="changeScreenSizeOption(3)" :active="screenSize === 3" :title="tl('Main-Preview.Mobile')" svg="fa-solid fa-mobile-screen"></ScreenButton>
             </div>
 
             <div class="text-[var(--text-color-light)] text-sm">
@@ -1863,7 +1867,7 @@ async function updateImageBlockFunc(imageBlock: ImageBlockContent) {
               <SvgStruct>
                 <i class="fa-solid fa-plus"></i>
               </SvgStruct>
-              <span>Section hinzufügen</span>
+              <span>{{ tl('modular-system.section-add') }}</span>
             </button>
           </div>
         </div>
