@@ -1,9 +1,13 @@
 <script lang="ts" setup>
+import { useI18n } from "vue-i18n";
 import type { ExperienceType } from "@/types/experienceType.ts";
 import ContentStruct from "@/components/ui/editor/ContentStruct.vue";
 import InputStruct from "@/components/ui/editor/InputStruct.vue";
 import SvgStruct from "@/components/ui/SvgStruct.vue";
 import { ref, watch } from "vue";
+
+const { t } = useI18n();
+const tl = (key: string) => t(`editorrightsideexperience.${key}`);
 
 const props = defineProps<{
   experienceBlock: ExperienceType,
@@ -64,9 +68,9 @@ watch(() => props.experienceBlock, (newExperience) => {
 
 <template>
   <ContentStruct @move-up="onMoveUp" @move-down="onMoveDown" :total-sections="props.totalSections" :current-position="props.currentPosition" @sectionVisible="onSectionVisible" :sectionVisible="props.sectionVisible">
-    <span class="md-subtitle text-[var(--text-color-light)]">Berufserfahrung</span>
+    <span class="md-subtitle text-[var(--text-color-light)]">{{ tl('Title') }}</span>
 
-    <InputStruct title="Firmenname">
+    <InputStruct :title="tl('subtitle-one')">
       <input
         @change="onUpdate()"
         v-model="inputCompanyName"
@@ -75,7 +79,7 @@ watch(() => props.experienceBlock, (newExperience) => {
       />
     </InputStruct>
 
-    <InputStruct title="Position / Beruf">
+    <InputStruct :title="tl('subtitle-two')">
       <input
         @change="onUpdate()"
         v-model="inputPosition"
@@ -84,20 +88,20 @@ watch(() => props.experienceBlock, (newExperience) => {
       />
     </InputStruct>
 
-    <InputStruct title="Beschreibung">
+    <InputStruct :title="tl('subtitle-three')">
       <textarea
         @change="onUpdate()"
         v-model="inputDescription"
         class="default-input w-full min-h-[90px] resize-none"
-        placeholder="Beschreibung über den Beruf..."
+        :placeholder="tl('placeholder-three')"
       ></textarea>
     </InputStruct>
 
     <div class="divider"></div>
 
-    <span class="md-subtitle text-[var(--text-color-light)]">Zeitraum</span>
+    <span class="md-subtitle text-[var(--text-color-light)]">{{ tl('Title-two') }}</span>
 
-    <InputStruct title="Von - Bis">
+    <InputStruct :title="tl('from-to')">
       <div class="flex gap-2">
         <input
           @change="onUpdate()"
