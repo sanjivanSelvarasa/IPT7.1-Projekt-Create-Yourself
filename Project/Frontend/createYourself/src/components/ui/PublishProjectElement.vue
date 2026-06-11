@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import SvgStruct from "@/components/ui/SvgStruct.vue";
+  import {computed} from "vue";
 
   const props = defineProps<{
     title: string,
@@ -8,12 +9,23 @@
     codeUrl: string,
     image: string,
   }>()
+
+  const apiUrl = import.meta.env.VITE_API_URL
+  const imageSrc = computed(() => {
+    if (!props.image) return ''
+
+    if (props.image.startsWith('http')) {
+      return props.image
+    }
+
+    return `${apiUrl}${props.image}`
+  })
 </script>
 
 <template>
   <div class="w-full h-full overflow-hidden bg-[var(--surface-color)] border-2 border-gray-200 shadow-md rounded-xl">
-    <div v-if="!image" class="w-full min-h-[175px] bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]"></div>
-    <img v-else :src="`http://localhost:3000${image}`" class="w-full min-h-[175px] max-h-[175px] object-cover">
+    <div v-if="!image" class="w-full h-[175px] bg-linear-to-br from-[var(--primary-color)] to-[var(--secondary-color)]"></div>
+    <img v-else :src="imageSrc" class="w-full h-[175px] object-cover">
     <div class="flex flex-col items-start justify-center gap-3 p-6">
       <span class="font-semibold text-xl">{{ props.title }}</span>
       <span class="text-[var(--text-color-light)] text-sm min-h-[150px] overflow-y-hidden">{{ props.description }}</span>
