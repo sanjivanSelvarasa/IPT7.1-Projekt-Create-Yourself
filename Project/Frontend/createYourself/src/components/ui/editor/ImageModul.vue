@@ -1,6 +1,10 @@
 <script lang="ts" setup>
+import { useI18n } from "vue-i18n";
 import ModulStruct from "@/components/ui/editor/ModulStruct.vue"
 import SvgStruct from "@/components/ui/SvgStruct.vue"
+
+const { t } = useI18n();
+const tl = (key: string) => t(`editor.${key}`);
 
 const props = defineProps<{
   imageContent: {
@@ -35,9 +39,9 @@ function onDown() {
 </script>
 
 <template>
-  <ModulStruct @click="onSelected" @delete="onDelete" @up="onUp" @down="onDown" type="Bild" :name="props.imageContent.alt ?? 'Bild'" svg="fa-regular fa-image" :class="props.isActive ? 'element-active' : ''">
+  <ModulStruct @click="onSelected" @delete="onDelete" @up="onUp" @down="onDown" :type="tl('defaults.image-alt')" :name="props.imageContent.alt ?? tl('defaults.image-alt')" svg="fa-regular fa-image" :class="props.isActive ? 'element-active' : ''">
     <div class="flex items-center justify-center relative w-full rounded-lg overflow-hidden bg-linear-to-br from-[var(--primary-color-light)] to-[var(--secondary-color-light)] min-h-[120px]">
-      <img v-if="props.imageContent.imageUrl" :src="`http://localhost:3000${props.imageContent.imageUrl}`" :alt="props.imageContent.alt ?? 'Bild'" class="w-full max-h-[250px] object-cover"/>
+      <img v-if="props.imageContent.imageUrl" :src="`http://localhost:3000${props.imageContent.imageUrl}`" :alt="props.imageContent.alt ?? tl('defaults.image-alt')" class="w-full max-h-[250px] object-cover"/>
       <template v-else>
         <div class="absolute w-full h-full bg-lines"></div>
 
