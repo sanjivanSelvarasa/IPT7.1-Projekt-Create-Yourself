@@ -10,9 +10,11 @@ const apiPrefixes = [
   '/users',
   '/token',
   '/account',
-  '/templates',
-  '/uploads',
   '/portfolio',
+  '/portfolios',
+  '/templates',
+  '/p',
+  '/uploads',
 ]
 
 const proxyEntries = Object.fromEntries(
