@@ -9,5 +9,7 @@
     "Empty": "Empty Section"
   },
   "contact-button": "Get in touch",
-  "leave-button": "Back to the editor"
+  "leave-button": "Back to the editor",
+  "projects-button": "View Projects",
+  "profile-image-alt": "Profile Image"
 }
