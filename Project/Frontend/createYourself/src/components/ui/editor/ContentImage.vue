@@ -61,9 +61,10 @@ watch(() => props.imageBlock, (newImageBlock) => {
   inputAlt.value = newImageBlock.alt ?? ""
 })
 
-const apiUrl = import.meta.env.VITE_API_URL
+const apiUrl = import.meta.env.VITE_BACKEND_URL
 const imageSrc = computed(() => {
   if (!props.imageBlock.imageUrl) return ''
+
 
   if (props.imageBlock.imageUrl.startsWith('http')) {
     return props.imageBlock.imageUrl
