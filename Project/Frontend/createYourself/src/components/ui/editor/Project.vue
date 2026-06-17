@@ -19,7 +19,7 @@ function onSelected() {
   emit('selected')
 }
 
-const apiUrl = import.meta.env.VITE_API_URL
+const apiUrl = import.meta.env.VITE_BACKEND_URL
 const imageSrc = computed(() => {
   if (!props.imageUrl) return ''
 
