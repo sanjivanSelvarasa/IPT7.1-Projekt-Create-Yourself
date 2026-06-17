@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import tailwindcss from '@tailwindcss/vite'
 
-const apiProxyTarget = process.env.API_PROXY_TARGET || 'http://127.0.0.1:3000'
+const apiProxyTarget = process.env.API_PROXY_TARGET || 'http://createyourself-backend:3000'
 const apiPrefixes = [
   '/users',
   '/token',
@@ -28,6 +28,7 @@ const proxyEntries = Object.fromEntries(
 )
 
 // https://vite.dev/config/
+
 export default defineConfig(({ command }) => ({
   plugins: [
     vue(),
@@ -40,13 +41,18 @@ export default defineConfig(({ command }) => ({
     allowedHosts: [
       'create-yourself.gian.ink',
     ],
-    proxy: proxyEntries,
+    proxy: {
+      '/api': {
+        target: apiProxyTarget,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
-
 
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
 }))
