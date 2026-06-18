@@ -1,0 +1,32 @@
+Fehlerbehebung:
+
+Generell:
+
+- VueDevTools wird unten angezeigt
+- Man die Webseite auf folgenden Pages nicht aktualisieren:
+ - Publish
+ - editor
+ - preview
+
+Neues Portfolio erstellen page:
+
+- URL wird immer als vergeben angezeigt
+
+Editorpage:
+
+- Suchfunktion
+
+Publishpage:
+
+- Selbst wenn oben rotes kreuz steht, kann man trotzdem publishen (Warnung bevor publsih (Button gelb))
+- Vorschau funktioniert nicht
+- Design noch nicht implementiert
+
+Loginpage:
+
+- Passwort vergessen funktioniert nicht
+
+Dashboard:
+
+- Selbst wenn du dein Portfolio veröffentlich, zeigt es bei veröffentlicht als 0
+- Wenn du auf Portfolio erstellen gehst und dann eine Sprache auswählst, wird sie in der Voschau trotzdem als Deutsch angezeigt
