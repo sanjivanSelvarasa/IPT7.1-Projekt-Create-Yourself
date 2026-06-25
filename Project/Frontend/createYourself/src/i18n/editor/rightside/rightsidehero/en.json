@@ -3,6 +3,9 @@
   "Title": "Contents",
   "text": "Text",
   "text-placeholder": "PLACEHOLDER TITLE",
+  "placeholder-hello": "Hello, I am",
+  "placeholder-main": "YOUR NAME",
+  "placeholder-description": "Describe your job and the relating tasks...",
   "text-character": "Characters",
   "Tag": "Tag",
   "Tag-Choice": {

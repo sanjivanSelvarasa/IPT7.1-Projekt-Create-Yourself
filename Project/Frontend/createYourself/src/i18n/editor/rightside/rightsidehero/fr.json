@@ -3,6 +3,9 @@
   "Title": "Sommaire",
   "text": "Texte",
   "text-placeholder": "TITRE PLACEBO",
+  "placeholder-hello": "Bonjour, je m'appelle",
+  "placeholder-main": "VOTRE NOM",
+  "placeholder-description": "Décrivez votre poste et les tâches qui y sont associées...",
   "text-character": "caractère",
   "Tag": "Étiquette",
   "Tag-Choice": {

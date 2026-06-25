@@ -1,6 +1,12 @@
 {
     "Title": "Hero-Section",
     "place-title": "PLATZHALTER TITEL",
-    "text-title": "Text - Haupttitel",
+    "text-title": {
+      "Overview": "Text",
+      "text-main": "Haupttitel",
+      "text-subtitle": "Untertitel",
+      "text-overtext": "Überschrift",
+      "text-paragraph": "Absatz"
+    },
     "text-placeholder": "PLATZHALTER TITEL"
 }

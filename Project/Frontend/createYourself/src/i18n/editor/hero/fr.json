@@ -1,6 +1,12 @@
 {
   "Title": "Section Héros",
   "place-title": "TITRE PLACEBO",
-  "text-title": "Texte - Titre principal",
+  "text-title": {
+    "Overview": "Texte",
+    "text-main": "titre principal",
+    "text-subtitle": "Sous-titres",
+    "text-overtext": "Titre",
+    "text-paragraph": "paragraphe"
+  },
   "text-placeholder": "TITRE PLACEBO"
 }
